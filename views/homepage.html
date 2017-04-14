@@ -39,14 +39,12 @@
 	<hr />
 	
 	<h4>Existing dates</h4>
-	<ul class="list-group">
-		<li class="list-group-item" ng-repeat="date in dates.data">
-			<a href="#/date/{{date.date_ts}}">
-				<span class="badge alert-info" ng-show="date.excluded_models.length > 0" title="{{date.excluded_models.length}} excluded models">{{date.excluded_models.length}}</span>
-				{{ date.date_ts | secondsToMilliseconds | date: 'dd MMM yyyy' }}
-			</a>
-		</li>
-	</ul>
+	<div class="list-group">
+		<a href="#/date/{{date.hash}}" class="list-group-item" ng-repeat="date in dates.data">
+			<span class="badge alert-info" ng-show="true || date.excluded_models.length > 0" title="{{date.excluded_models.length}} excluded models">{{date.excluded_models.length}}</span>
+			{{ date.date_ts | secondsToMilliseconds | date: 'dd MMM yyyy' }}
+		</a>
+	</div>
 </div>
 <div class="col-xs-12 col-md-9">
 	<article ng-repeat="model in models.data">

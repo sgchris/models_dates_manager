@@ -82,8 +82,15 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 			
 		},
 		
-		data: [],
+		'delete': function(dateTs) {
+			if (!confirm('Delete the dates with all its settings?')) {
+				return;
+			}
+			
+			
+		},
 		
+		data: [],
 		load: function() {
 			$scope.dates.inProgress = true;
 			

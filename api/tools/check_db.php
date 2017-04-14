@@ -35,7 +35,8 @@ if ($res === false) {
 	$res = $db->exec('
 		create table dates_list (
 			date_ts number primary key,
-			excluded_models text
+			excluded_models text,
+			hash text
 		)
 	');
 	if ($res === false) {
