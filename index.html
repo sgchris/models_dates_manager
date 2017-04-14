@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html ng-app="WebApp">
+	<head>
+		<title>VIP Models</title>
+		<link rel="stylesheet" type="text/css" href="assets/external/bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet/less" type="text/css" href="assets/css/style.less" />
+	</head>
+	<body>
+		<div id="fb-root"></div>
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">VIP Models</a>
+				</div>
+				<div id="navbar" class="collapse navbar-collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li ng-if="!loggedInUser">
+							<a>
+								<div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="false"></div>
+							</a>
+						</li>
+						<li ng-if="loggedInUser">
+							<a style="padding:0;">
+								<img ng-src="http://graph.facebook.com/{{loggedInUser.id}}/picture" title="{{loggedInUser.name}}" />
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div class="container-fluid page-content">
+			<div class="{{controller}}-container" ng-view></div>
+		</div>
+
+		<!-- libs -->
+		<script src="assets/external/jquery-2.2.3.min.js"></script>
+		<script src="assets/external/bootstrap/js/bootstrap.min.js"></script>
+		<script src="assets/external/less.min.js"></script>
+		<script src="assets/external/angular/angular.min.js"></script>
+		<script src="assets/external/angular/angular-route.min.js"></script>
+		<script src="assets/external/angular/angular-local-storage.min.js"></script>
+		<script src="assets/external/ui-bootstrap-1.3.2.min.js"></script>
+
+		<!-- initialization -->
+		<script src="app/init.js"></script>
+		
+		<!-- filters -->
+		<script src="app/filters.js"></script>
+		
+		<!-- directives -->
+		<script src="app/model-box.js"></script>
+		
+		
+		<script src="controllers/homepage.js" charset="utf-8"></script>
+		<script src="controllers/about.js" charset="utf-8"></script>
+		<script src="app/routes.js" charset="utf-8"></script>
+	</body>
+</html>

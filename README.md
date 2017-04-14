@@ -1,2 +1,7 @@
-# models_dates_manager
-Manage models by dates - multashka.com
+# Models dates manager
+
+Manage models list by dates 
+- every date has several models
+- every new date contains all the available models by default
+
+

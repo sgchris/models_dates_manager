@@ -1,0 +1,7 @@
+# codelite (IDE) related
+.codelite
+*.phprj
+*.workspace
+
+# vendor
+vendor

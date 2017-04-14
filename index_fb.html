@@ -1,0 +1,44 @@
+<h1>VIP models - multashka.com</h1>
+
+<a href="https://developers.facebook.com/apps/1464574370233315/fb-login/quickstart/" target="_blank">https://developers.facebook.com/apps/1464574370233315/fb-login/quickstart/</a>
+
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1464574370233315',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v2.8'
+    });
+    FB.AppEvents.logPageView();   
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<script>
+/*
+
+
+{
+    status: 'connected',
+    authResponse: {
+        accessToken: '...',
+        expiresIn:'...',
+        signedRequest:'...',
+        userID:'...'
+    }
+}
+
+*/
+FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+});
+</script>
