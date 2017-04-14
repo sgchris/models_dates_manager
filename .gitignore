@@ -5,3 +5,7 @@
 
 # vendor
 vendor
+
+# database
+api/db/models.db
+
