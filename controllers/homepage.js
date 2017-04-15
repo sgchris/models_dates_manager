@@ -6,8 +6,50 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 		
 		// new model related
 		newModelName: '',
+		newModelError: false,
 		addNewModel: function() {
-			console.log('adding new model', $scope.models.newModelName);
+			if ($scope.models.newModelName.trim().length == 0) {
+				$scope.models.newModelError = 'Please type model name in the input above';
+				return;
+			}
+			$scope.models.newModelError = false;
+			
+			$scope.models.inProgress = true;
+			$http({
+				method: 'post',
+				url: 'api/add_model.php',
+				data: {
+					name: $scope.models.newModelName.trim()
+				}
+			}).then(function(res) {
+				if (!res.data) {
+					$scope.dates.newDateError = 'add new model: cannot receive response';
+					return console.error('add new model: cannot receive response', res);
+				}
+				
+				if (res.data.result == 'error') {
+					$scope.models.newModelError = res.data.error || 'error occurred'
+					return;
+				}
+				
+				if (res.data.result == 'ok') {
+					// clear the new date
+					$scope.models.newModelError = false;
+					$scope.models.newDate = '';
+					
+					// reload the models list
+					$scope.models.load();
+					
+					return;
+				}
+				
+				$scope.models.newModelError = 'error occurred';
+			}, function() {
+				$scope.models.newModelError = 'server error';
+			}).finally(function() {
+				$scope.models.inProgress = true;
+			});
+			
 		},
 		
 		data: [],

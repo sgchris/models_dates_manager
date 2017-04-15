@@ -182,4 +182,25 @@ function uploadImages(&$params) {
 	}
 }
 
-
+/**
+ * Check if the value is in the range
+ * @param <unknown> $var 
+ * @param <unknown> $min 
+ * @param <unknown> $max 
+ * @param <unknown> $includingMin 
+ * @param <unknown> $includingMax 
+ * @return  
+ */
+function between($var, $min, $max, $includingMin = true, $includingMax = true) {
+	$condA = $var > $min;
+	if ($includingMin) {
+		$condA = $var >= $min;
+	}
+	
+	$condB = $var < $max;
+	if ($includingMin) {
+		$condB = $var <= $max;
+	}
+	
+	return $condA && $condB;
+}
