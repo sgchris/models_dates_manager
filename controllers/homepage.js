@@ -35,7 +35,7 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 				if (res.data.result == 'ok') {
 					// clear the new date
 					$scope.models.newModelError = false;
-					$scope.models.newDate = '';
+					$scope.models.newModelName = '';
 					
 					// reload the models list
 					$scope.models.load();

@@ -2,6 +2,8 @@
 
 require_once __DIR__.'/init.php';
 
+requestShouldBe('POST');
+
 // receive parameters 
 $params = receiveParams(['date'], ['date']);
 

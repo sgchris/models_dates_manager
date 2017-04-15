@@ -1,7 +1,7 @@
 <?php
 	
 // include helper functions
-require_once __DIR__.DIRECTORY_SEPARATOR.'init.php';
+require_once __DIR__.'/init.php';
 
 // validate the request
 requestShouldBe('POST');
