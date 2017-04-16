@@ -1,48 +1,49 @@
-<?php echo json_encode([
-	[
-		'name' => 'Marina', 
-		'comments' => 'marina moshkovich fashion photographer',
-		'images' => [
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300'
-		]
-	], [
-		'name' => 'Gregory Chris', 
-		'comments' => '',
-		'images' => [
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300'
-		]
-	], [
-		'name' => 'Gregory Chris', 
-		'comments' => '',
-		'images' => [
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300'
-		]
-	], [
-		'name' => 'Gregory Chris', 
-		'comments' => '',
-		'images' => [
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300'
-		]
-	], [
-		'name' => 'Gregory Chris', 
-		'comments' => '',
-		'images' => [
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300',
-			'http://placehold.it/400x300'
-		]
-	]
-]);
+<?php 
+
+require_once __DIR__.'/init.php';
+
+requestShouldBe('GET');
+
+$params = receiveParams(['date']);
+
+// get all the models
+$allModels = $db->query('
+	SELECT * 
+	FROM models 
+	ORDER by 
+		CAST(display_order AS INTEGER) DESC, 
+		id DESC')->fetchAll();
+
+// process models images
+foreach ($allModels as $i => $modelRow) {
+	$allModels[$i]['images'] = json_decode($modelRow['images']) ?? [];
+}
+
+// remove date's excluded models
+if (!empty($params['date'])) {
+	$stmt = $db->prepare('
+		SELECT * 
+		FROM dates_list 
+		WHERE date_ts = :date_ts
+	');
+	$result = $stmt->execute(array(':date_ts' => $params['date']));
+	if (!$result) {
+		_exit($stmt->errorInfo());
+	}
+	$dateInfo = $stmt->fetch();
+	if (!$dateInfo) {
+		_exit('cannot read date info');
+	}
+	
+	// get list of models to exclude
+	$excludedModels = json_decode($dateInfo['excluded_models']) ?? [];
+	
+	// process the list - remove excluded models from the list
+	if (!empty($excludedModels)) {
+		$allModels = array_filter($allModels, function($modelRow) use ($excludedModels) {
+			return !in_array($modelRow['id'], $excludedModels);
+		});
+	}
+}
+
+_success(['models' => $allModels]);

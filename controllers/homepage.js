@@ -58,7 +58,7 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 			$scope.models.inProgress = true;
 			
 			$http.get('api/get_models.php').then(function(res) {
-				$scope.models.data = res.data;
+				$scope.models.data = res.data && res.data.models ? res.data.models : [];
 			}).finally(function() {
 				$scope.models.inProgress = false;
 			});
