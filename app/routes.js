@@ -8,6 +8,10 @@ webApp.config(['$routeProvider', function($routeProvider) {
 			templateUrl: 'views/date.html',
 			controller: 'DateController'
 		})
+		.when('/model/:modelId', {
+			templateUrl: 'views/model.html',
+			controller: 'ModelController'
+		})
 		.otherwise({
 			templateUrl: 'views/homepage.html',
 			controller: 'HomepageController'
