@@ -11,5 +11,5 @@ define('LOG_FILE_PATH', __DIR__.DS.'api.log');
 define('DB_FILE_PATH', __DIR__.DS.'db'.DS.'models.db');
 
 // facebook info
-define('FB_APP_ID', '1464574370233315');
-define('FB_APP_SECRET', 'a30e5de58b2a3842532cd02f5a0fe46e');
+define('FB_APP_ID', '<your facebook app ID>');
+define('FB_APP_SECRET', '<your facebook app secret>');

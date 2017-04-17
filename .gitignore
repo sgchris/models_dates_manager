@@ -3,6 +3,9 @@
 *.phprj
 *.workspace
 
+# config 
+api/config.php
+
 # vendor
 vendor
 
