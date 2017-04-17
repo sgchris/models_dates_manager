@@ -1,5 +1,34 @@
-<div class="model-box-wrapper">
-	<div>
-		<img src="http://placehold.it/400x300">
+<div class="model-box-wrapper extended">
+	<div class="model-tag">Model #{{model.id}}</div>
+	<div class="main-image-wrapper">
+		<img ng-show=" model.images[0]" ng-src="{{model.images[0]}}">
+		<img ng-show="!model.images[0]" ng-src="{{defaultImage}}">
+	</div>
+	<div class="small-images-wrapper">
+		<div class="small-image-wrapper" ng-repeat="i in [1, 2, 3, 4, 5]">
+			<img ng-show=" model.images[i]" ng-src="{{model.images[i]}}">
+			<img ng-show="!model.images[i]" ng-src="{{defaultImage}}">
+		</div>
+	</div>
+	<h2 class="model-name">{{model.name}}</h2>
+	<p class="model-notes">{{model.notes}} Ant Financial, the Alibaba affiliate company focused on financial services, appears to have finally won its battle with Euronet to acquire MoneyGram, the U.S.-based cross-border payments service, after it increased its bid to</p>
+	<div class="model-toolbar">
+		<a href="javascript:;" class="btn btn-link pull-right icon-red"
+			ng-click="deleteModel(model.id);" 
+			title="Delete the model from the system">
+			<i class="glyphicon glyphicon-trash"></i>
+		</a>
+		<a href="#/model/{{model.id}}" class="btn btn-link pull-right"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+		
+		<a href="javascript:;" class="btn btn-link" 
+			ng-click="relocateModel(model.id, 'top');" 
+			title="Place the model at the top of the list">
+			<i class="glyphicon glyphicon-chevron-up"></i>
+		</a>
+		<a href="javascript:;" class="btn btn-link" 
+			ng-click="relocateModel(model.id, 'bottom');" 
+			title="Place the model at the bottom of the list">
+			<i class="glyphicon glyphicon-chevron-down"></i>
+		</a>
 	</div>
 </div>
