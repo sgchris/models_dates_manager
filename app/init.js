@@ -85,7 +85,6 @@ webApp.run(['$rootScope', '$window', '$http', function($rootScope, $window, $htt
 				
 				// get logged in user details
 				FB.api('/me', function(response) {
-					console.log('response', response);
 					$rootScope.$apply(function() {
 						$rootScope.loggedInUser = response;
 					});

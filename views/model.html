@@ -1,1 +1,21 @@
-<h1>Model page</h1>
+<div class="container-fluid">
+	<div class="upload-model-images-wrapper">
+		<h3>Upload new images</h3>
+		<form ng-submit="uploader.uploadFiles()">
+			<input type="file" class="input-control" multiple="true">
+			<button type="submit">Upload</button>
+		</form>
+			
+	</div>
+
+	<h1>Model {{model.details.name}}</h1>
+	
+	<!-- images list -->
+	<div ng-if="model.details.images.length > 0" class="model-image-wrapper" ng-repeat="imageUrl in model.details.images">
+		<img ng-src="{{imageUrl}}" />
+	</div>
+	<div ng-if="model.details.images.length == 0">
+		No images :(
+	</div>
+	
+</div>
