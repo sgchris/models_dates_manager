@@ -13,7 +13,7 @@ if (!is_numeric($modelId) || !($modelId > 0)) {
 
 $newLocation = strtolower($params['new_location']);
 if (!in_array($newLocation, ['top', 'bottom'])) {
-	_exit('bad new_location parameter');
+	_exit('bad new_location parameter - only "top" or "bottom" allowed');
 }
 
 if ($newLocation == 'top') {
@@ -33,7 +33,7 @@ if ($newLocation == 'top') {
 	}
 	$minDisplayOrder = $minDisplayOrder['min_display_order'] ?? 0;
 	
-	$newDisplayOrder = $minDisplayOrder + 1;
+	$newDisplayOrder = $minDisplayOrder - 1;
 }
 
 $stmt = $db->prepare('

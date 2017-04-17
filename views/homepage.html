@@ -49,7 +49,7 @@
 </div>
 <div class="col-xs-12 col-md-9">
 	<article ng-repeat="model in models.data">
-		<model-box ng-model="model"></model-box>
+		<model-box ng-model="model" on-relocate="models.load()" on-delete="models.load()"></model-box>
 	</article>
 </div>
 

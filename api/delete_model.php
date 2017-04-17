@@ -3,7 +3,6 @@
 require_once __DIR__.'/init.php';
 
 requestShouldBe('post');
-
 $params = receiveParams(['model_id'], ['model_id']);
 
 $modelId = $params['model_id'];
@@ -48,3 +47,4 @@ if (!empty($dates)) {
 	}
 }
 
+_success();
