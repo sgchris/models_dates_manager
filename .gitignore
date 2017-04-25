@@ -12,3 +12,6 @@ vendor
 # database
 api/db/models.db
 
+# upload folder
+images/upload
+
