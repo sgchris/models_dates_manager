@@ -1,18 +1,40 @@
 <div class="container-fluid">
-	<div class="upload-model-images-wrapper">
-		<h3>Upload new images</h3>
-		<form ng-submit="uploader.uploadFiles()">
-			<input type="file" class="input-control" multiple="true">
-			<button type="submit">Upload</button>
-		</form>
-			
-	</div>
 
 	<h1>Model {{model.details.name}}</h1>
 	
+
+	<div class="upload-model-images-wrapper">
+		
+		<hr />
+		
+		<h3>Upload new images</h3>
+		<div class="upload-model-images-drop-area" ngf-drop ngf-select="uploader.uploadFiles($files, $invalidFiles)" ngf-multiple="true" accept="image/*"
+			title="Drag and drop new model images to this area, or just click to select new files">
+			<span class="upload-model-images-drop-area-text">Drop images here / Click to select</span>
+		</div>
+		<div class="text-danger" ng-if="uploader.errorMessage" ng-attr-title="{{uploader.errorMessage}}">{{uploader.errorMessage}}</div>
+	</div>
+	
+	<hr />
+	
 	<!-- images list -->
 	<div ng-if="model.details.images.length > 0" class="model-image-wrapper" ng-repeat="imageUrl in model.details.images">
-		<img ng-src="{{imageUrl}}" />
+		<div class="model-image-wrapper-inner">
+			<img ng-src="{{IMAGES_BASE_URL}}/{{imageUrl}}" />
+		</div>
+		<div class="model-toolbar">
+			<a href="javascript:;" class="btn btn-link pull-right icon-red"
+				ng-click="model.deleteImage(imageUrl);" 
+				title="Delete the image">
+				<i class="glyphicon glyphicon-trash"></i>
+			</a>
+			<a href="javascript:;" class="btn btn-link pull-right"
+				ng-click="model.makeMainImage(imageUrl);" 
+				title="Make model&rsquo;s main image">
+				<i ng-if="$index == 0" class="glyphicon glyphicon-star icon-green"></i>
+				<i ng-if="$index != 0" class="glyphicon glyphicon-star-empty"></i>
+			</a>
+		</div>
 	</div>
 	<div ng-if="model.details.images.length == 0">
 		No images :(

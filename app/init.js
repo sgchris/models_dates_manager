@@ -1,4 +1,4 @@
-webApp = angular.module('WebApp', ['ngRoute', 'ui.bootstrap']);
+webApp = angular.module('WebApp', ['ngRoute', 'ui.bootstrap', 'ngFileUpload']);
 
 webApp.config(['$httpProvider', function($httpProvider) {
 
@@ -50,6 +50,9 @@ webApp.config(['$httpProvider', function($httpProvider) {
 
 
 webApp.run(['$rootScope', '$window', '$http', function($rootScope, $window, $http) {
+	
+	// models' images base URL
+	$rootScope.IMAGES_BASE_URL = window.IMAGES_BASE_URL;
 	
 	// store the controller name in the rootScope
 	$rootScope.$on('$routeChangeSuccess', function(ev, data) {

@@ -10,6 +10,7 @@ webApp.directive('modelBox', ['$http', function($http) {
 			onRelocate: '&'
 		},
 		link: function(scope, element, attributes) {
+			console.log('scope', scope);
 			scope.defaultImage = 'images/model_silhouette.png';
 			
 			/**

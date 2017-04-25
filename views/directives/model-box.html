@@ -1,12 +1,12 @@
 <div class="model-box-wrapper extended">
 	<div class="model-tag">Model #{{model.id}}</div>
 	<div class="main-image-wrapper">
-		<img ng-show=" model.images[0]" ng-src="{{model.images[0]}}">
+		<img ng-show=" model.images[0]" ng-src="{{$root.IMAGES_BASE_URL}}/{{model.images[0]}}">
 		<img ng-show="!model.images[0]" ng-src="{{defaultImage}}">
 	</div>
 	<div class="small-images-wrapper">
 		<div class="small-image-wrapper" ng-repeat="i in [1, 2, 3, 4, 5]">
-			<img ng-show=" model.images[i]" ng-src="{{model.images[i]}}">
+			<img ng-show=" model.images[i]" ng-src="{{$root.IMAGES_BASE_URL}}/{{model.images[i]}}">
 			<img ng-show="!model.images[i]" ng-src="{{defaultImage}}">
 		</div>
 	</div>
