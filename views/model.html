@@ -1,19 +1,65 @@
 <div class="container-fluid">
 
 	<h1>Model {{model.details.name}}</h1>
+	<p title="{{model.details.name}}" class="lead secondary-title">{{model.details.notes}}</p>
 	
-
+	<!-- upload new images -->
 	<div class="upload-model-images-wrapper">
+		
+		<h3>Upload new images</h3>
+		<div class="upload-model-images-drop-area" 
+			ngf-drop 
+			ng-model="uploader.files"
+			ngf-multiple="true" 
+			accept="image/*"
+			ngf-drag-over-class="'model-images-dragover'" 
+			title="Drop images to that area">
+			<span class="upload-model-images-drop-area-text">Drop images here</span>
+			<br />
+			<button
+				class="btn btn-primary btn-large"
+				ngf-select="uploader.uploadFiles($files, $invalidFiles)" 
+				ngf-multiple="true" 
+				accept="image/*"
+				title="Click the button to select files from your computer">
+				<i class="glyphicon glyphicon-picture"></i> Select files from my PC
+			</button>
+			
+		</div>
+		<div class="text-danger" ng-if="uploader.errorMessage" ng-attr-title="{{uploader.errorMessage}}">{{uploader.errorMessage}}</div>
 		
 		<hr />
 		
-		<h3>Upload new images</h3>
-		<div class="upload-model-images-drop-area" ngf-drop ngf-select="uploader.uploadFiles($files, $invalidFiles)" ngf-multiple="true" accept="image/*"
-			title="Drag and drop new model images to this area, or just click to select new files">
-			<span class="upload-model-images-drop-area-text">Drop images here / Click to select</span>
-		</div>
-		<div class="text-danger" ng-if="uploader.errorMessage" ng-attr-title="{{uploader.errorMessage}}">{{uploader.errorMessage}}</div>
 	</div>
+	
+	<!-- model comments -->
+	<div class="row">
+		<div class="col-xs-12 col-md-4">
+			<form class="form-horizontal" ng-submit="model.update()" name="model.detailsForm">
+				<div class="form-group">
+					<label class="col-sm-2">Name</label>
+					<div class="col-sm-10"><input type="text" class="form-control" ng-model="model.details.name" /></div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-2">Notes</label>
+					<div class="col-sm-10"><textarea class="form-control" ng-model="model.details.notes">{{model.details.notes}}</textarea></div>
+				</div>
+					
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-primary">
+							<i class="glyphicon glyphicon-pencil"></i> Update
+						</button>
+						<span ng-show="model.detailsForm.$dirty" class="text-warning" title="Model details are not updated until you press the update button">
+							&nbsp;&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-warning-sign"></i> Please update!
+						</span>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	
 	
 	<hr />
 	
@@ -36,7 +82,7 @@
 			</a>
 		</div>
 	</div>
-	<div ng-if="model.details.images.length == 0">
+	<div ng-if="model.details.images.length == 0" class="model-no-images-wrapper">
 		No images :(
 	</div>
 	

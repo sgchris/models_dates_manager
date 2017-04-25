@@ -121,66 +121,6 @@ function checkUploadFolder() {
 	}
 }
 
-/**
- * Take base64 encoded images in "extra_data", create images, and replace the content
- * in `params` array
- * with their URL
- * @param array $params 
- * @return  
- */
-function uploadImages(&$params) {
-	if (!empty($params['extra_data'])) {
-
-		// decode extra parameters
-		$params['extra_data'] = json_decode($params['extra_data'], true);
-		
-		// check if "additional" images were uploaded
-		if (isset($params['extra_data']['additionalPictures']) && !empty($params['extra_data']['additionalPictures'])) {
-			
-			// check that the images can be created
-			checkUploadFolder();
-			
-			// set the upload folder (defined in the config file)
-			$uploadFolder = IMAGES_UPLOAD_PATH;
-			
-			// store every passed image (it's passed as a base64 encoded string)
-			foreach ($params['extra_data']['additionalPictures'] as $i => $additionalPicture) {
-				$additionalPictureContent = preg_replace('%^data.*?base64\,%i', '', $additionalPicture, -1, $totalReplaced);
-				
-				// check if replaced the base64 encoded shit. If not, probably that's a URL to the image
-				if ($totalReplaced == 0) {
-					continue;
-				}
-				
-				// decode the content
-				$imageContent = base64_decode($additionalPictureContent);
-				
-				// generate image name
-                $pureName = preg_replace('%[^A-Za-z0-9]+%', '', $params['name']);
-				$imageName = uniqid($pureName.'_').'.jpg';
-				$imagePath = $uploadFolder.DIRECTORY_SEPARATOR.$imageName;
-				
-				
-				// create the image
-				$filePutContentsResult = file_put_contents($imagePath, $imageContent);
-				if ($filePutContentsResult === false) {
-					_exit('could not save image #' . $i);
-				}
-				
-				// change the base64 content with the new image path
-				$params['extra_data']['additionalPictures'][$i] = IMAGES_UPLOAD_URL.'/'.$imageName;
-			}
-			
-			// check if the main image was set, if not, set the first uploaded image as the main image
-			if (empty($params['picture'])) {
-				$params['picture'] = array_shift($params['extra_data']['additionalPictures']);
-			}
-		}
-		
-		// encode the extra parameters back to a string
-		$params['extra_data'] = json_encode($params['extra_data']);
-	}
-}
 
 /**
  * Check if the value is in the range
@@ -203,4 +143,83 @@ function between($var, $min, $max, $includingMin = true, $includingMax = true) {
 	}
 	
 	return $condA && $condB;
+}
+
+
+/**
+ * Execute statement with error check
+ * @param string $sql 
+ * @param array $paramsArray 
+ * @return array 
+ */
+function executeQuery($sql, array $paramsArray = array(), $returnResultSet = true, $fetchOnlyOne = false) {
+	global $db;
+	
+	// prepare
+	$stmt = $db->prepare($sql);
+	if (!$stmt) {
+		_exit($db->errorInfo());
+	}
+	
+	// execute
+	$result = $stmt->execute($paramsArray);
+	if (!$result) {
+		_exit($stmt->errorInfo());
+	}
+	
+	return $returnResultSet ? 
+		($fetchOnlyOne ? $stmt->fetch() : $stmt->fetchAll()) : 
+		true;
+}
+
+
+/**
+ * Execute query without getting the result
+ * @param string $sql 
+ * @param array $paramsArray 
+ * @return boolean
+ */
+function dbExec($sql, array $paramsArray = array()) {
+	return executeQuery($sql, $paramsArray, $__returnResultSet = false);
+}
+
+/**
+ * Execute query and get the results - list of rows
+ * @param string $sql 
+ * @param array $paramsArray 
+ * @return array
+ */
+function dbQuery($sql, array $paramsArray = array()) {
+	return executeQuery($sql, $paramsArray, $__returnResultSet = true);
+}
+
+/**
+ * Execute query and get the result as one row array
+ * @param string $sql 
+ * @param array $paramsArray 
+ * @return array
+ */
+function dbRow($sql, array $paramsArray = array()) {
+	return executeQuery($sql, $paramsArray, $__returnResultSet = true, $__fetchOnlyOne = true);
+}
+
+/**
+ * Get model details
+ * @param number $modelId 
+ * @return array
+ */
+function getModelDetails($modelId) {
+	global $db;
+	
+	// get the model from the DB
+	$modelRow = dbRow('select * from models where id = :model_id', array(
+		':model_id' => $modelId
+	));
+	
+	// check that she exists
+	if (!$modelRow) {
+		_exit('cannot find the model');
+	}
+	
+	return $modelRow;
 }

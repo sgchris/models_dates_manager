@@ -17,26 +17,18 @@ if (strlen($imageUrl) < 5 || strlen($imageUrl) > 255) {
 }
 
 // get the model from the DB
-$modelRow = $db->prepare('select * from models where id = :model_id');
-$result = $modelRow->execute(array(
+$modelRow = dbRow('select * from models where id = :model_id', array(
 	':model_id' => $modelId
 ));
-if (!$result) {
-	_exit($modelRow->errorInfo());
-}
-
-// check that she exists
-$modelRow = $modelRow->fetch();
-if (!$modelRow) {
-	_exit('cannot locate the model');
-}
 
 $modelImages = json_decode($modelRow['images']);
 $foundImage = false;
 if (!empty($modelImages)) {
 	foreach ($modelImages as $i => $modelImage) {
 		if ($modelImage == $imageUrl) {
+
 			$foundImage = true;
+
 			// remove the image from the array
 			array_splice($modelImages, $i, 1);
 			
@@ -48,21 +40,14 @@ if (!empty($modelImages)) {
 	}
 }
 
-
-
 if (!$foundImage) {
 	_exit('Image was not found');
 }
 
 // update model's row in the DB
-$stmt = $db->prepare('update models set images = :images where id = :model_id');
-$result = $stmt->execute(array(
+$stmt = dbExec('update models set images = :images where id = :model_id', array(
 	':images' => json_encode(array_values($modelImages)),
 	':model_id' => $modelId,
 ));
-
-if (!$result) {
-	_exit($stmt->errorInfo());
-}
 
 _success();

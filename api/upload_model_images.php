@@ -12,40 +12,12 @@ if (!is_numeric($modelId) || !($modelId > 0)) {
 }
 
 // check the destination folder
-$destinationFolder = __DIR__.'/../images/upload';
-if (!is_dir($destinationFolder)) {
-	
-	// check if it's possible to create the folder
-	if (!is_writable(dirname($destinationFolder))) {
-		_exit('cannot create images folder - no permissions');
-	}
-	
-	// create the folder
-	$result = @mkdir($destinationFolder);
-	if (!$result) {
-		_exit('cannot create images folder - operation failed');
-	}
-}
-
-if (!is_writable($destinationFolder)) {
-	_exit('No permissions to the images folder');
-}
+$destinationFolder = IMAGES_UPLOAD_PATH;
+checkUploadFolder();
 
 
 // get the model from the DB
-$modelRow = $db->prepare('select * from models where id = :model_id');
-$result = $modelRow->execute(array(
-	':model_id' => $modelId
-));
-if (!$result) {
-	_exit($modelRow->errorInfo());
-}
-
-// check that she exists
-$modelRow = $modelRow->fetch();
-if (!$modelRow) {
-	_exit('cannot locate the model');
-}
+$modelRow = getModelDetails($modelId);
 
 $errors = [];
 $successfulFiles = 0;
@@ -81,15 +53,10 @@ if (!empty($_FILES)) {
 		$modelImages = json_decode($modelRow['images']) ?? [];
 		$modelImages[] = $newImageFileName;
 		$modelImages = json_encode(array_values($modelImages));
-		$stmt = $db->prepare('update models set images = :images where id = :model_id');
-		$result = $stmt->execute(array(
+		dbExec('update models set images = :images where id = :model_id', array(
 			':model_id' => $modelId,
 			':images' => $modelImages,
 		));
-		if (!$result) {
-			$errors[] = $modelRow->errorInfo();
-			continue;
-		}
 		
 		$successfulFiles ++;
 	}

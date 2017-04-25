@@ -12,32 +12,28 @@ if (!is_numeric($params['date'])) {
 }
 
 // check that the date is +/- one year
-if ($params['date'] > strtotime('+1 year') || $params['date'] < strtotime('-1 year')) {
+if (!between($params['date'], strtotime('-1 year'), strtotime('+1 year'))) {
 	_exit('date is too far away');
 }
 
 // check if the date already exists
-$stmt = $db->prepare('select * from dates_list where date_ts = :date_ts');
+$date = dbRow(
+	'select * from dates_list where date_ts = :date_ts', 
+	array(':date_ts' => $params['date'])
+);
 
-$result = $stmt->execute(array(
-	':date_ts' => $params['date']
-));
-if (!$result) {
-	_exit(json_encode($stmt->errorInfo()));
-}
-if ($stmt->fetch()) {
+if (!empty($date)) {
 	_exit('the date already exists');
 }
 
 
 // insert the new date
-$stmt = $db->prepare('insert into dates_list (date_ts, hash) values (:date_ts, :hash)');
-$result = $stmt->execute(array(
-	':date_ts' => $params['date'],
-	':hash' => md5(microtime(true)),
-));
-if (!$result) {
-	_exit(json_encode($stmt->errorInfo()));
-}
+dbExec(
+	'insert into dates_list (date_ts, hash) values (:date_ts, :hash)',
+	array(
+		':date_ts' => $params['date'],
+		':hash' => md5(microtime(true)),
+	)
+);
 
 _success();

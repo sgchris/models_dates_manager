@@ -18,7 +18,7 @@ if (!in_array($newLocation, ['top', 'bottom'])) {
 
 if ($newLocation == 'top') {
 	// get the max display_order
-	$maxDisplayOrder = $db->query('select max(display_order) as max_display_order from models')->fetch();
+	$maxDisplayOrder = dbRow('select max(display_order) as max_display_order from models');
 	if (!$maxDisplayOrder) {
 		_exit('cannot get the max display order');
 	}
@@ -27,7 +27,7 @@ if ($newLocation == 'top') {
 	$newDisplayOrder = $maxDisplayOrder + 1;
 } else {
 	// get the max display_order
-	$minDisplayOrder = $db->query('select min(display_order) as min_display_order from models')->fetch();
+	$minDisplayOrder = dbRow('select min(display_order) as min_display_order from models');
 	if (!$minDisplayOrder) {
 		_exit('cannot get the min display order');
 	}
@@ -36,16 +36,14 @@ if ($newLocation == 'top') {
 	$newDisplayOrder = $minDisplayOrder - 1;
 }
 
-$stmt = $db->prepare('
+$stmt = dbExec('
 	UPDATE models 
 	SET display_order = :new_display_order 
-	WHERE id = :model_id');
-$result = $stmt->execute([
-	':new_display_order' => $newDisplayOrder,
-	':model_id' => $modelId,
-]);
-if (!$result) {
-	_exit($stmt->errorInfo());
-}
+	WHERE id = :model_id', 
+	[
+		':new_display_order' => $newDisplayOrder,
+		':model_id' => $modelId,
+	]
+);
 
 _success();

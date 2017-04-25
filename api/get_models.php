@@ -7,12 +7,12 @@ requestShouldBe('GET');
 $params = receiveParams(['date']);
 
 // get all the models
-$allModels = $db->query('
+$allModels = dbQuery('
 	SELECT * 
 	FROM models 
 	ORDER by 
 		CAST(display_order AS INTEGER) DESC, 
-		id DESC')->fetchAll();
+		id DESC');
 
 // process models images
 foreach ($allModels as $i => $modelRow) {
@@ -21,16 +21,11 @@ foreach ($allModels as $i => $modelRow) {
 
 // remove date's excluded models
 if (!empty($params['date'])) {
-	$stmt = $db->prepare('
+	$dateInfo = dbRow('
 		SELECT * 
 		FROM dates_list 
 		WHERE date_ts = :date_ts
-	');
-	$result = $stmt->execute(array(':date_ts' => $params['date']));
-	if (!$result) {
-		_exit($stmt->errorInfo());
-	}
-	$dateInfo = $stmt->fetch();
+	', array(':date_ts' => $params['date']));
 	if (!$dateInfo) {
 		_exit('cannot read date info');
 	}

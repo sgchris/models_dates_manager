@@ -4,12 +4,8 @@
 
 require_once __DIR__.DIRECTORY_SEPARATOR.'init.php';
 
-$results = $db->query('select * from dates_list order by date_ts asc');
-if (!$results) {
-	_exit($db->errorInfo());
-}
+$results = dbQuery('select * from dates_list order by date_ts asc');
 
-$results = $results->fetchAll();
 foreach ($results as $i => $row) {
 	$results[$i]['excluded_models'] = !empty($row['excluded_models']) ? 
 		array_filter(explode(',', $row['excluded_models']), 'strlen') :

@@ -12,26 +12,19 @@ if (!is_numeric($params['date'])) {
 }
 
 // check if the date already exists
-$stmt = $db->prepare('select * from dates_list where date_ts = :date_ts');
+$date = dbRow(
+	'select * from dates_list where date_ts = :date_ts', 
+	array(':date_ts' => $params['date'])
+);
 
-$result = $stmt->execute(array(
-	':date_ts' => $params['date']
-));
-if (!$result) {
-	_exit(json_encode($stmt->errorInfo()));
-}
-if (!$stmt->fetch()) {
-	_exit('the date does not exists');
+if (empty($date)) {
+	_exit('the date does not exist');
 }
 
 // insert the new date
-$stmt = $db->prepare('delete from dates_list where date_ts = :date_ts');
-$result = $stmt->execute(array(
+$stmt = dbExec('delete from dates_list where date_ts = :date_ts', array(
 	':date_ts' => $params['date']
 ));
-if (!$result) {
-	_exit(json_encode($stmt->errorInfo()));
-}
 
 _success();
 

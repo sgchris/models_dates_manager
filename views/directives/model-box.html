@@ -10,8 +10,8 @@
 			<img ng-show="!model.images[i]" ng-src="{{defaultImage}}">
 		</div>
 	</div>
-	<h2 class="model-name">{{model.name}}</h2>
-	<p class="model-notes">{{model.notes}} Ant Financial, the Alibaba affiliate company focused on financial services, appears to have finally won its battle with Euronet to acquire MoneyGram, the U.S.-based cross-border payments service, after it increased its bid to</p>
+	<h2 class="model-name"><a href="#/model/{{model.id}}">{{model.name}}</a></h2>
+	<p class="model-notes" ng-attr-title="{{model.notes}}">{{model.notes}}</p>
 	<div class="model-toolbar">
 		<a href="javascript:;" class="btn btn-link pull-right icon-red"
 			ng-click="deleteModel(model.id);" 

@@ -17,28 +17,11 @@ if (strlen($imageUrl) < 5 || strlen($imageUrl) > 255) {
 }
 
 // check the destination folder
-$destinationFolder = __DIR__.'/../images/upload';
-if (!is_dir($destinationFolder)) {
-	_exit('No images folder');
-}
-if (!is_writable($destinationFolder)) {
-	_exit('No permissions to the images folder');
-}
+$destinationFolder = IMAGES_UPLOAD_PATH;
+checkUploadFolder();
 
 // get the model from the DB
-$modelRow = $db->prepare('select * from models where id = :model_id');
-$result = $modelRow->execute(array(
-	':model_id' => $modelId
-));
-if (!$result) {
-	_exit($modelRow->errorInfo());
-}
-
-// check that she exists
-$modelRow = $modelRow->fetch();
-if (!$modelRow) {
-	_exit('cannot locate the model');
-}
+$modelRow = getModelDetails($modelId);
 
 $modelImages = json_decode($modelRow['images']);
 $foundImage = false;
@@ -68,14 +51,9 @@ if (!$deleteResult) {
 }
 
 // update model's row in the DB
-$stmt = $db->prepare('update models set images = :images where id = :model_id');
-$result = $stmt->execute(array(
+dbExec('update models set images = :images where id = :model_id', array(
 	':images' => json_encode(array_values($modelImages)),
 	':model_id' => $modelId,
 ));
-
-if (!$result) {
-	_exit($stmt->errorInfo());
-}
 
 _success();

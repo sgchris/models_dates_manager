@@ -1,12 +1,44 @@
 webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$http', '$timeout', 'Upload', 
 	function($rootScope, $routeParams, $scope, $http, $timeout, Upload) {
-	
+		
 	$scope.model = {
 		inProgress: false,
 		
 		id: $routeParams.modelId,
 		
 		details: {},
+		
+		detailsForm: null,
+		
+		update: function() {
+			$scope.model.inProgress = true;
+			
+			var data = {
+				model_id: $scope.model.id,
+				name: $scope.model.details.name,
+				notes: $scope.model.details.notes,
+			};
+			
+			$http({
+				method: 'post',
+				url: 'api/update_model.php',
+				data: data
+			}).then(function(res) {
+				if (res.data && res.data.result == 'ok') {
+					
+					if ($scope.model.detailsForm) {
+						$scope.model.detailsForm.$setPristine();
+					}
+					
+					$scope.model.load();
+					return;
+				}
+				
+				alert('cannot update model notes. ' + JSON.stringify(res.data));
+			}).finally(function() {
+				$scope.model.inProgress = false;
+			});
+		},
 		
 		deleteImage: function(imageUrl) {
 			if (!confirm('Delete the image?')) {
@@ -90,8 +122,10 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 		files: false,
 		errorMessage: '',
 		
-		uploadFiles: function(files, errFiles) {
-			$scope.uploader.files = files;
+		uploadFiles: function(files) {
+			if (!files) {
+				files = $scope.uploader.files;
+			}
 			
 			angular.forEach(files, function(file) {
 				file.upload = Upload.upload({
@@ -131,6 +165,10 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 
 		},
 	};
+	
+	$scope.$watch('uploader.files', function(newVal) {
+		$scope.uploader.uploadFiles();
+	});
 	
 	$scope.model.load();
 	
