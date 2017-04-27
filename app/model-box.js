@@ -10,8 +10,16 @@ webApp.directive('modelBox', ['$http', function($http) {
 			onRelocate: '&'
 		},
 		link: function(scope, element, attributes) {
-			console.log('scope', scope);
 			scope.defaultImage = 'images/model_silhouette.png';
+			
+			// set the initial main image
+			scope.mainImage = scope.model.images[0] ? 
+				(scope.$root.IMAGES_BASE_URL + '/' + scope.model.images[0]) : 
+				scope.defaultImage;
+				
+			scope.setMainImage = function(imageNumber) {
+				scope.mainImage = scope.$root.IMAGES_BASE_URL + '/' + scope.model.images[imageNumber];
+			};
 			
 			/**
 			 * move the model to the top/bottom of the list
