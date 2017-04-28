@@ -12,6 +12,8 @@ webApp.directive('modelBox', ['$http', function($http) {
 		link: function(scope, element, attributes) {
 			scope.defaultImage = 'images/model_silhouette.png';
 			
+			scope.galleryIsOpen = false;
+			
 			// set the initial main image
 			scope.mainImage = scope.model.images[0] ? 
 				(scope.$root.IMAGES_BASE_URL + '/' + scope.model.images[0]) : 
@@ -19,6 +21,10 @@ webApp.directive('modelBox', ['$http', function($http) {
 				
 			scope.setMainImage = function(imageNumber) {
 				scope.mainImage = scope.$root.IMAGES_BASE_URL + '/' + scope.model.images[imageNumber];
+			};
+			
+			scope.openGallery = function() {
+				scope.galleryIsOpen = !scope.galleryIsOpen;
 			};
 			
 			/**

@@ -1,7 +1,10 @@
 <div class="model-box-wrapper extended">
+	<!-- the gallery -->
+	<an-gri-gal ng-if="galleryIsOpen" images="model.images" on-close="openGallery();"></an-gri-gal>
+	
 	<div class="model-tag">Model #{{model.id}}</div>
 	<div class="main-image-wrapper">
-		<a ng-click="openLightBox(model.id);" class="main-image-lightbox-link" title="Click to see model images in original size">
+		<a ng-click="openGallery();" class="main-image-lightbox-link" title="Click to see model images in original size">
 			<i class="glyphicon glyphicon-search"></i>
 		</a>
 		<img ng-show=" model.images[0]" ng-src="{{mainImage}}">

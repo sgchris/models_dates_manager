@@ -1,0 +1,59 @@
+.ang-gri-gal-wrapper {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0,0,0,0.8);
+	z-index: 1500;
+	
+	.ang-gri-gal-next, .ang-gri-gal-prev, .ang-gri-gal-close {
+		position: absolute;
+		z-index: 15;
+		
+		background: rgba(255, 255, 255, 0.3);
+		width: 50px; 
+		height: 50px;
+		text-align: center;
+		line-height: 50px;
+		font-size: 20px;
+		font-weight: bold;
+		color: #FFF;
+		
+		right: 50px;
+		top: 40%;
+		
+		cursor: pointer;
+	}
+	
+	.ang-gri-gal-prev {
+		right: initial;
+		left: 50px;
+	}
+	
+	.ang-gri-gal-close {
+		top: 50px
+	}
+	
+	.ang-gri-gal-main-image {
+		position: fixed;
+		
+		top: 10px;
+		right: 10px;
+		bottom: 10px;
+		left: 10px;
+		
+		text-align: center;
+		line-height: 100%;
+		overflow: hidden;
+		
+		z-index: 10;
+		
+		img {
+			max-height: 100%;
+			max-width: 100%;
+			
+			cursor: pointer;
+		}
+	}
+}
