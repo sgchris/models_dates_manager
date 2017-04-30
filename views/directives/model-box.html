@@ -5,7 +5,7 @@
 	<div class="model-tag">Model #{{model.id}}</div>
 	<div class="main-image-wrapper">
 		<a ng-click="openGallery();" class="main-image-lightbox-link" title="Click to see model images in original size">
-			<i class="glyphicon glyphicon-search"></i>
+			<i class="fa fa-search-plus"></i>
 		</a>
 		<img ng-show=" model.images[0]" ng-src="{{mainImage}}">
 		<img ng-show="!model.images[0]" ng-src="{{defaultImage}}">

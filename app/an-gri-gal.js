@@ -1,5 +1,5 @@
 
-webApp.directive('anGriGal', [function() {
+webApp.directive('anGriGal', ['$window', function($window) {
 	return {
 		replace: true,
 		scope: {
@@ -23,11 +23,24 @@ webApp.directive('anGriGal', [function() {
 					scope.mainImage = scope.images[scope.currentImage];
 				}
 			};
+			
+			scope.closeGal = function(e) {
+				if (typeof(scope.onClose) == 'function') {
+					scope.onClose();
+				}
+			};
+			
 		},
 		template: '<div class="ang-gri-gal-wrapper">' + 
-				'<div class="ang-gri-gal-close" ng-click="onClose();">&times;</div>' + 
-				'<div class="ang-gri-gal-next" ng-click="next();">&gt;</div>' + 
-				'<div class="ang-gri-gal-prev" ng-click="prev();">&lt;</div>' +
+				'<div class="ang-gri-gal-close" ng-click="closeGal();">' + 
+				'	<i class="fa fa-remove"></i>' + 
+				'</div>' + 
+				'<div class="ang-gri-gal-next" ng-click="next();">' + 
+				'	<i class="fa fa-chevron-right"></i>' + 
+				'</div>' + 
+				'<div class="ang-gri-gal-prev" ng-click="prev();">' + 
+				'	<i class="fa fa-chevron-left"></i>' + 
+				'</div>' +
 				'<div class="ang-gri-gal-main-image">' + 
 				'	<img ng-src="{{$root.IMAGES_BASE_URL}}/{{mainImage}}" ng-click="next();" />' +
 				'</div>' +
