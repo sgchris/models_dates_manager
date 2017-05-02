@@ -3,11 +3,21 @@ webApp.directive('anGriGal', ['$window', function($window) {
 	return {
 		replace: true,
 		scope: {
+			// list of images
 			images: '=',
+			// start with image number
+			initialIndex: '=',
+			// on close callback
 			onClose: '&'
 		},
 		link: function(scope, element, attrs) {
-			scope.currentImage = 0;
+			
+			// receive initial index
+			if (!scope.initialIndex || scope.initialIndex < 0 || scope.initialIndex > scope.images.length) {
+				scope.initialIndex = 0;
+			}
+			
+			scope.currentImage = scope.initialIndex;
 			scope.mainImage = scope.images[scope.currentImage];
 			
 			scope.next = function() {

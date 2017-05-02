@@ -29,9 +29,31 @@
 	background: #F5F5F5;
 	border: 1px solid #DDD;
 	box-sizing: border-box;
+	position: relative;
 	
 	float: left;
 	margin: 0 10px 10px 0;
+	
+	.main-image-lightbox-link {
+		position: absolute;
+		display: none;
+		width: 100px;
+		height: 100px;
+		line-height: 100px;
+		top: 150px;
+		left: 170px;
+		font-size: 50px;
+		color: #FFF;
+		background: rgba(255, 255, 255, 0.3);
+		z-index: 10;
+		cursor: pointer;
+	}
+	
+	&:hover {
+		.main-image-lightbox-link {
+			display: block;
+		}
+	}
 	
 	.model-image-wrapper-inner {
 		width: 398px;

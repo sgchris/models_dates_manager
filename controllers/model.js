@@ -1,5 +1,25 @@
 webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$http', '$timeout', 'Upload', 
 	function($rootScope, $routeParams, $scope, $http, $timeout, Upload) {
+	
+	$scope.gallery = {
+		isOpen: false,
+		
+		initialIndex: 0,
+		setInitialIndex: function(newIndex) {
+			$scope.gallery.initialIndex = newIndex;
+		},
+		
+		close: function() {
+			$scope.gallery.isOpen = false;
+		},
+		
+		open: function() {
+			$scope.gallery.isOpen = true;
+		}
+	};
+		
+	$scope.galleryIsOpen = false;
+	$scope.galleryIsOpen = false;
 		
 	$scope.model = {
 		inProgress: false,

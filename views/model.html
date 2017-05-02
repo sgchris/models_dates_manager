@@ -1,5 +1,8 @@
 <div class="container-fluid">
 
+	<!-- the gallery -->
+	<an-gri-gal ng-if="gallery.isOpen" images="model.details.images" initial-index="gallery.initialIndex" on-close="gallery.close();"></an-gri-gal>
+
 	<h1>Model {{model.details.name}}</h1>
 	<p title="{{model.details.name}}" class="lead secondary-title">{{model.details.notes}}</p>
 	
@@ -65,6 +68,10 @@
 	
 	<!-- images list -->
 	<div ng-if="model.details.images.length > 0" class="model-image-wrapper" ng-repeat="imageUrl in model.details.images">
+		<a ng-click="gallery.setInitialIndex($index); gallery.open();" class="main-image-lightbox-link" title="Click to see model images in original size">
+			<i class="fa fa-search-plus"></i>
+		</a>
+		
 		<div class="model-image-wrapper-inner">
 			<img ng-src="{{IMAGES_BASE_URL}}/{{imageUrl}}" />
 		</div>
