@@ -1,1 +1,11 @@
-<h1>Date</h1>
+<div class="container-fluid date-page">
+	<h1>{{data.date.date_ts * 1000 | date:dd/MM/yy }}</h1>
+	
+	<hr />
+	
+	<div class="col-xs-12 col-md-9">
+		<article ng-repeat="model in data.models">
+			<model-box ng-model="model" on-relocate="models.load()" on-delete="models.load()"></model-box>
+		</article>
+	</div>
+</div>

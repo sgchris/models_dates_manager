@@ -6,7 +6,7 @@ webApp.directive('anGriGal', ['$window', function($window) {
 			// list of images
 			images: '=',
 			// start with image number
-			initialIndex: '=',
+			initialIndex: '=?',
 			// on close callback
 			onClose: '&'
 		},
