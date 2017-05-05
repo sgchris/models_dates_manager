@@ -11,7 +11,11 @@
 		<img ng-show="!model.images[0]" ng-src="{{defaultImage}}">
 	</div>
 	<div class="small-images-wrapper">
-		<div class="small-image-wrapper" ng-class="{'defined-small-image': model.images[i]}" ng-repeat="i in [1, 2, 3, 4, 5]">
+		<div class="small-image-wrapper" ng-repeat="i in [0, 1, 2, 3, 4]"
+			ng-class="{
+				'defined-small-image': model.images[i], 
+				'selected-small-image': mainImage == $root.IMAGES_BASE_URL + '/' + model.images[i]
+			}">
 			<img ng-show=" model.images[i]" ng-src="{{$root.IMAGES_BASE_URL}}/{{model.images[i]}}" ng-click="setMainImage(i);">
 			<img ng-show="!model.images[i]" ng-src="{{defaultImage}}">
 		</div>
