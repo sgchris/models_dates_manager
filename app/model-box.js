@@ -5,9 +5,11 @@ webApp.directive('modelBox', ['$http', function($http) {
 		scope: {
 			model: '=ngModel',
 			
-			// expressions
-			onDelete: '&',
-			onRelocate: '&'
+			// callbacks (expressions)
+			onDelete: '&?',
+			onRelocate: '&?',
+			onDismiss: '&?',
+			onInclude: '&?'
 		},
 		link: function(scope, element, attributes) {
 			scope.defaultImage = 'images/model_silhouette.png';
@@ -26,6 +28,18 @@ webApp.directive('modelBox', ['$http', function($http) {
 			scope.openGallery = function() {
 				scope.galleryIsOpen = !scope.galleryIsOpen;
 			};
+			
+			// check if "dismiss" callback is defined
+			scope.showDismissButton = (typeof(scope.onDismiss) == 'function');
+			
+			// check if "include" callback is defined
+			scope.showIncludeButton = (typeof(scope.onInclude) == 'function');
+			
+			// check if "relocate" callback is defined
+			scope.showRelocateButtons = (typeof(scope.onRelocate) == 'function');
+			
+			// check if "delete" callback is defined
+			scope.showDeleteButtons = (typeof(scope.onDelete) == 'function');
 			
 			/**
 			 * move the model to the top/bottom of the list

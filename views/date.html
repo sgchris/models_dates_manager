@@ -1,11 +1,38 @@
 <div class="container-fluid date-page">
+	<button class="btn btn-large btn-danger pull-right" ng-click="data.deleteDate();"><i class="glyphicon glyphicon-remove"></i> Delete this date</button>
 	<h1>{{data.date.date_ts * 1000 | date:dd/MM/yy }}</h1>
 	
 	<hr />
 	
-	<div class="col-xs-12 col-md-9">
-		<article ng-repeat="model in data.models">
-			<model-box ng-model="model" on-relocate="models.load()" on-delete="models.load()"></model-box>
-		</article>
+	<div class="row">
+		<div class="col-xs-12">
+			<article ng-repeat="model in data.models">
+				<model-box 
+					ng-model="model" 
+					on-dismiss="data.excludeModel(data.date, model);"></model-box>
+			</article>
+		</div>
 	</div>
+	
+	<div ng-if="data.excludedModels.length > 0">
+		<hr />
+		
+		<div class="row" style="background: #FFE; padding: 10px; border-top: 1px solid #DDE;">
+			<h2>Excluded models</h2>
+			
+			<div class="col-xs-12">
+				<article ng-repeat="model in data.excludedModels">
+					<model-box 
+						ng-model="model" 
+						on-include="data.includeModel(data.date, model);"></model-box>
+				</article>
+			</div>
+		</div>
+	</div>
+	
+	<br />
+	<br />
+	<br />
+	<br />
+	
 </div>

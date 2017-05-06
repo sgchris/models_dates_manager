@@ -1,5 +1,9 @@
 webApp.config(['$routeProvider', function($routeProvider) {
 	$routeProvider
+		.when('/', {
+			templateUrl: 'views/homepage.html',
+			controller: 'HomepageController'
+		})
 		.when('/about', {
 			templateUrl: 'views/about.html',
 			controller: 'AboutController'
@@ -13,7 +17,6 @@ webApp.config(['$routeProvider', function($routeProvider) {
 			controller: 'ModelController'
 		})
 		.otherwise({
-			templateUrl: 'views/homepage.html',
-			controller: 'HomepageController'
+			redirectTo: '/'
 		});
 }]);

@@ -17,7 +17,6 @@ if (!$dateData) {
 $dateData['excluded_models'] = !empty($row['excluded_models']) ? 
 	array_filter(explode(',', $row['excluded_models']), 'strlen') :	[];
 
-
 _success([
 	'date' => $dateData,
 ]);

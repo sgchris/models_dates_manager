@@ -14,7 +14,7 @@ $allModels = dbQuery('
 		CAST(display_order AS INTEGER) DESC, 
 		id DESC');
 
-// process models images
+// decode models images
 foreach ($allModels as $i => $modelRow) {
 	$allModels[$i]['images'] = json_decode($modelRow['images']) ?? [];
 }
@@ -31,14 +31,22 @@ if (!empty($params['date'])) {
 	}
 	
 	// get list of models to exclude
-	$excludedModels = json_decode($dateInfo['excluded_models']) ?? [];
+	$excludedModelsIds = json_decode($dateInfo['excluded_models']) ?? [];
+	
+	// initialize the two arrays
+	$excludedModels = array();
+	$includedModels = array();
 	
 	// process the list - remove excluded models from the list
-	if (!empty($excludedModels)) {
-		$allModels = array_filter($allModels, function($modelRow) use ($excludedModels) {
-			return !in_array($modelRow['id'], $excludedModels);
-		});
+	foreach ($allModels as $model) {
+		if (in_array($model['id'], $excludedModelsIds)) {
+			$excludedModels[] = $model;
+		} else {
+			$includedModels[] = $model;
+		}
 	}
+	
+	_success(['models' => $includedModels, 'excluded_models' => $excludedModels]);
 }
 
 _success(['models' => $allModels]);

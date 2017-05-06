@@ -23,19 +23,29 @@
 	<h2 class="model-name"><a href="#/model/{{model.id}}">{{model.name}}</a></h2>
 	<p class="model-notes" ng-attr-title="{{model.notes}}">{{model.notes}}</p>
 	<div class="model-toolbar">
-		<a href="javascript:;" class="btn btn-link pull-right icon-red"
+		<a href="javascript:;" class="btn btn-link pull-right icon-red" 
+			ng-if="showDeleteButtons"
 			ng-click="deleteModel(model.id);" 
 			title="Delete the model from the system">
 			<i class="glyphicon glyphicon-trash"></i>
 		</a>
-		<a href="#/model/{{model.id}}" class="btn btn-link pull-right"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+		
+		<a href="#/model/{{model.id}}" class="btn btn-link pull-right"><i class="glyphicon glyphicon-pencil"></i></a>
+		
+		<a href="javascript:;" class="btn btn-link pull-right icon-orange" title="Exclude model from this date"
+			ng-if="showDismissButton" ng-click="onDismiss();"><i class="glyphicon glyphicon-minus-sign"></i></a>
+			
+		<a href="javascript:;" class="btn btn-link pull-right icon-green" title="Re-include model in this date"
+			ng-if="showIncludeButton" ng-click="onInclude();"><i class="glyphicon glyphicon-plus-sign"></i></a>
 		
 		<a href="javascript:;" class="btn btn-link" 
+			ng-if="showRelocateButtons"
 			ng-click="relocateModel(model.id, 'top');" 
 			title="Place the model at the top of the list">
 			<i class="glyphicon glyphicon-chevron-up"></i>
 		</a>
 		<a href="javascript:;" class="btn btn-link" 
+			ng-if="showRelocateButtons" 
 			ng-click="relocateModel(model.id, 'bottom');" 
 			title="Place the model at the bottom of the list">
 			<i class="glyphicon glyphicon-chevron-down"></i>
