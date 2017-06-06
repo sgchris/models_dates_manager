@@ -60,6 +60,35 @@ function _log() {
 	return (is_numeric($res) && $res > 0);
 }
 
+
+/**
+ * define that the current request should be allowed only to "$allowedUsers"
+ * (defined in the config file)
+ * @return  
+ */
+function setRestrictedAccess() {
+	global $allowedUsers;
+	
+	// wait, while the user is stored in the session
+	$counter = 30;
+	while (!isset($_SESSION) || !isset($_SESSION['user']) || !isset($_SESSION['user']['name'])) {
+		// in milliseconds
+		usleep(100 * 1000);
+		
+		if (--$counter < 0) {
+			break;
+		}
+	}
+	
+	if (!isset($_SESSION) || !isset($_SESSION['user']) || !isset($_SESSION['user']['name'])) {
+		_exit('Not logged in');
+	}
+	
+	if (!in_array($_SESSION['user']['name'], $allowedUsers)) {
+		_exit('no permissions to do that operation');
+	}
+}
+
 /**
  * Check the request method
  * @param <unknown> $requestMethod 

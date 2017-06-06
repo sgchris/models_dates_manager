@@ -37,7 +37,9 @@ if (isset($_POST['access_token'])) {
 		'access_token' => $accessToken,
 	];
 	
-	_success();
+	_success([
+		'has_restricted_access' => in_array($userData['name'], $allowedUsers)
+	]);
 	
 } else {
 	_exit('no access token parameter');

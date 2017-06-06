@@ -6,6 +6,11 @@ requestShouldBe('GET');
 
 $params = receiveParams(['date']);
 
+// there's no option to show all the models for unauthorized users
+if (empty($params['date'])) {
+	setRestrictedAccess();
+}
+
 // get all the models
 $allModels = dbQuery('
 	SELECT * 

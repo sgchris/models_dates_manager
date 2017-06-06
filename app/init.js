@@ -54,6 +54,8 @@ webApp.run(['$rootScope', '$window', '$http', function($rootScope, $window, $htt
 	// models' images base URL
 	$rootScope.IMAGES_BASE_URL = window.IMAGES_BASE_URL;
 	
+	$rootScope.loginInProcess = true;
+	
 	// store the controller name in the rootScope
 	$rootScope.$on('$routeChangeSuccess', function(ev, data) {
 		if (data && data.controller) {
@@ -82,7 +84,9 @@ webApp.run(['$rootScope', '$window', '$http', function($rootScope, $window, $htt
 					data: {
 						access_token: accessToken
 					}
-				}).then(function(){}, function() {
+				}).then(function(res) {
+					$rootScope.hasRestrictedAccess = res.data.has_restricted_access;
+				}, function() {
 					alert('could not authenticate the server');
 				});
 				
@@ -96,6 +100,8 @@ webApp.run(['$rootScope', '$window', '$http', function($rootScope, $window, $htt
 			} else {
 				$rootScope.loggedInUser = false;
 			}
+			
+			$rootScope.loginInProcess = false;
 		});
 	};
 	

@@ -4,6 +4,8 @@ require_once __DIR__.'/init.php';
 
 requestShouldBe('post');
 
+setRestrictedAccess();
+
 $params = receiveParams(['model_id', 'image_url'], ['model_id', 'image_url']);
 
 $modelId = $params['model_id'];

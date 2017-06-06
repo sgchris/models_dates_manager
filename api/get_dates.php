@@ -4,6 +4,10 @@
 
 require_once __DIR__.DIRECTORY_SEPARATOR.'init.php';
 
+requestShouldBe('GET');
+
+setRestrictedAccess();
+
 $results = dbQuery('select * from dates_list order by date_ts asc');
 
 foreach ($results as $i => $row) {

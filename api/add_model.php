@@ -4,6 +4,8 @@ require_once __DIR__.'/init.php';
 
 requestShouldBe('POST');
 
+setRestrictedAccess();
+
 // receive parameters 
 $params = receiveParams(['name'], ['name']);
 
