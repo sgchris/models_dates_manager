@@ -190,6 +190,10 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 		$scope.uploader.uploadFiles();
 	});
 	
-	$scope.model.load();
+	$rootScope.$watch('hasRestrictedAccess', function(hasRestrictedAccess) {
+		if (hasRestrictedAccess) {
+			$scope.model.load();
+		}
+	});
 	
 }]);

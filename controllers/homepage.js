@@ -8,6 +8,10 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 		newModelName: '',
 		newModelError: false,
 		addNewModel: function() {
+			if (!$rootScope.loggedInUser) {
+				return;
+			}
+			
 			if ($scope.models.newModelName.trim().length == 0) {
 				$scope.models.newModelError = 'Please type model name in the input above';
 				return;
@@ -55,6 +59,10 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 		data: [],
 		
 		load: function() {
+			if (!$rootScope.loggedInUser) {
+				return;
+			}
+			
 			$scope.models.inProgress = true;
 			
 			$http.get('api/get_models.php').then(function(res) {
@@ -76,6 +84,10 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 			
 		},
 		addNewDate: function() {
+			if (!$rootScope.loggedInUser) {
+				return;
+			}
+			
 			// validate the new date
 			if (!$scope.dates.newDate) {
 				$scope.dates.newDateError = 'Please select date! Click on the icon or on the input above';
@@ -134,6 +146,10 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 		
 		data: [],
 		load: function() {
+			if (!$rootScope.loggedInUser) {
+				return;
+			}
+			
 			$scope.dates.inProgress = true;
 			
 			$http.get('api/get_dates.php').then(function(res) {
@@ -145,8 +161,11 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 		
 	};
 	
-	// init 
-	$scope.models.load();
-	$scope.dates.load();
+	$rootScope.$watch('hasRestrictedAccess', function(hasRestrictedAccess) {
+		if (hasRestrictedAccess) {
+			$scope.models.load();
+			$scope.dates.load();
+		}
+	});
 	
 }]);

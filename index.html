@@ -16,6 +16,18 @@
 	</head>
 	<body>
 		<div id="fb-root"></div>
+		
+		<!-- the login curtain for non logged in users -->
+		<div class="curtain" ng-show="!loginInProcess && !loggedInUser"></div>
+		<div class="curtain-login-area" ng-show="!loginInProcess && !loggedInUser">
+			<h1>Models-Dates management</h1>
+			<p>Please login using the facebook button below</p><br />
+			<div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="false"></div>
+			<br><hr><br>
+			<p>For more information <a href="mailto:moshkovich.marina@gmail.com">moshkovich.marina@gmail.com</a></p>
+		</div>
+		
+		
 		<nav class="navbar navbar-inverse navbar-fixed-top">
 			<div class="container-fluid">
 				<div class="navbar-header">
@@ -29,11 +41,6 @@
 				</div>
 				<div id="navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav navbar-right">
-						<li ng-if="!loggedInUser">
-							<a>
-								<div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="false"></div>
-							</a>
-						</li>
 						<li ng-if="loggedInUser">
 							<a style="padding:0;">
 								<img ng-src="http://graph.facebook.com/{{loggedInUser.id}}/picture" title="{{loggedInUser.name}}" />
