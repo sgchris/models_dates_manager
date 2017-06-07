@@ -1,4 +1,7 @@
-<div class="col-xs-12 col-md-3 sidebar-wrapper">
+<!-- add login popup -->
+<ng-include src="'/views/snippets/login-curtain.html'"></ng-include>
+
+<div class="col-xs-12 col-md-3 sidebar-wrapper" ng-if="hasRestrictedAccess">
 	<h4>Add new model</h4>
 	
 	<form ng-submit="models.addNewModel()">

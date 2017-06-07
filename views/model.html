@@ -1,4 +1,7 @@
-<div class="container-fluid">
+<!-- add login popup -->
+<ng-include src="'/views/snippets/login-curtain.html'"></ng-include>
+
+<div class="container-fluid" ng-if="hasRestrictedAccess">
 
 	<!-- the gallery -->
 	<an-gri-gal ng-if="gallery.isOpen" images="model.details.images" initial-index="gallery.initialIndex" on-close="gallery.close();"></an-gri-gal>
