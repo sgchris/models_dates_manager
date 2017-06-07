@@ -56,6 +56,8 @@ webApp.run(['$rootScope', '$window', '$http', function($rootScope, $window, $htt
 	
 	$rootScope.loginInProcess = true;
 	
+	$rootScope.hasRestrictedAccess = false;
+	
 	// store the controller name in the rootScope
 	$rootScope.$on('$routeChangeSuccess', function(ev, data) {
 		if (data && data.controller) {
