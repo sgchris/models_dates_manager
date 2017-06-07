@@ -1,5 +1,10 @@
 <div class="container-fluid date-page">
-	<button class="btn btn-large btn-danger pull-right" ng-click="data.deleteDate();"><i class="glyphicon glyphicon-remove"></i> Delete this date</button>
+
+	<!-- delete button -->
+	<button ng-if="hasRestrictedAccess" class="btn btn-large btn-danger pull-right" ng-click="data.deleteDate();">
+		<i class="glyphicon glyphicon-remove"></i> Delete this date
+	</button>
+
 	<h1>{{data.date.date_ts * 1000 | date:dd/MM/yy }}</h1>
 	
 	<hr />
@@ -14,7 +19,7 @@
 		</div>
 	</div>
 	
-	<div ng-if="data.excludedModels.length > 0">
+	<div ng-if="data.excludedModels.length > 0 && hasRestrictedAccess">
 		<hr />
 		
 		<div class="row" style="background: #FFE; padding: 10px; border-top: 1px solid #DDE;">

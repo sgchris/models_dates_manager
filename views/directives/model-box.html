@@ -22,7 +22,7 @@
 	</div>
 	<h2 class="model-name"><a href="#/model/{{model.id}}">{{model.name}}</a></h2>
 	<p class="model-notes" ng-attr-title="{{model.notes}}">{{model.notes}}</p>
-	<div class="model-toolbar">
+	<div class="model-toolbar" ng-if="hasRestrictedAccess">
 		<a href="javascript:;" class="btn btn-link pull-right icon-red" 
 			ng-if="showDeleteButtons"
 			ng-click="deleteModel(model.id);" 
