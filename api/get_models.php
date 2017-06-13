@@ -4,20 +4,40 @@ require_once __DIR__.'/init.php';
 
 requestShouldBe('GET');
 
-$params = receiveParams(['date']);
+$params = receiveParams(['date', 'hash']);
 
 // there's no option to show all the models for unauthorized users
 if (empty($params['date'])) {
 	setRestrictedAccess();
 }
 
-// get all the models
-$allModels = dbQuery('
+// validate the hash
+$hash = null;
+if (!empty($params['hash'])) {
+	if (!preg_match('/^[a-f0-9]{32}$/', $params['hash'])) {
+		_exit('bad hash parameter');
+	}
+	
+	$hash = $params['hash'];
+}
+
+$query = '
 	SELECT * 
-	FROM models 
+	FROM models ';
+	
+if ($hash) {
+	$query.= ' 
+	WHERE hash = :hash ';
+}
+
+$query.= '
 	ORDER by 
 		CAST(display_order AS INTEGER) DESC, 
-		id DESC');
+		id DESC';
+
+// get all the models
+$queryParams = $hash ? [':hash' => $hash] : [];
+$allModels = dbQuery($query, $queryParams);
 
 // decode models images
 foreach ($allModels as $i => $modelRow) {

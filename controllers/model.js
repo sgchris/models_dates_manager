@@ -24,7 +24,9 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 	$scope.model = {
 		inProgress: false,
 		
-		id: $routeParams.modelId,
+		id: null,
+		
+		hash: $routeParams.modelHash,
 		
 		details: {},
 		
@@ -114,22 +116,18 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 			
 			$http({
 				method: 'get',
-				url: 'api/get_models.php'
+				url: 'api/get_models.php',
+				params: {
+					hash: $scope.model.hash
+				}
 			}).then(function(res) {
 				var foundModel = false;
-				if (res.data && res.data.result == 'ok') {
-					// find the current model
-					res.data.models.forEach(function(modelObj) {
-						if (modelObj.id == $scope.model.id) {
-							$scope.model.details = modelObj;
-							foundModel = true;
-						}
-					});
-				}
-				
-				if (!foundModel) {
+				if (res.data && res.data.result == 'ok' && res.data.models && res.data.models.length === 1) {
+					$scope.model.details = res.data.models[0];
+				} else {
 					alert('cannot load model details');
 				}
+				
 			}).finally(function() {
 				$scope.model.inProgress = false;
 			});
