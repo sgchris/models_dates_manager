@@ -16,6 +16,10 @@ webApp.config(['$routeProvider', function($routeProvider) {
 			templateUrl: 'views/model.html',
 			controller: 'ModelController'
 		})
+		.when('/models_categories', {
+			templateUrl: 'views/models_categories.html',
+			controller: 'ModelsCategoriesController'
+		})
 		.otherwise({
 			redirectTo: '/'
 		});

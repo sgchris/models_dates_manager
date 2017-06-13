@@ -59,6 +59,8 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 				}
 				
 				alert('cannot update model notes. ' + JSON.stringify(res.data));
+			}, function() {
+				alert('Network error');
 			}).finally(function() {
 				$scope.model.inProgress = false;
 			});
@@ -85,6 +87,8 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 				}
 				
 				alert('cannot delete model\'s image. error:' + JSON.stringify(res.data));
+			}, function() {
+				alert('Network error');
 			}).finally(function() {
 				$scope.model.inProgress = false;
 			});
@@ -107,6 +111,8 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 				}
 				
 				alert('cannot delete model\'s image. error:' + JSON.stringify(res.data));
+			}, function() {
+				alert('Network error');
 			}).finally(function() {
 				$scope.model.inProgress = false;
 			});
@@ -131,6 +137,8 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 					alert('cannot load model details');
 				}
 				
+			}, function() {
+				alert('Network error');
 			}).finally(function() {
 				$scope.model.inProgress = false;
 			});

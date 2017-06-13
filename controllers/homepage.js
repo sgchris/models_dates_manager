@@ -56,7 +56,56 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 			
 		},
 		
+		// models list
 		data: [],
+		
+		// check if there are uncategorized models
+		thereAreUncategorizedModels: function(modelsCategories) {
+			if (!modelsCategories || modelsCategories.length === 0) {
+				return false;
+			}
+			
+			if ($scope.models.data.length > 0) {
+				var maxModelsCategoryId = 0,
+					isUncategorized = false,
+					thereAreUncategorized = false;
+				
+				$scope.models.data.forEach(function(modelData) {
+					isUncategorized = true;
+					
+					modelsCategories.forEach(function(categoryData) {
+						if (categoryData.id > maxModelsCategoryId) {
+							maxModelsCategoryId = categoryData.id;
+						}
+						
+						if (modelData.category == categoryData.id) {
+							isUncategorized = false;
+						}
+					});
+					
+					if (isUncategorized) {
+						thereAreUncategorized = true;
+					}
+				});
+				
+				if (thereAreUncategorized) {
+					$scope.tabs.addUncategorizedTab();
+				}
+			}
+		},
+		
+		// check if there are models in the specific category
+		thereAreModelsInCategory: function(modelsCategoryId) {
+			var thereAreModelsInTheCategory = false;
+			
+			$scope.models.data.forEach(function(modelData) {
+				if (modelData.category == modelsCategoryId) {
+					thereAreModelsInTheCategory = true;
+				}
+			});
+			
+			return thereAreModelsInTheCategory;
+		},
 		
 		load: function() {
 			if (!$rootScope.loggedInUser) {
@@ -67,8 +116,76 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 			
 			$http.get('api/get_models.php').then(function(res) {
 				$scope.models.data = res.data && res.data.models ? res.data.models : [];
+				
+				// check if uncategorized tab should be added
+				if ($scope.models.thereAreUncategorizedModels($scope.tabs.data)) {
+					console.log('models: there are uncategorized');
+					$scope.tabs.addUncategorizedTab();
+				}
+				
 			}).finally(function() {
 				$scope.models.inProgress = false;
+			});
+		}
+	};
+	
+	$scope.tabs = {
+		data: [],
+		
+		otherTabCaption: 'Other',
+		
+		addUncategorizedTab: function() {
+			var maxModelsCategoryId = 0,
+				otherTabExists = false;
+			
+			// find max ID of the models categories
+			$scope.tabs.data.forEach(function(tabData) {
+				if (tabData.id > maxModelsCategoryId) {
+					maxModelsCategoryId = tabData.id;
+				}
+				
+				if (tabData.name == $scope.tabs.otherTabCaption) {
+					otherTabExists = true;
+				}
+			});
+			
+			// add to the tabs
+			if (!otherTabExists) {
+				$scope.tabs.data.push({
+					id: maxModelsCategoryId + 1, 
+					name: $scope.tabs.otherTabCaption
+				});
+			}
+		},
+		
+		current: '',
+		
+		load: function() {
+			$http({
+				method: 'get',
+				url: 'api/get_models_categories.php'
+			}).then(function(res) {
+				if (res && res.data && res.data.models_categories) {
+					
+					// set the tabs
+					$scope.tabs.data = res.data.models_categories;
+					
+					// check if there are uncategorized models
+					if ($scope.models.thereAreUncategorizedModels(res.data.models_categories)) {
+						console.log('tabs: there are uncategorized');
+						$scope.tabs.addUncategorizedTab();
+					}
+					
+					
+					if ($scope.tabs.data.length > 0) {
+						$scope.tabs.current = $scope.tabs.data[0].id;
+					}
+					
+				} else {
+					alert('error reading models categories');
+				}
+			}, function() {
+				alert('Network error');
 			});
 		}
 	};
@@ -165,6 +282,7 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 		if (hasRestrictedAccess) {
 			$scope.models.load();
 			$scope.dates.load();
+			$scope.tabs.load();
 		}
 	});
 	
