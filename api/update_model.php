@@ -5,7 +5,7 @@ require_once __DIR__.'/init.php';
 requestShouldBe('post');
 setRestrictedAccess();
 
-$params = receiveParams(['model_id', 'name', 'notes'], ['model_id']);
+$params = receiveParams(['model_id', 'name', 'notes', 'private_notes', 'tags'], ['model_id']);
 
 $modelId = $params['model_id'];
 if (!is_numeric($modelId) || !($modelId > 0)) {
@@ -37,6 +37,26 @@ if (!empty($params['notes'])) {
 	}
 	
 	$updateParams['notes'] = $params['notes'];
+}
+
+// check "notes" parameter
+if (!empty($params['private_notes'])) {
+	// validate 
+	if (!between(strlen($params['private_notes']), 1, 2047)) {
+		_exit('bad private_notes parameter');
+	}
+	
+	$updateParams['private_notes'] = $params['private_notes'];
+}
+
+// check "notes" parameter
+if (!empty($params['tags'])) {
+	// validate 
+	if (!between(strlen($params['tags']), 1, 2047)) {
+		_exit('bad tags parameter');
+	}
+	
+	$updateParams['tags'] = $params['tags'];
 }
 
 // perform the update (only one parameter is model_id)

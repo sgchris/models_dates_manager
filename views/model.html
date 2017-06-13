@@ -40,16 +40,35 @@
 	
 	<!-- model comments -->
 	<div class="row">
-		<div class="col-xs-12 col-md-4">
+		<div class="col-xs-12 col-md-6">
 			<form class="form-horizontal" ng-submit="model.update()" name="model.detailsForm">
 				<div class="form-group">
-					<label class="col-sm-2">Name</label>
+					<label class="col-sm-2"><i class="glyphicon glyphicon-user"></i> Name</label>
 					<div class="col-sm-10"><input type="text" class="form-control" ng-model="model.details.name" /></div>
 				</div>
 				
 				<div class="form-group">
-					<label class="col-sm-2">Notes</label>
-					<div class="col-sm-10"><textarea class="form-control" ng-model="model.details.notes">{{model.details.notes}}</textarea></div>
+					<label class="col-sm-2"><i class="glyphicon glyphicon-eye-open"></i> Public notes</label>
+					<div class="col-sm-10">
+						<small>This text will be <em><strong>seen by everybody</strong></em></small><br/>
+						<textarea class="form-control" ng-model="model.details.notes">{{model.details.notes}}</textarea>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-2"><i class="glyphicon glyphicon-lock"></i> Private notes</label>
+					<div class="col-sm-10">
+						<small>This text will be seen only by the administrators</small><br/>
+						<textarea class="form-control" ng-model="model.details.private_notes">{{model.details.notes}}</textarea>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-2"><i class="glyphicon glyphicon-tags"></i> Tags</label>
+					<div class="col-sm-10">
+						<small>Comma separated tags. example: vip, celebrity, recommended</small><br/>
+						<input type="text" class="form-control" ng-model="model.details.tags">
+					</div>
 				</div>
 					
 				<div class="form-group">

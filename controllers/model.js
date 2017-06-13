@@ -39,6 +39,8 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 				model_id: $scope.model.id,
 				name: $scope.model.details.name,
 				notes: $scope.model.details.notes,
+				private_notes: $scope.model.details.private_notes,
+				tags: $scope.model.details.tags,
 			};
 			
 			$http({
@@ -123,6 +125,7 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 			}).then(function(res) {
 				var foundModel = false;
 				if (res.data && res.data.result == 'ok' && res.data.models && res.data.models.length === 1) {
+					$scope.model.id = res.data.models[0].id;
 					$scope.model.details = res.data.models[0];
 				} else {
 					alert('cannot load model details');
