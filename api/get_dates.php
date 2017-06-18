@@ -11,9 +11,16 @@ setRestrictedAccess();
 $results = dbQuery('select * from dates_list order by date_ts asc');
 
 foreach ($results as $i => $row) {
+	// excluded models
 	$results[$i]['excluded_models'] = !empty($row['excluded_models']) ? 
 		array_filter(explode(',', $row['excluded_models']), 'strlen') :
 		[];
+
+	// 
+	$results[$i]['chosen_models'] = !empty($row['chosen_models']) ? 
+		array_filter(explode(',', $row['chosen_models']), 'strlen') :
+		[];
+
 }
 
 _success([

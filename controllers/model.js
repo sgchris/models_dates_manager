@@ -166,20 +166,24 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 				});
 
 				file.upload.then(function (response) {
+					$scope.uploader.errorMessage = '';
+					
 					if (response.data && response.data.result == 'ok') {
 						// reload the model
 						$scope.model.load();
 						return;
 					}
 					
-					$scope.uploader.errorMessage = ''
 					
 					if (response.data.error && typeof(response.data.error) == 'string') {
 						$scope.uploader.errorMessage = response.data.error;
-					} else {
-						Object.keys(response.data).forEach(function(k) {
-							$scope.uploader.errorMessage+= k + ':' + JSON.stringify(response.data[k]) + '; ';
+					} else if (response.data.error.errors && response.data.error.errors instanceof Object) {
+						Object.keys(response.data.error.errors).forEach(function(k) {
+							$scope.uploader.errorMessage+= JSON.stringify(response.data.error.errors[k]) + '; ';
 						});
+					} else {
+						$scope.uploader.errorMessage = 'Error occurred';
+						console.error(response.data);
 					}
 					
 				}, function (response) {

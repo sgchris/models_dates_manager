@@ -60,7 +60,7 @@
 
 	<br />
 
-	<article ng-repeat="model in models.data">
+	<article ng-repeat="model in models.data | filterModelsByCategory:tabs.current">
 		<model-box ng-model="model" on-relocate="models.load()" on-delete="models.load()"></model-box>
 	</article>
 </div>

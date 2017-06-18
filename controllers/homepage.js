@@ -23,7 +23,8 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 				method: 'post',
 				url: 'api/add_model.php',
 				data: {
-					name: $scope.models.newModelName.trim()
+					name: $scope.models.newModelName.trim(),
+					category: $scope.tabs.current || ''
 				}
 			}).then(function(res) {
 				if (!res.data) {
@@ -135,15 +136,10 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 		otherTabCaption: 'Other',
 		
 		addUncategorizedTab: function() {
-			var maxModelsCategoryId = 0,
-				otherTabExists = false;
+			var otherTabExists = false;
 			
 			// find max ID of the models categories
 			$scope.tabs.data.forEach(function(tabData) {
-				if (tabData.id > maxModelsCategoryId) {
-					maxModelsCategoryId = tabData.id;
-				}
-				
 				if (tabData.name == $scope.tabs.otherTabCaption) {
 					otherTabExists = true;
 				}
@@ -152,7 +148,7 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 			// add to the tabs
 			if (!otherTabExists) {
 				$scope.tabs.data.push({
-					id: maxModelsCategoryId + 1, 
+					id: -1, 
 					name: $scope.tabs.otherTabCaption
 				});
 			}
@@ -286,4 +282,19 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 		}
 	});
 	
+}]);
+
+webApp.filter('filterModelsByCategory', [function() {
+	return function(models, category) {
+		console.log('models', models, 'category', category);
+		var filtered = [];
+		
+		models.forEach(function(model) {
+			if (model.category == category || (!model.category && category == -1)) {
+				filtered.push(model);
+			}
+		});
+		
+		return filtered;
+	};
 }]);
