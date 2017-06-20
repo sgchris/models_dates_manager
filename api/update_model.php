@@ -5,7 +5,7 @@ require_once __DIR__.'/init.php';
 requestShouldBe('post');
 setRestrictedAccess();
 
-$params = receiveParams(['model_id', 'name', 'notes', 'private_notes', 'tags'], ['model_id']);
+$params = receiveParams(['model_id', 'name', 'category', 'notes', 'private_notes', 'tags'], ['model_id']);
 
 $modelId = $params['model_id'];
 if (!is_numeric($modelId) || !($modelId > 0)) {
@@ -27,6 +27,20 @@ if (!empty($params['name'])) {
 	}
 	
 	$updateParams['name'] = $params['name'];
+}
+
+// check "category" parameter
+if (isset($params['category'])) {
+	if (!empty($params['category'])) {
+		// validate 
+		if (!is_numeric($params['category'])) {
+			_exit('bad category parameter');
+		}
+		
+		$updateParams['category'] = $params['category'];
+	} else {
+		$updateParams['category'] = '';
+	}
 }
 
 // check "notes" parameter

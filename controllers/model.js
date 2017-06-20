@@ -38,6 +38,7 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 			var data = {
 				model_id: $scope.model.id,
 				name: $scope.model.details.name,
+				category: $scope.model.details.category,
 				notes: $scope.model.details.notes,
 				private_notes: $scope.model.details.private_notes,
 				tags: $scope.model.details.tags,
@@ -199,6 +200,33 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 		},
 	};
 	
+	$scope.models_categories = {
+		inProgress: false,
+		
+		data: [],
+		
+		load: function() {
+			$scope.models_categories.inProgress = true;
+			
+			$http({
+				method: 'get',
+				url: 'api/get_models_categories.php'
+			}).then(function(res) {
+				var foundModel = false;
+				if (res.data && res.data.result == 'ok') {
+					$scope.models_categories.data = res.data.models_categories;
+				} else {
+					alert('cannot load model details');
+				}
+				
+			}, function() {
+				alert('Network error');
+			}).finally(function() {
+				$scope.model.inProgress = false;
+			});
+		}
+	}
+	
 	$scope.$watch('uploader.files', function(newVal) {
 		$scope.uploader.uploadFiles();
 	});
@@ -206,6 +234,8 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 	$rootScope.$watch('hasRestrictedAccess', function(hasRestrictedAccess) {
 		if (hasRestrictedAccess) {
 			$scope.model.load();
+			
+			$scope.models_categories.load();
 		}
 	});
 	
