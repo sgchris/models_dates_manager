@@ -212,7 +212,6 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 				method: 'get',
 				url: 'api/get_models_categories.php'
 			}).then(function(res) {
-				var foundModel = false;
 				if (res.data && res.data.result == 'ok') {
 					$scope.models_categories.data = res.data.models_categories;
 				} else {

@@ -1,5 +1,5 @@
 .model-box-wrapper {
-	height: 462px;
+	height: 465px;
 	width: 302px; 
 	border: 1px solid #CCC;
 	box-sizing: border-box;
@@ -106,18 +106,22 @@
 	p.model-notes {
 		margin: 0;
 		padding: 0 5px;
-		font-size: 14px;
-		line-height: 20px;
-		height: 60px;
+		font-size: 13px;
+		line-height: 16px;
+		height: 32px;
 		text-overflow: ellipsis;
 		overflow: hidden;
 		box-sizing: border-box;
 		color: #888;
+		
+		&.model-private-notes {
+			background: #ffefef;
+		}
 	}
 
 	/* extended - with the bottom toolbar */
 	&.extended {
-		height: 497px;
+		height: 500px;
 		
 		.model-toolbar {
 			margin-top: 10px;

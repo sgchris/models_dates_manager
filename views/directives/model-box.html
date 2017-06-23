@@ -22,6 +22,7 @@
 	</div>
 	<h2 class="model-name"><a href="#/model/{{model.hash}}">{{model.name}}</a></h2>
 	<p class="model-notes" ng-attr-title="{{model.notes}}">{{model.notes}}</p>
+	<p class="model-notes model-private-notes" ng-class="{'invisible': !$root.hasRestrictedAccess || !model.private_notes}" ng-attr-title="{{model.private_notes}}">{{model.private_notes}}</p>
 	<div class="model-toolbar"><!--  ng-if="hasRestrictedAccess" -->
 		<a href="javascript:;" class="btn btn-link pull-right icon-red" 
 			ng-if="showDeleteButtons"
