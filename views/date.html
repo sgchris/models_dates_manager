@@ -11,6 +11,15 @@
 	
 	<div class="row">
 		<div class="col-xs-12">
+		
+			<models-categories-tabs addUncategorized="false" on-select="tabs.tabChanged(newSelectedTab)"></models-categories-tabs>
+
+			<br />
+
+			<article ng-repeat="model in models.data | filterModelsByCategory:tabs.current">
+				<model-box ng-model="model" on-relocate="models.load()" on-delete="models.load()"></model-box>
+			</article>
+		
 			<article ng-repeat="model in data.models">
 				<model-box 
 					ng-model="model" 

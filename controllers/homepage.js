@@ -283,18 +283,3 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 	});
 	
 }]);
-
-webApp.filter('filterModelsByCategory', [function() {
-	return function(models, category) {
-		console.log('models', models, 'category', category);
-		var filtered = [];
-		
-		models.forEach(function(model) {
-			if (model.category == category || (!model.category && category == -1)) {
-				filtered.push(model);
-			}
-		});
-		
-		return filtered;
-	};
-}]);

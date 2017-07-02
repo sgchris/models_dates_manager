@@ -141,6 +141,14 @@ webApp.controller('DateController', ['$rootScope', '$scope', '$routeParams', '$h
 		}
 	};
 	
+	$scope.tabs = {
+		current: '',
+		tabChanged: function(newTab) {
+			$scope.tabs.current = newTab;
+		}
+	}
+	
+	
 	$scope.data.load();
 	
 }]);
