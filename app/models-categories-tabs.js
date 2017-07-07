@@ -29,6 +29,11 @@ webApp.directive('modelsCategoriesTabs', ['$http', function($http) {
 						
 						// the currently selected tab
 						scope.current = (scope.modelsCategories && scope.modelsCategories.length > 0) ? scope.modelsCategories[0].id : '';
+						
+						// initial tab select
+						if (scope.current) {
+							scope.onSelect({newSelectedTab: scope.current});
+						}
 					}
 				});
 			} else {
@@ -55,6 +60,11 @@ webApp.directive('modelsCategoriesTabs', ['$http', function($http) {
 				
 				// invoke the callback
 				scope.onSelect({newSelectedTab: newTabId});
+			}
+			
+			// initial tab select
+			if (scope.current) {
+				scope.onSelect({newSelectedTab: scope.current});
 			}
 		},
 		templateUrl: 'views/directives/models-categories-tabs.html',
