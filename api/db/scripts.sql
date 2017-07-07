@@ -20,9 +20,13 @@ CREATE TABLE "models" (
 	hash text,
 	display_order number
 );
-
-
-
+CREATE TABLE models_categories (id integer primary key autoincrement, name text);
+CREATE TABLE "dates_models_categories"  (
+	date_id integer,
+	models_category_id integer,
+	hash text,
+	PRIMARY KEY (hash)
+);
 
 -- alter table dates_list !!!! SHOULD BE MODIFIED !!!!!
 
