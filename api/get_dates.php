@@ -16,7 +16,7 @@ foreach ($results as $i => $row) {
 		array_filter(explode(',', $row['excluded_models']), 'strlen') :
 		[];
 
-	// 
+	// chosen models for the date
 	$results[$i]['chosen_models'] = !empty($row['chosen_models']) ? 
 		array_filter(explode(',', $row['chosen_models']), 'strlen') :
 		[];

@@ -8,8 +8,10 @@ webApp.directive('modelBox', ['$http', function($http) {
 			// callbacks (expressions)
 			onDelete: '&?',
 			onRelocate: '&?',
-			onDismiss: '&?',
-			onInclude: '&?'
+			onExclude: '&?',
+			onInclude: '&?',
+			onChoose: '&?',
+			onUnChoose: '&?'
 		},
 		link: function(scope, element, attributes) {
 			scope.defaultImage = 'images/model_silhouette.png';
@@ -29,17 +31,23 @@ webApp.directive('modelBox', ['$http', function($http) {
 				scope.galleryIsOpen = !scope.galleryIsOpen;
 			};
 			
-			// check if "dismiss" callback is defined
-			scope.showDismissButton = (typeof(scope.onDismiss) == 'function');
+			// check if "exclude" callback is defined
+			scope.showExcludeButton = (typeof(scope.onExclude) == 'function');
 			
 			// check if "include" callback is defined
 			scope.showIncludeButton = (typeof(scope.onInclude) == 'function');
 			
 			// check if "relocate" callback is defined
-			scope.showRelocateButtons = (typeof(scope.onRelocate) == 'function');
+			scope.showRelocateButton = (typeof(scope.onRelocate) == 'function');
 			
 			// check if "delete" callback is defined
-			scope.showDeleteButtons = (typeof(scope.onDelete) == 'function');
+			scope.showDeleteButton = (typeof(scope.onDelete) == 'function');
+			
+			// check if "Choose" callback is defined
+			scope.showChooseButton = (typeof(scope.onChoose) == 'function');
+			
+			// check if "UnChoose" callback is defined
+			scope.showUnChooseButton = (typeof(scope.onUnChoose) == 'function');
 			
 			/**
 			 * move the model to the top/bottom of the list

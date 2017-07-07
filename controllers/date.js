@@ -7,6 +7,7 @@ webApp.controller('DateController', ['$rootScope', '$scope', '$routeParams', '$h
 		
 		models: [],
 		excludedModels: [],
+		chosenModels: [],
 		
 		loadModels: function(dateTs) {
 			$http({
@@ -25,6 +26,11 @@ webApp.controller('DateController', ['$rootScope', '$scope', '$routeParams', '$h
 						$scope.data.excludedModels = res.data.excluded_models;
 					}
 					
+					// check the chosen models
+					if (res.data.chosen_models) {
+						$scope.data.chosenModels = res.data.chosen_models;
+					}
+					
 					return;
 				}
 				
@@ -33,6 +39,61 @@ webApp.controller('DateController', ['$rootScope', '$scope', '$routeParams', '$h
 			}, function(res) {
 				alert('error loading models');
 				console.error(res);
+			});
+		},
+		
+		chooseModel: function(date, model) {
+			if (!confirm('Choose ' + model.name + ' for this date?')) {
+				return;
+			}
+			
+			var apiData = {
+				date: date.date_ts,
+				model_id: model.id
+			};
+			
+			$http({
+				method: 'post',
+				url: 'api/choose_model_for_date.php',
+				data: apiData
+			}).then(function(res) {
+				if (res.data && res.data.result == 'ok') {
+					$scope.data.load();
+					return;
+				}
+				
+				alert('Error excluding model');
+				console.error('Error excluding model', res);
+			}, function(res) {
+				console.error('Error excluding model', res);
+			});
+		},
+		
+		// remove the model from the "Excluded" list (i.e. include the model in that date)
+		unChooseModel: function(date, model) {
+			if (!confirm('Un-choose ' + model.name + ' for the date?')) {
+				return;
+			}
+			
+			var apiData = {
+				date: date.date_ts,
+				model_id: model.id
+			};
+			
+			$http({
+				method: 'post',
+				url: 'api/unchoose_model_for_date.php',
+				data: apiData
+			}).then(function(res) {
+				if (res.data && res.data.result == 'ok') {
+					$scope.data.load();
+					return;
+				}
+				
+				alert('Error including model');
+				console.error('Error including model', res);
+			}, function(res) {
+				console.error('Error including model', res);
 			});
 		},
 		

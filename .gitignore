@@ -10,7 +10,7 @@ api/config.php
 vendor
 
 # database
-api/db/models.db
+*.db
 
 # upload folder
 images/upload

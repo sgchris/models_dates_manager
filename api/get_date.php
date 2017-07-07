@@ -14,10 +14,18 @@ if (!$dateData) {
 }
 
 // convert "excluded_models" to array
-$dateData['excluded_models'] = !empty($row['excluded_models']) ? array_filter(explode(',', $row['excluded_models']), 'strlen') : [];
+$dateData['excluded_models'] = !empty($dateData['excluded_models']) ? 
+	array_filter(
+		json_decode($dateData['excluded_models'], $__assoc = true), 
+		'strlen'
+	) : [];
 
 // convert "chosen_models" to array
-$dateData['chosen_models'] = !empty($row['chosen_models']) ? array_filter(explode(',', $row['chosen_models']), 'strlen') : [];
+$dateData['chosen_models'] = !empty($dateData['chosen_models']) ? 
+	array_filter(
+		json_decode($dateData['chosen_models'], $__assoc = true), 
+		'strlen'
+	) : [];
 
 _success([
 	'date' => $dateData,
