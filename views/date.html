@@ -17,7 +17,13 @@
 			<br />
 
 			<article ng-repeat="model in data.models | filterModelsByCategory:tabs.current">
+				<!-- free -->
 				<model-box 
+					ng-if="!hasRestrictedAccess"
+					ng-model="model"></model-box>
+				<!-- restricted -->
+				<model-box 
+					ng-if=" hasRestrictedAccess"
 					ng-model="model" 
 					on-exclude="data.excludeModel(data.date, model);"
 					on-choose="data.chooseModel(data.date, model);"></model-box>
@@ -28,7 +34,7 @@
 	<div ng-if="data.chosenModels.length > 0 && hasRestrictedAccess">
 		<hr />
 		
-		<div class="row" style="background: #EFE; padding: 10px; border-top: 1px solid #DDE;">
+		<div class="row" style="background: #EFE; padding: 10px; border-top: 1px solid #DDE; border-left: 5px solid green;">
 			<h2>Chosen models</h2>
 			
 			<div class="col-xs-12">
@@ -44,7 +50,7 @@
 	<div ng-if="data.excludedModels.length > 0 && hasRestrictedAccess">
 		<hr />
 		
-		<div class="row" style="background: #FFE; padding: 10px; border-top: 1px solid #DDE;">
+		<div class="row" style="background: #FFE; padding: 10px; border-top: 1px solid #DDE; border-left: 5px solid orange;">
 			<h2>Excluded models</h2>
 			
 			<div class="col-xs-12">
