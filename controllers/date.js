@@ -1,6 +1,12 @@
 webApp.controller('DateController', ['$rootScope', '$scope', '$routeParams', '$http', '$location', function($rootScope, $scope, $routeParams, $http, $location) {
+	console.log('date controller', $routeParams);
 	
+	// identify the date by its haash
 	$scope.hash = $routeParams['hash'];
+	
+	// the selected category
+	// for unauthorized user that should be defined!
+	$scope.category = $routeParams['category'];
 	
 	$scope.data = {
 		date: {},
@@ -31,11 +37,10 @@ webApp.controller('DateController', ['$rootScope', '$scope', '$routeParams', '$h
 						$scope.data.chosenModels = res.data.chosen_models;
 					}
 					
-					return;
+				} else {
+					alert('error loading models');
+					console.error(res.data);
 				}
-				
-				alert('error loading models');
-				console.error(res.data);
 			}, function(res) {
 				alert('error loading models');
 				console.error(res);
@@ -179,7 +184,6 @@ webApp.controller('DateController', ['$rootScope', '$scope', '$routeParams', '$h
 		},
 		
 		load: function() {
-			
 			// get date info
 			$http({
 				method: 'get',
@@ -193,23 +197,50 @@ webApp.controller('DateController', ['$rootScope', '$scope', '$routeParams', '$h
 					
 					// load models
 					$scope.data.loadModels(res.data.date.date_ts);
-					
-					return;
+				} else {
+					alert('error getting data');
 				}
 				
-				alert('error getting data');
 			});
 		}
 	};
 	
 	$scope.tabs = {
+		// current tab to filter the models
 		current: '',
-		tabChanged: function(newTab) {
-			$scope.tabs.current = newTab;
+		
+		// callback from the tabs directive
+		tabClicked: function(newTab) {
+			console.log('newTab', newTab);
+			console.log('#/date/' + $scope.hash + '/' + encodeURIComponent(newTab.name));
+			$location.path('#/date/' + $scope.hash + '/' + encodeURIComponent(newTab.name));
+		},
+		
+		dataLoaded: function(modelsCategories) {
+			console.log('models categories loaded');
+			
+			// if no tabs data, just exit, nothing to do with it
+			if (!modelsCategories || modelsCategories.length === 0) {
+				return;
+			}
+			
+			// if no category was defined, redirect to the first tab
+			if (!$scope.category) {
+				// redirect to the first tab
+				$scope.tabs.current = modelsCategories[0];
+			} else {
+				// select the required tab
+				modelsCategories.forEach(function(categoryData) {
+					if (categoryData.name == $scope.category) {
+						$scope.tabs.current = categoryData;
+					}
+				});
+			}
 		}
 	}
 	
-	
-	$scope.data.load();
+	$rootScope.$watch('hasRestrictedAccess', function(hasRestrictedAccess) {
+		$scope.data.load();
+	});
 	
 }]);

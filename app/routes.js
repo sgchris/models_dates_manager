@@ -12,6 +12,10 @@ webApp.config(['$routeProvider', function($routeProvider) {
 			templateUrl: 'views/date.html',
 			controller: 'DateController'
 		})
+		.when('/date/:hash/:category', {
+			templateUrl: 'views/date.html',
+			controller: 'DateController'
+		})
 		.when('/model/:modelHash', {
 			templateUrl: 'views/model.html',
 			controller: 'ModelController'

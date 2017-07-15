@@ -1,9 +1,9 @@
 /**
  * Tabs with models categories
  */
-webApp.directive('modelsCategoriesTabs', ['$http', function($http) {
+webApp.directive('modelsCategoriesTabs', ['$http', '$q', function($http, $q) {
 	
-	var modelsCategories = false;
+	var modelsCategoriesCache = false;
 	
 	var otherTabCaption = 'Other';
 	
@@ -15,58 +15,75 @@ webApp.directive('modelsCategoriesTabs', ['$http', function($http) {
 			
 			// callbacks (expressions)
 			onSelect: '&',
+			
+			// fire a callback when the data is loaded from the server
+			onLoad: '&?',
 		},
 		link: function(scope, element, attributes) {
+			var loadModelsCategories;
 			
-			// load models categories from the server
-			if (modelsCategories === false) {
-				$http({
+			// load models categories from the server or from the cache
+			if (!modelsCategoriesCache) {
+				loadModelsCategories = $http({
 					method: 'get',
 					url: 'api/get_models_categories.php'
-				}).then(function(res) {
-					if (res.data && res.data.result == 'ok') {
-						scope.modelsCategories = modelsCategories = res.data.models_categories;
-						
-						// the currently selected tab
-						scope.current = (scope.modelsCategories && scope.modelsCategories.length > 0) ? scope.modelsCategories[0].id : '';
-						
-						// initial tab select
-						if (scope.current) {
-							scope.onSelect({newSelectedTab: scope.current});
-						}
-					}
 				});
 			} else {
 				// take the cached results
-				scope.modelsCategories = modelsCategories;
-				
-			}
-			
-			// check if adding "uncategorized" tab needed
-			if (scope.addUncategorized) {
-				scope.modelsCategories.push({
-					id: -1,
-					name: otherTabCaption
+				loadModelsCategories = $q(function(resolve, reject) {
+					var retObj = {
+						data: {
+							result: 'ok',
+							models_categories: modelsCategoriesCache
+						}
+					};
+					
+					resolve(retObj);
 				});
 			}
 			
-			// the currently selected tab
-			scope.current = (scope.modelsCategories && scope.modelsCategories.length > 0) ? scope.modelsCategories[0].id : '';
+			// implement promise resolve
+			loadModelsCategories.then(function(res) {
+				if (res.data && res.data.result == 'ok') {
+					// set the data in the scope
+					scope.modelsCategories = modelsCategories = res.data.models_categories;
+					
+					// check if adding "uncategorized" tab needed
+					if (scope.addUncategorized) {
+						scope.modelsCategories.push({
+							id: -1,
+							name: otherTabCaption
+						});
+					}
+
+					
+					// the currently selected tab
+					scope.current = (scope.modelsCategories && scope.modelsCategories.length > 0) ? scope.modelsCategories[0] : '';
+					
+					// call user callback
+					if (typeof(scope.onLoad) == 'function') {
+						scope.onLoad({modelsCategories: scope.modelsCategories});
+					}
+				}
+			});
 			
-			// callback when tab changes
-			scope.tabChanged = function(newTabId) {
+			// callback when tab is clicked
+			scope.tabClicked = function(newTab) {
 				// set the new current tab ID
-				scope.current = newTabId;
+				scope.current = newTab;
 				
-				// invoke the callback
-				scope.onSelect({newSelectedTab: newTabId});
-			}
+				// invoke the scope callback
+				scope.onSelect({newSelectedTab: newTab});
+			};
 			
-			// initial tab select
-			if (scope.current) {
-				scope.onSelect({newSelectedTab: scope.current});
-			}
 		},
-		templateUrl: 'views/directives/models-categories-tabs.html',
+		template: 
+			'<div>' + 
+				'<ul class="nav nav-tabs">' + 
+					'<li ng-repeat="modelCategory in modelsCategories" ng-class="{\'active\': modelCategory.id == current.id}">' + 
+						'<a href="javascript:;" ng-click="tabClicked(modelCategory);">{{ modelCategory.name }}</a>' + 
+					'</li>' + 
+				'</ul>' + 
+			'</div>'
 	};
 }]);
