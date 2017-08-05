@@ -1,6 +1,6 @@
-webApp.config(['$routeProvider', function($routeProvider) {
-	$routeProvider
-		.when('/', {
+webApp.config(['$stateProvider', function($stateProvider) {
+	$stateProvider
+		.state('home', { '/', {
 			templateUrl: 'views/homepage.html',
 			controller: 'HomepageController'
 		})
