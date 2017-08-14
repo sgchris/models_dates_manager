@@ -1,30 +1,34 @@
+
 webApp.config(['$stateProvider', function($stateProvider) {
 	$stateProvider
-		.state('home', { '/', {
-			templateUrl: 'views/homepage.html',
-			controller: 'HomepageController'
-		})
-		.when('/about', {
+		.state('about', {
+			url: '/about', 
 			templateUrl: 'views/about.html',
 			controller: 'AboutController'
 		})
-		.when('/date/:hash', {
+		.state('date', {
+			url: '/date/:hash',
 			templateUrl: 'views/date.html',
 			controller: 'DateController'
 		})
-		.when('/date/:hash/:category', {
+		.state('date.category', {
+			url: '/date/:hash/:category',
 			templateUrl: 'views/date.html',
 			controller: 'DateController'
 		})
-		.when('/model/:modelHash', {
+		.state('model', {
+			url: '/model/:modelHash',
 			templateUrl: 'views/model.html',
 			controller: 'ModelController'
 		})
-		.when('/models_categories', {
+		.state('models_categories', {
+			url: '/models_categories',
 			templateUrl: 'views/models_categories.html',
 			controller: 'ModelsCategoriesController'
 		})
-		.otherwise({
-			redirectTo: '/'
+		.state('home', { 
+			url: "*path", 
+			templateUrl: 'views/homepage.html',
+			controller: 'HomepageController'
 		});
 }]);
