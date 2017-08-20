@@ -1,5 +1,5 @@
-webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$http', '$timeout', 'Upload', 
-	function($rootScope, $routeParams, $scope, $http, $timeout, Upload) {
+webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$http', '$timeout', 'Upload', 
+	function($rootScope, $stateParams, $scope, $http, $timeout, Upload) {
 	
 	$scope.gallery = {
 		isOpen: false,
@@ -26,7 +26,7 @@ webApp.controller('ModelController', ['$rootScope', '$routeParams', '$scope', '$
 		
 		id: null,
 		
-		hash: $routeParams.modelHash,
+		hash: $stateParams.modelHash,
 		
 		details: {},
 		

@@ -1,12 +1,12 @@
-webApp.controller('DateController', ['$rootScope', '$scope', '$routeParams', '$http', '$location', function($rootScope, $scope, $routeParams, $http, $location) {
-	console.log('date controller', $routeParams);
+webApp.controller('DateController', ['$rootScope', '$scope', '$stateParams', '$http', '$location', function($rootScope, $scope, $stateParams, $http, $location) {
+	console.log('date controller', $stateParams);
 	
 	// identify the date by its haash
-	$scope.hash = $routeParams['hash'];
+	$scope.hash = $stateParams['hash'];
 	
 	// the selected category
 	// for unauthorized user that should be defined!
-	$scope.category = $routeParams['category'];
+	$scope.category = $stateParams['category'];
 	
 	$scope.data = {
 		date: {},

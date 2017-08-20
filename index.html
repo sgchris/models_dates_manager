@@ -40,7 +40,7 @@
 			</div>
 		</nav>
 		<div class="container-fluid page-content">
-			<div class="{{controller}}-container" ng-view></div>
+			<div class="{{controller}}-container" ui-view></div>
 		</div>
 		<script>
 		window.IMAGES_BASE_URL = 'images/upload';
@@ -69,14 +69,14 @@
 		<script src="app/model-box.js"></script>
 		<script src="app/models-categories-tabs.js"></script>
 		
-		<!-- router -->
-		<script src="app/routes.js"></script>
-		
 		<!-- controllers -->
 		<script src="controllers/homepage.js"></script>
 		<script src="controllers/about.js"></script>
 		<script src="controllers/date.js"></script>
 		<script src="controllers/model.js"></script>
 		<script src="controllers/models_categories.js"></script>
+		
+		<!-- router -->
+		<script src="app/routes.js"></script>
 	</body>
 </html>

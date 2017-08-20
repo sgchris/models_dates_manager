@@ -1,6 +1,14 @@
 
-webApp.config(['$stateProvider', function($stateProvider) {
+webApp.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
+	
+	$urlRouterProvider.otherwise("/");
+	
 	$stateProvider
+		.state('home', { 
+			url: "/", 
+			templateUrl: 'views/homepage.html',
+			controller: 'HomepageController'
+		})
 		.state('about', {
 			url: '/about', 
 			templateUrl: 'views/about.html',
@@ -25,10 +33,7 @@ webApp.config(['$stateProvider', function($stateProvider) {
 			url: '/models_categories',
 			templateUrl: 'views/models_categories.html',
 			controller: 'ModelsCategoriesController'
-		})
-		.state('home', { 
-			url: "*path", 
-			templateUrl: 'views/homepage.html',
-			controller: 'HomepageController'
 		});
+		
+		$locationProvider.hashPrefix('');
 }]);
