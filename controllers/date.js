@@ -1,5 +1,6 @@
-webApp.controller('DateController', ['$rootScope', '$scope', '$stateParams', '$http', '$location', function($rootScope, $scope, $stateParams, $http, $location) {
-	console.log('date controller', $stateParams);
+webApp.controller('DateController', ['$rootScope', '$scope', '$state', '$stateParams', '$http', '$location', 
+function($rootScope, $scope, $state, $stateParams, $http, $location) {
+	console.log('dates controller', $stateParams);
 	
 	// identify the date by its haash
 	$scope.hash = $stateParams['hash'];
@@ -213,28 +214,32 @@ webApp.controller('DateController', ['$rootScope', '$scope', '$stateParams', '$h
 		tabClicked: function(newTab) {
 			console.log('newTab', newTab);
 			console.log('#/date/' + $scope.hash + '/' + encodeURIComponent(newTab.name));
-			$location.path('#/date/' + $scope.hash + '/' + encodeURIComponent(newTab.name));
+			$state.go('date_category', {hash: $scope.hash, category: newTab.name});
+			//$location.path('#/date/' + $scope.hash + '/' + encodeURIComponent(newTab.name));
 		},
 		
 		dataLoaded: function(modelsCategories) {
-			console.log('models categories loaded');
+			console.log('models categories loaded', modelsCategories);
 			
 			// if no tabs data, just exit, nothing to do with it
 			if (!modelsCategories || modelsCategories.length === 0) {
+				alert('No models categories!');
 				return;
 			}
 			
-			// if no category was defined, redirect to the first tab
-			if (!$scope.category) {
-				// redirect to the first tab
-				$scope.tabs.current = modelsCategories[0];
-			} else {
+			// take the category from the URL
+			if ($scope.category) {
 				// select the required tab
 				modelsCategories.forEach(function(categoryData) {
 					if (categoryData.name == $scope.category) {
-						$scope.tabs.current = categoryData;
+						$scope.tabs.current = categoryData.id;
 					}
 				});
+			}
+			
+			// if still tab selected, take the first one
+			if (!$scope.tabs.current) {
+				$scope.tabs.current = modelsCategories[0].id;
 			}
 		}
 	}

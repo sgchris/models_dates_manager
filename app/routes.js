@@ -19,7 +19,7 @@ webApp.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', func
 			templateUrl: 'views/date.html',
 			controller: 'DateController'
 		})
-		.state('date.category', {
+		.state('date_category', {
 			url: '/date/:hash/:category',
 			templateUrl: 'views/date.html',
 			controller: 'DateController'
