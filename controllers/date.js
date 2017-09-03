@@ -7,7 +7,7 @@ function($rootScope, $scope, $state, $stateParams, $http, $location) {
 	
 	// the selected category
 	// for unauthorized user that should be defined!
-	$scope.category = $stateParams['category'];
+	$scope.category = $stateParams['category'] || false;
 	
 	$scope.data = {
 		date: {},

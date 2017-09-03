@@ -13,6 +13,9 @@ webApp.directive('modelsCategoriesTabs', ['$http', '$q', function($http, $q) {
 		scope: {
 			addUncategorized: '=?',
 			
+			// initial value
+			initialValue: '&?',
+			
 			// callbacks (expressions)
 			onSelect: '&',
 			
@@ -55,10 +58,24 @@ webApp.directive('modelsCategoriesTabs', ['$http', '$q', function($http, $q) {
 							name: otherTabCaption
 						});
 					}
-
 					
-					// the currently selected tab
-					scope.current = (scope.modelsCategories && scope.modelsCategories.length > 0) ? scope.modelsCategories[0] : '';
+					// Check if the initial value was provided
+					if (scope.initialValue) {
+						// find the value in the models categories list
+						if (scope.modelsCategories && scope.modelsCategories.length > 0) {
+							scope.modelsCategories.forEach(function(modelCategory) {
+								if (modelCategory.name == scope.initialValue) {
+									// assign the object
+									scope.current = modelCategory;
+								}
+							});
+						}
+					} 
+					
+					// fallback - take the first value
+					if (!scope.current) {
+						scope.current = (scope.modelsCategories && scope.modelsCategories.length > 0) ? scope.modelsCategories[0] : '';
+					}
 					
 					// call user callback
 					if (typeof(scope.onLoad) == 'function') {
