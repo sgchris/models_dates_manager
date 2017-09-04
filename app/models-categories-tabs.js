@@ -14,7 +14,7 @@ webApp.directive('modelsCategoriesTabs', ['$http', '$q', function($http, $q) {
 			addUncategorized: '=?',
 			
 			// initial value
-			initialValue: '&?',
+			initialValue: '@?',
 			
 			// callbacks (expressions)
 			onSelect: '&',
