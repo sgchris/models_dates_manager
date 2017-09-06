@@ -212,14 +212,17 @@ function($rootScope, $scope, $state, $stateParams, $http, $location) {
 		
 		// callback from the tabs directive
 		tabClicked: function(newTab) {
-			console.log('newTab', newTab);
-			console.log('#/date/' + $scope.hash + '/' + encodeURIComponent(newTab.name));
 			$state.go('date_category', {hash: $scope.hash, category: newTab.name});
-			//$location.path('#/date/' + $scope.hash + '/' + encodeURIComponent(newTab.name));
 		},
 		
 		dataLoaded: function(modelsCategories) {
-			console.log('models categories loaded', modelsCategories);
+			if (!$scope.category && modelsCategories && modelsCategories.length > 0) {
+				$state.go('date_category', {
+					hash: $scope.hash, 
+					category: modelsCategories[0].name
+				});
+				return;
+			}
 			
 			// if no tabs data, just exit, nothing to do with it
 			if (!modelsCategories || modelsCategories.length === 0) {
