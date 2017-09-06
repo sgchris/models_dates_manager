@@ -1,4 +1,10 @@
-webApp.directive('modelBox', ['$http', function($http) {
+webApp.directive('modelBox', ['$http', 'modelsCategoriesService', function($http, modelsCategoriesService) {
+	var modelsCategories = {};
+	
+	var loadModelsCategories = function() {
+		
+	};
+	
 	return {
 		//require: 'ngModel',
 		replace: true,
@@ -15,6 +21,18 @@ webApp.directive('modelBox', ['$http', function($http) {
 		},
 		link: function(scope, element, attributes) {
 			scope.defaultImage = 'images/model_silhouette.png';
+			
+			// load the category name of the model
+			scope.modelCategoryName = '';
+			if (scope.model.category && parseInt(scope.model.category) > 0) {
+				modelsCategoriesService.load(function(modelsCategories) {
+					modelsCategories.forEach(function(modelCategory) {
+						if (modelCategory.id == scope.model.category) {
+							scope.modelCategoryName = modelCategory.name;
+						}
+					});
+				});
+			}
 			
 			scope.galleryIsOpen = false;
 			

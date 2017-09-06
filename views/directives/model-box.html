@@ -4,6 +4,10 @@
 	
 	<div class="model-tag">Model #{{model.id}}</div>
 	<div class="main-image-wrapper">
+		<!-- the category badge -->
+		<span class="model-category-name-badge" ng-if="modelCategoryName">{{modelCategoryName}}</span>
+		
+		<!-- the search icon -->
 		<a ng-click="openGallery();" class="main-image-lightbox-link" title="Click to see model images in original size">
 			<i class="fa fa-search-plus"></i>
 		</a>
