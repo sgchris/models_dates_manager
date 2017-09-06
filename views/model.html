@@ -1,7 +1,7 @@
 <!-- add login popup -->
-<ng-include src="'/views/snippets/login-curtain.html'"></ng-include>
+<!-- <ng-include src="'/views/snippets/login-curtain.html'"></ng-include> -->
 
-<div class="container-fluid" ng-if="hasRestrictedAccess">
+<div class="container-fluid">
 
 	<!-- the gallery -->
 	<an-gri-gal ng-if="gallery.isOpen" images="model.details.images" initial-index="gallery.initialIndex" on-close="gallery.close();"></an-gri-gal>
@@ -10,7 +10,7 @@
 	<p title="{{model.details.name}}" class="lead secondary-title">{{model.details.notes}}</p>
 	
 	<!-- upload new images -->
-	<div class="upload-model-images-wrapper">
+	<div class="upload-model-images-wrapper" ng-if="hasRestrictedAccess">
 		
 		<h3>Upload new images</h3>
 		<div class="upload-model-images-drop-area" 
@@ -38,8 +38,8 @@
 		
 	</div>
 	
-	<!-- model comments -->
-	<div class="row">
+	<!-- model details -->
+	<div class="row" ng-if="hasRestrictedAccess">
 		<div class="col-xs-12 col-md-6">
 			<form class="form-horizontal" ng-submit="model.update()" name="model.detailsForm">
 				<div class="form-group">
@@ -109,7 +109,7 @@
 		<div class="model-image-wrapper-inner">
 			<img ng-src="{{IMAGES_BASE_URL}}/{{imageUrl}}" />
 		</div>
-		<div class="model-toolbar">
+		<div class="model-toolbar" ng-if="hasRestrictedAccess">
 			<a href="javascript:;" class="btn btn-link pull-right icon-red"
 				ng-click="model.deleteImage(imageUrl);" 
 				title="Delete the image">

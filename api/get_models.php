@@ -7,7 +7,7 @@ requestShouldBe('GET');
 $params = receiveParams(['date', 'hash']);
 
 // there's no option to show all the models for unauthorized users
-if (empty($params['date'])) {
+if (empty($params['date']) && empty($params['hash'])) {
 	setRestrictedAccess();
 }
 

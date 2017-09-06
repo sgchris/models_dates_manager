@@ -229,12 +229,14 @@ webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$
 	$scope.$watch('uploader.files', function(newVal) {
 		$scope.uploader.uploadFiles();
 	});
+
+	// load the model's data
+	$scope.model.load();
+	$scope.models_categories.load();
 	
 	$rootScope.$watch('hasRestrictedAccess', function(hasRestrictedAccess) {
 		if (hasRestrictedAccess) {
-			$scope.model.load();
 			
-			$scope.models_categories.load();
 		}
 	});
 	
