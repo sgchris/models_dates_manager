@@ -44,9 +44,9 @@
 			
 			<div class="col-xs-12">
 				<article ng-repeat="model in data.chosenModels">
-					<model-box 
+					<model-box-small 
 						ng-model="model" 
-						on-un-choose="data.unChooseModel(data.date, model);"></model-box>
+						on-un-choose="data.unChooseModel(data.date, model);"></model-box-small>
 				</article>
 			</div>
 		</div>
@@ -60,9 +60,9 @@
 			
 			<div class="col-xs-12">
 				<article ng-repeat="model in data.excludedModels">
-					<model-box 
+					<model-box-small
 						ng-model="model" 
-						on-include="data.includeModel(data.date, model);"></model-box>
+						on-include="data.includeModel(data.date, model);"></model-box-small>
 				</article>
 			</div>
 		</div>

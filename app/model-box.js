@@ -1,9 +1,4 @@
-webApp.directive('modelBox', ['$http', 'modelsCategoriesService', function($http, modelsCategoriesService) {
-	var modelsCategories = {};
-	
-	var loadModelsCategories = function() {
-		
-	};
+var modelBoxCoreFunction = function($http, modelsCategoriesService) {
 	
 	return {
 		//require: 'ngModel',
@@ -83,7 +78,6 @@ webApp.directive('modelBox', ['$http', 'modelsCategoriesService', function($http
 					}
 				}).then(function(res) {
 					if (res.data && res.data.result == 'ok') {
-						console.log('scope.onRelocate', scope.onRelocate, typeof(scope.onRelocate))
 						if (typeof(scope.onRelocate) == 'function') {
 							scope.onRelocate();
 							return;
@@ -132,4 +126,17 @@ webApp.directive('modelBox', ['$http', 'modelsCategoriesService', function($http
 		},
 		templateUrl: 'views/directives/model-box.html',
 	}
+};
+
+webApp.directive('modelBox', ['$http', 'modelsCategoriesService', function($http, modelsCategoriesService) {
+	return modelBoxCoreFunction($http, modelsCategoriesService);
+}]);
+
+webApp.directive('modelBoxSmall', ['$http', 'modelsCategoriesService', function($http, modelsCategoriesService) {
+	var directiveObject = modelBoxCoreFunction($http, modelsCategoriesService);
+	
+	// replace the base template with the one for small box
+	directiveObject.templateUrl = 'views/directives/model-box-small.html'
+	
+	return directiveObject;
 }]);

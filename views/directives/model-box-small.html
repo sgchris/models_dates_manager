@@ -1,0 +1,44 @@
+<div class="model-box-small-wrapper">
+	<div class="model-box-small-image-wrapper">
+		<img ng-show=" model.images[0]" ng-src="{{mainImage}}">
+		<img ng-show="!model.images[0]" ng-src="{{defaultImage}}">
+	</div>
+	<div class="model-box-small-name">
+		<a href="#/model/{{model.hash}}" ng-attr-title="{{model.name}}">{{model.name}}</a>
+	</div>
+	<div class="model-box-small-toolbar">
+		<a href="javascript:;" class="btn btn-link pull-right icon-red" 
+			ng-if="showDeleteButton"
+			ng-click="deleteModel(model.id);" 
+			title="Delete the model from the system">
+			<i class="glyphicon glyphicon-trash"></i>
+		</a>
+		
+		<a href="#/model/{{model.hash}}" class="btn btn-link pull-right" title="View/Edit model details"><i class="glyphicon glyphicon-pencil"></i></a>
+		
+		<a href="javascript:;" class="btn btn-link pull-right icon-orange" title="Exclude model from this date"
+			ng-if="showExcludeButton" ng-click="onExclude();"><i class="glyphicon glyphicon-minus-sign"></i></a>
+			
+		<a href="javascript:;" class="btn btn-link pull-right icon-green" title="Re-include model in this date"
+			ng-if="showIncludeButton" ng-click="onInclude();"><i class="glyphicon glyphicon-plus-sign"></i></a>
+		
+		<a href="javascript:;" class="btn btn-link pull-right icon-green" title="Choose model for this date"
+			ng-if="showChooseButton" ng-click="onChoose();"><i class="glyphicon glyphicon-ok"></i></a>
+		
+		<a href="javascript:;" class="btn btn-link pull-right icon-orange" title="Un-Choose model for this date"
+			ng-if="showUnChooseButton" ng-click="onUnChoose();"><i class="glyphicon glyphicon-remove"></i></a>
+		
+		<a href="javascript:;" class="btn btn-link" 
+			ng-if="showRelocateButton"
+			ng-click="relocateModel(model.id, 'top');" 
+			title="Place the model at the top of the list">
+			<i class="glyphicon glyphicon-chevron-up"></i>
+		</a>
+		<a href="javascript:;" class="btn btn-link" 
+			ng-if="showRelocateButton" 
+			ng-click="relocateModel(model.id, 'bottom');" 
+			title="Place the model at the bottom of the list">
+			<i class="glyphicon glyphicon-chevron-down"></i>
+		</a>
+	</div>
+</div>
