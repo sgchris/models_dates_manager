@@ -20,7 +20,7 @@
 
 			<br />
 
-			<article ng-repeat="model in data.models | filterModelsByCategory:tabs.current">
+			<article ng-repeat="model in data.availableModels | filterModelsByCategory:tabs.current">
 				<!-- free -->
 				<model-box 
 					ng-if="!hasRestrictedAccess"
@@ -33,6 +33,22 @@
 					on-exclude="data.excludeModel(data.date, model);"
 					on-choose="data.chooseModel(data.date, model);"></model-box>
 			</article>
+		</div>
+	</div>
+	
+	<div ng-if="data.models.length > 0 && hasRestrictedAccess">
+		<hr />
+		
+		<div class="row" style="background: #EFE; padding: 10px; border-top: 1px solid #DDE; border-left: 5px solid green;">
+			<h2>All the models</h2>
+			
+			<div class="col-xs-12">
+				<article ng-repeat="model in data.models">
+					<model-box-small 
+						ng-model="model" 
+						on-un-choose="data.unChooseModel(data.date, model);"></model-box-small>
+				</article>
+			</div>
 		</div>
 	</div>
 	
