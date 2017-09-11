@@ -1,6 +1,5 @@
 webApp.controller('DateController', ['$rootScope', '$scope', '$state', '$stateParams', '$http', '$location', '$q', 
 function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
-	console.log('dates controller', $stateParams);
 	
 	// identify the date by its haash
 	$scope.hash = $stateParams['hash'];
@@ -207,7 +206,8 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 			
 			var promise = $http({
 				method: 'get',
-				url: 'api/get_models.php'
+				url: 'api/get_models.php',
+				params: apiParams
 			});
 			
 			promise.then(function(res) {
@@ -314,14 +314,22 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 		
 		// callback from the tabs directive
 		tabClicked: function(newTab) {
-			$state.go('date_category', {hash: $scope.hash, category: newTab.name});
+			$state.go('date_category', {
+				hash: $scope.hash, 
+				category: newTab.name
+			}, {
+				location: 'replace'
+			});
 		},
 		
 		dataLoaded: function(modelsCategories) {
+			// when no category provided, redirect to the first one.
 			if (!$scope.category && modelsCategories && modelsCategories.length > 0) {
 				$state.go('date_category', {
 					hash: $scope.hash, 
 					category: modelsCategories[0].name
+				}, {
+					location: 'replace'
 				});
 				return;
 			}

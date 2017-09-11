@@ -4,28 +4,28 @@ require_once __DIR__.'/init.php';
 
 requestShouldBe('GET');
 
-$params = receiveParams(['date_ts', 'date_hash']);
+$params = receiveParams(['model_hash', 'date_hash']);
 
 // there's no option to show all the models for unauthorized users
-$date_ts = isset($params['date_ts']) ? $params['date_ts'] : false;
+$model_hash = isset($params['model_hash']) ? $params['model_hash'] : false;
 $date_hash = isset($params['date_hash']) ? $params['date_hash'] : false;
 
-// validate date_ts parameter
-if ($date_ts) {
-	if (!preg_match('/^\d+$/', $date_ts)) {
-		_exit('bad date timestamp parameter');
+// validate model_hash parameter
+if ($model_hash) {
+	if (!preg_match('/^[\dA-Fa-f]+$/', $model_hash)) {
+		_exit('bad model hash parameter');
 	}
 }
 
-// validate date_ts parameter
+// validate date_hash parameter
 if ($date_hash) {
 	if (!preg_match('/^[\dA-Fa-f]+$/', $date_hash)) {
 		_exit('bad date hash parameter');
 	}
 }
 
-// set restricted access only when requesting all the models
-if (!$date_ts) {
+// *all* the models are available only to admin
+if (!$date_hash && !$model_hash) {
 	setRestrictedAccess();
 }
 
@@ -34,16 +34,16 @@ if (!$date_ts) {
 $query = '
 	SELECT * 
 	FROM models';
+$queryParams = [];
 
 // if the date was provided, load list only of the 
-if ($date_ts || $date_hash) {
+if ($date_hash) {
 	// get all the models for the date
 	$dateRow = dbRow('
 		SELECT * 
 		FROM dates_list 
 		WHERE date_ts = :date_ts OR hash = :hash', array(
-			'date_ts' => ($date_ts ?: ''),
-			'date_hash' => ($date_hash ?: ''),
+			'hash' => ($date_hash ?: '')
 		)
 	);
 	
@@ -68,16 +68,18 @@ if ($date_ts || $date_hash) {
 	);
 	
 	$query.= ' WHERE id IN ('. implode(',', $modelsIds). ')';
+} elseif ($model_hash) {
+	$query.= ' WHERE hash = :hash';
+	$queryParams['hash'] = $model_hash;
 }
 
-	
 $query.= '
 	ORDER by 
 		CAST(display_order AS INTEGER) DESC, 
 		id DESC';
 
 // get all the models
-$allModels = dbQuery($query);
+$allModels = dbQuery($query, $queryParams);
 
 // decode models images
 foreach ($allModels as $i => $modelRow) {

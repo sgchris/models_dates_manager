@@ -127,7 +127,7 @@ webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$
 				method: 'get',
 				url: 'api/get_models.php',
 				params: {
-					hash: $scope.model.hash
+					model_hash: $scope.model.hash
 				}
 			}).then(function(res) {
 				var foundModel = false;
@@ -136,6 +136,7 @@ webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$
 					$scope.model.details = res.data.models[0];
 				} else {
 					alert('cannot load model details');
+					console.error('res', res);
 				}
 				
 			}, function() {
