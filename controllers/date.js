@@ -1,9 +1,15 @@
-webApp.controller('DateController', ['$rootScope', '$scope', '$state', '$stateParams', '$http', '$location', 
-function($rootScope, $scope, $state, $stateParams, $http, $location) {
+webApp.controller('DateController', ['$rootScope', '$scope', '$state', '$stateParams', '$http', '$location', '$q', 
+function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 	console.log('dates controller', $stateParams);
 	
 	// identify the date by its haash
 	$scope.hash = $stateParams['hash'];
+	
+	// hash MUST be provided
+	if (!$scope.hash) {
+		$state.go('home');
+		return;
+	}
 	
 	// the selected category
 	// for unauthorized user that should be defined!
@@ -12,41 +18,13 @@ function($rootScope, $scope, $state, $stateParams, $http, $location) {
 	$scope.data = {
 		date: {},
 		
-		models: [],
+		// models relevant for the date
+		availableModels: [],
 		excludedModels: [],
 		chosenModels: [],
 		
-		loadModels: function(dateTs) {
-			$http({
-				method: 'get',
-				url: 'api/get_models.php',
-				params: {
-					date: dateTs
-				}
-			}).then(function(res) {
-				if (res.data && res.data.result == 'ok') {
-					// check the included models
-					$scope.data.models = res.data.models;
-					
-					// check the excluded models
-					if (res.data.excluded_models) {
-						$scope.data.excludedModels = res.data.excluded_models;
-					}
-					
-					// check the chosen models
-					if (res.data.chosen_models) {
-						$scope.data.chosenModels = res.data.chosen_models;
-					}
-					
-				} else {
-					alert('error loading models');
-					console.error(res.data);
-				}
-			}, function(res) {
-				alert('error loading models');
-				console.error(res);
-			});
-		},
+		// all the rest
+		models: [],
 		
 		chooseModel: function(date, model) {
 			if (!confirm('Choose ' + model.name + ' for this date?')) {
@@ -184,24 +162,113 @@ function($rootScope, $scope, $state, $stateParams, $http, $location) {
 			});
 		},
 		
-		load: function() {
+		loadModels: function(dateTs) {
+			
+			// get all models in restricted mode / relevant models for free mode
+			var apiParams = {};
+			if (!$rootScope.hasRestrictedAccess) {
+				apiParams.date_hash = $scope.hash;
+			}
+			
+			var promise = $http({
+				method: 'get',
+				url: 'api/get_models.php'
+			});
+			
+			promise.then(function(res) {
+				if (res.data && res.data.result == 'ok') {
+					// check the included models
+					$scope.data.models = res.data.models;
+					
+				} else {
+					alert('error loading models');
+					console.error(res.data);
+				}
+			}, function(res) {
+				alert('error loading models');
+				console.error(res);
+			});
+			
+			return promise;
+		},
+		
+		loadDate: function() {
 			// get date info
-			$http({
+			var promise = $http({
 				method: 'get',
 				url: 'api/get_date.php',
 				params: {
 					hash: $scope.hash
 				}
-			}).then(function(res) {
+			});
+			
+			promise.then(function(res) {
 				if  (res.data && res.data.result == 'ok') {
 					$scope.data.date = res.data.date;
-					
-					// load models
-					$scope.data.loadModels(res.data.date.date_ts);
 				} else {
 					alert('error getting data');
 				}
+			});
+			
+			return promise;
+		},
+		
+		load: function() {
+			$q.all([
+				$scope.data.loadDate(), 
+				$scope.data.loadModels()
+			]).then(function(dateRes, modelsRes) {
 				
+				// convert models to object where keys are the IDs
+				var modelsObj = {};
+				$scope.data.models.forEach(function(modelData) {
+					modelsObj[modelData.id] = modelData;
+				});
+				
+				// update the models lists (excluded, chosen, available);
+				$scope.data.availableModels = [];
+				$scope.data.date.available_models.forEach(function(availableModelId) {
+					if (typeof(modelsObj[availableModelId]) != 'undefined') {
+						$scope.data.availableModels.push(modelsObj[availableModelId]);
+						
+						// remove her from the "rest" models list
+						$scope.data.models.forEach(function(modelData, i) {
+							if (modelData.id == availableModelId) {
+								$scope.data.models.splice(i, 1);
+							}
+						});
+					}
+				});
+				
+				// update the models lists (excluded, chosen, available);
+				$scope.data.chosenModels = [];
+				$scope.data.date.chosen_models.forEach(function(chosenModelId) {
+					if (typeof(modelsObj[chosenModelId]) != 'undefined') {
+						$scope.data.chosenModels.push(modelsObj[chosenModelId]);
+						
+						// remove her from the "rest" models list
+						$scope.data.models.forEach(function(modelData, i) {
+							if (modelData.id == chosenModelId) {
+								$scope.data.models.splice(i, 1);
+							}
+						});
+					}
+				});
+				
+				// update the models lists (excluded, chosen, available);
+				$scope.data.excludedModels = [];
+				$scope.data.date.excluded_models.forEach(function(excludedModelId) {
+					if (typeof(modelsObj[excludedModelId]) != 'undefined') {
+						$scope.data.excludedModels.push(modelsObj[excludedModelId]);
+						
+						// remove her from the "rest" models list
+						$scope.data.models.forEach(function(modelData, i) {
+							if (modelData.id == excludedModelId) {
+								$scope.data.models.splice(i, 1);
+							}
+						});
+					}
+				});
 			});
 		}
 	};

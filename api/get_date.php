@@ -13,6 +13,13 @@ if (!$dateData) {
 	_exit('date not found');
 }
 
+// convert "available_models" to array
+$dateData['available_models'] = !empty($dateData['available_models']) ? 
+	array_filter(
+		json_decode($dateData['available_models'], $__assoc = true), 
+		'strlen'
+	) : [];
+
 // convert "excluded_models" to array
 $dateData['excluded_models'] = !empty($dateData['excluded_models']) ? 
 	array_filter(
