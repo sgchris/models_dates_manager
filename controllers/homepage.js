@@ -1,5 +1,5 @@
-webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibModal', 
-	function($rootScope, $scope, $http, $modal) {
+webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibModal', 'modelsCategoriesService',
+	function($rootScope, $scope, $http, $modal, modelsCategoriesService) {
 
 	$scope.models = {
 		inProgress: false,
@@ -157,31 +157,17 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 		current: '',
 		
 		load: function() {
-			$http({
-				method: 'get',
-				url: 'api/get_models_categories.php'
-			}).then(function(res) {
-				if (res && res.data && res.data.models_categories) {
-					
-					// set the tabs
-					$scope.tabs.data = res.data.models_categories;
-					
-					// check if there are uncategorized models
-					if ($scope.models.thereAreUncategorizedModels(res.data.models_categories)) {
-						console.log('tabs: there are uncategorized');
-						$scope.tabs.addUncategorizedTab();
-					}
-					
-					
-					if ($scope.tabs.data.length > 0) {
-						$scope.tabs.current = $scope.tabs.data[0].id;
-					}
-					
-				} else {
-					alert('error reading models categories');
+			modelsCategoriesService.load(function(modelsCategories) {
+				$scope.tabs.data = modelsCategories;
+				
+				// check if there are uncategorized models
+				if ($scope.models.thereAreUncategorizedModels(modelsCategories)) {
+					$scope.tabs.addUncategorizedTab();
 				}
-			}, function() {
-				alert('Network error');
+				
+				if ($scope.tabs.data.length > 0) {
+					$scope.tabs.current = $scope.tabs.data[0].id;
+				}
 			});
 		}
 	};

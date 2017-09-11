@@ -40,6 +40,9 @@ webApp.factory('modelsCategoriesService', ['$http', '$q', function($http, $q) {
 						callbackFn(res.data.models_categories);
 					}
 				}
+			}, function(res) {
+				alert('error loading models categories');
+				console.error('error loading models categories', res);
 			});
 		}
 	};

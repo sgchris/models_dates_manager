@@ -1,5 +1,5 @@
-webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$http', '$timeout', 'Upload', 
-	function($rootScope, $stateParams, $scope, $http, $timeout, Upload) {
+webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$http', '$timeout', 'Upload', 'modelsCategoriesService',
+	function($rootScope, $stateParams, $scope, $http, $timeout, Upload, modelsCategoriesService) {
 	
 	$scope.gallery = {
 		isOpen: false,
@@ -207,22 +207,8 @@ webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$
 		data: [],
 		
 		load: function() {
-			$scope.models_categories.inProgress = true;
-			
-			$http({
-				method: 'get',
-				url: 'api/get_models_categories.php'
-			}).then(function(res) {
-				if (res.data && res.data.result == 'ok') {
-					$scope.models_categories.data = res.data.models_categories;
-				} else {
-					alert('cannot load model details');
-				}
-				
-			}, function() {
-				alert('Network error');
-			}).finally(function() {
-				$scope.model.inProgress = false;
+			modelsCategoriesService.load(function(modelsCategories) {
+				$scope.models_categories.data = modelsCategories;
 			});
 		}
 	}
