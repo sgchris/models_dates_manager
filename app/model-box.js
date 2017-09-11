@@ -12,7 +12,9 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService) {
 			onExclude: '&?',
 			onInclude: '&?',
 			onChoose: '&?',
-			onUnChoose: '&?'
+			onUnChoose: '&?',
+			onMakeAvailable: '&?',
+			onMakeUnavailable: '&?'
 		},
 		link: function(scope, element, attributes) {
 			scope.defaultImage = 'images/model_silhouette.png';
@@ -61,6 +63,12 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService) {
 			
 			// check if "UnChoose" callback is defined
 			scope.showUnChooseButton = (typeof(scope.onUnChoose) == 'function');
+			
+			// check if "UnChoose" callback is defined
+			scope.showMakeAvailableButton = (typeof(scope.onMakeAvailable) == 'function');
+			
+			// check if "UnChoose" callback is defined
+			scope.showMakeUnavailableButton = (typeof(scope.onMakeUnavailable) == 'function');
 			
 			/**
 			 * move the model to the top/bottom of the list
@@ -123,6 +131,7 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService) {
 					alert('Delete failed - server error');
 				});
 			};
+
 		},
 		templateUrl: 'views/directives/model-box.html',
 	}

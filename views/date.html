@@ -5,7 +5,7 @@
 		<i class="glyphicon glyphicon-remove"></i> Delete this date
 	</button>
 
-	<h1>{{data.date.date_ts * 1000 | date:dd/MM/yy }}</h1>
+	<h1>{{data.date.date_ts * 1000 | date:'EEEE, dd LLLL yyyy' }}</h1>
 	
 	<hr />
 	
@@ -31,7 +31,9 @@
 					ng-if=" hasRestrictedAccess"
 					ng-model="model" 
 					on-exclude="data.excludeModel(data.date, model);"
-					on-choose="data.chooseModel(data.date, model);"></model-box>
+					on-choose="data.chooseModel(data.date, model);"
+					on-make-unavailable="data.makeUnavailable(data.date, model);"
+					></model-box>
 			</article>
 		</div>
 	</div>
@@ -40,13 +42,13 @@
 		<hr />
 		
 		<div class="row" style="background: #EFE; padding: 10px; border-top: 1px solid #DDE; border-left: 5px solid green;">
-			<h2>All the models</h2>
+			<h2>All the available models</h2>
 			
 			<div class="col-xs-12">
-				<article ng-repeat="model in data.models">
+				<article ng-repeat="model in data.models | filterModelsByCategory:tabs.current">
 					<model-box-small 
 						ng-model="model" 
-						on-un-choose="data.unChooseModel(data.date, model);"></model-box-small>
+						on-make-available="data.makeAvailable(data.date, model);"></model-box-small>
 				</article>
 			</div>
 		</div>

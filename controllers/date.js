@@ -162,6 +162,41 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 			});
 		},
 		
+		changeAvailability: function(date, model, makeModelAvailable) {
+			var apiFileName = 'make_model_available_for_date.php';
+			if (!makeModelAvailable) {
+				apiFileName = 'make_model_unavailable_for_date.php';
+			}
+			
+			// call the API
+			$http({
+				method: 'post',
+				url: 'api/' + apiFileName,
+				data: {
+					date: date.date_ts,
+					model_id: model.id
+				}
+			}).then(function(res) {
+				if (res.data && res.data.result == 'ok') {
+					$scope.data.load();
+					return;
+				}
+				
+				alert('Error changing model availability');
+				console.error('Error changing model availability', res);
+			}, function(res) {
+				console.error('Error changing model availability', res);
+			});
+		},
+		
+		makeAvailable: function(date, model) {
+			$scope.data.changeAvailability(date, model, true);
+		},
+		
+		makeUnavailable: function(date, model) {
+			$scope.data.changeAvailability(date, model, false);
+		},
+		
 		loadModels: function(dateTs) {
 			
 			// get all models in restricted mode / relevant models for free mode

@@ -34,22 +34,17 @@ if (empty($date)) {
 
 $modelObj = getModelDetails($params['model_id']);
 
-// get already excluded models for the date
-$chosenModels = json_decode($date['chosen_models']) ?? array();
+// get already available models for the date
+$availableModels = json_decode($date['available_models']) ?? array();
 
-if (!in_array($modelObj['id'], $chosenModels)) {
-	_exit('The model is already not chosen for this date');
+if (in_array($modelObj['id'], $availableModels)) {
+	_exit('The model is already available for this date');
 }
 
-// remove the model from the "excluded" array
-array_splice(
-	$chosenModels, 
-	array_search($params['model_id'], $chosenModels), 
-	1
-);
+$availableModels[] = $modelObj['id'];
 
-dbExec('update dates_list set chosen_models = :chosen_models where date_ts = :date_ts', array(
-	':chosen_models' => json_encode($chosenModels),
+dbExec('update dates_list set available_models = :available_models where date_ts = :date_ts', array(
+	':available_models' => json_encode($availableModels),
 	':date_ts' => $date['date_ts'],
 ));
 

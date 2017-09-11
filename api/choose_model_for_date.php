@@ -34,7 +34,7 @@ if (empty($date)) {
 
 $modelObj = getModelDetails($params['model_id']);
 
-// get already excluded models for the date
+// get already chosen models for the date
 $chosenModels = json_decode($date['chosen_models']) ?? array();
 
 if (in_array($modelObj['id'], $chosenModels)) {

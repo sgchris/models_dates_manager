@@ -9,7 +9,7 @@
 		
 		<!-- the search icon -->
 		<a ng-click="openGallery();" class="main-image-lightbox-link" title="Click to see model images in original size">
-			<i class="fa fa-search-plus"></i>
+			<i class="fa fa-search"></i>
 		</a>
 		<img ng-show=" model.images[0]" ng-src="{{mainImage}}">
 		<img ng-show="!model.images[0]" ng-src="{{defaultImage}}">
@@ -60,6 +60,18 @@
 			ng-click="relocateModel(model.id, 'bottom');" 
 			title="Place the model at the bottom of the list">
 			<i class="glyphicon glyphicon-chevron-down"></i>
+		</a>
+		<a href="javascript:;" class="btn btn-link" 
+			ng-if="showMakeAvailableButton" 
+			ng-click="onMakeAvailable();" 
+			title="Make that model relevant for that date">
+			<i class="glyphicon glyphicon-upload"></i>
+		</a>
+		<a href="javascript:;" class="btn btn-link" 
+			ng-if="showMakeUnavailableButton" 
+			ng-click="onMakeUnavailable();" 
+			title="Make that model NOT relevant for that date">
+			<i class="glyphicon glyphicon-download"></i>
 		</a>
 	</div>
 </div>
