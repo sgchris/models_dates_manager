@@ -1,5 +1,5 @@
-webApp.controller('ModelsCategoriesController', ['$rootScope', '$scope', '$http', 
-	function($rootScope, $scope, $http) {
+webApp.controller('ModelsCategoriesController', ['$rootScope', '$scope', '$http', 'modelsCategoriesService', 
+	function($rootScope, $scope, $http, modelsCategoriesService) {
 	
 	$scope.models_categories = {
 		
@@ -64,23 +64,8 @@ webApp.controller('ModelsCategoriesController', ['$rootScope', '$scope', '$http'
 		},
 		
 		load: function() {
-			
-			$scope.models_categories.inProgress = true;
-			
-			$http({
-				method: 'get',
-				url: 'api/get_models_categories.php'
-			}).then(function(res) {
-				var foundModel = false;
-				if (res.data && res.data.result == 'ok' && res.data.models_categories) {
-					$scope.models_categories.data = res.data.models_categories;
-				} else {
-					alert('cannot load models categories');
-				}
-			}, function() {
-				alert('Network error');
-			}).finally(function() {
-				$scope.models_categories.inProgress = false;
+			modelsCategoriesService.load(function(modelsCategories) {
+				$scope.models_categories.data = modelsCategories;
 			});
 		}
 	};
