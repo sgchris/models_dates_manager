@@ -1,14 +1,6 @@
 -- useful scripts
 
-
 ---- schemas
-CREATE TABLE "dates_list" (
-	date_ts number primary key,
-	excluded_models text,
-	chosen_models text,
-	type text,
-	hash text
-);
 CREATE TABLE "models" (
 	id integer primary key autoincrement,
 	name text,
@@ -26,6 +18,13 @@ CREATE TABLE "dates_models_categories"  (
 	models_category_id integer,
 	hash text,
 	PRIMARY KEY (hash)
+);
+CREATE TABLE "dates_list" (
+	date_ts number primary key,
+	available_models text,
+	excluded_models text,
+	chosen_models text,
+	hash text
 );
 
 -- alter table dates_list !!!! SHOULD BE MODIFIED !!!!!
