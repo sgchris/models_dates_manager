@@ -17,10 +17,10 @@
 		
 		<a href="#/model/{{model.hash}}" class="btn btn-link pull-right" title="View/Edit model details"><i class="glyphicon glyphicon-pencil"></i></a>
 		
-		<a href="javascript:;" class="btn btn-link pull-right icon-orange" title="Exclude model from this date"
+		<a href="javascript:;" class="btn btn-link pull-right icon-orange" title="Mark model as stand-by for this date"
 			ng-if="showExcludeButton" ng-click="onExclude();"><i class="glyphicon glyphicon-minus-sign"></i></a>
 			
-		<a href="javascript:;" class="btn btn-link pull-right icon-green" title="Re-include model in this date"
+		<a href="javascript:;" class="btn btn-link pull-right icon-green" title="Mark model as relevant for this date"
 			ng-if="showIncludeButton" ng-click="onInclude();"><i class="glyphicon glyphicon-plus-sign"></i></a>
 		
 		<a href="javascript:;" class="btn btn-link pull-right icon-green" title="Choose model for this date"
@@ -32,13 +32,13 @@
 		<a href="javascript:;" class="btn btn-link" 
 			ng-if="showRelocateButton"
 			ng-click="relocateModel(model.id, 'top');" 
-			title="Place the model at the top of the list">
+			title="Move the model to the top of the list">
 			<i class="glyphicon glyphicon-chevron-up"></i>
 		</a>
 		<a href="javascript:;" class="btn btn-link" 
 			ng-if="showRelocateButton" 
 			ng-click="relocateModel(model.id, 'bottom');" 
-			title="Place the model at the bottom of the list">
+			title="Move the model to the bottom of the list">
 			<i class="glyphicon glyphicon-chevron-down"></i>
 		</a>
 		<a href="javascript:;" class="btn btn-link" 

@@ -192,6 +192,28 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 			$scope.data.changeAvailability(date, model, true);
 		},
 		
+		makeAllAvailable: function(date, category) {
+			// call the API
+			$http({
+				method: 'post',
+				url: 'api/make_all_models_unavailable_for_date.php',
+				data: {
+					date: date.date_ts,
+					category: category
+				}
+			}).then(function(res) {
+				if (res.data && res.data.result == 'ok') {
+					$scope.data.load();
+					return;
+				}
+				
+				alert('Error changing model availability');
+				console.error('Error changing model availability', res);
+			}, function(res) {
+				console.error('Error changing model availability', res);
+			});
+		},
+		
 		makeUnavailable: function(date, model) {
 			$scope.data.changeAvailability(date, model, false);
 		},
