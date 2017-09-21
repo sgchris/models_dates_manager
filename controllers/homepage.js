@@ -1,6 +1,8 @@
-webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibModal', 'modelsCategoriesService',
-	function($rootScope, $scope, $http, $modal, modelsCategoriesService) {
-
+webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$state', '$uibModal', 'modelsCategoriesService',
+	function($rootScope, $scope, $http, $state, $modal, modelsCategoriesService) {
+	
+	var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+	
 	$scope.models = {
 		inProgress: false,
 		
@@ -12,10 +14,15 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 				return;
 			}
 			
+			// if no name provided, give according to the current date/time
+			var emptyName = false;
 			if ($scope.models.newModelName.trim().length == 0) {
-				$scope.models.newModelError = 'Please type model name in the input above';
-				return;
+				var now = new Date();
+				$scope.models.newModelName = 'Model ' + now.getDate() + ' ' + days[now.getDay()] + ' ' + now.getHours() + '.' + now.getMinutes();
+				
+				emptyName = true;
 			}
+			
 			$scope.models.newModelError = false;
 			
 			$scope.models.inProgress = true;
@@ -42,9 +49,15 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 					$scope.models.newModelError = false;
 					$scope.models.newModelName = '';
 					
-					// reload the models list
-					$scope.models.load();
+					// the API returns the hash of the new model
+					var newModelHash = res.data.hash;
 					
+					// reload the models list
+					var promise = $scope.models.load();
+					
+					if (emptyName) {
+						$state.go('model', {modelHash: newModelHash});
+					}
 					return;
 				}
 				
@@ -115,7 +128,9 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 			
 			$scope.models.inProgress = true;
 			
-			$http.get('api/get_models.php').then(function(res) {
+			var promise = $http.get('api/get_models.php');
+			
+			promise.then(function(res) {
 				$scope.models.data = res.data && res.data.models ? res.data.models : [];
 				
 				// check if uncategorized tab should be added
@@ -127,6 +142,8 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$uibM
 			}).finally(function() {
 				$scope.models.inProgress = false;
 			});
+			
+			return promise;
 		}
 	};
 	

@@ -39,15 +39,18 @@ if (!$maxDisplayOrder) {
 }
 $maxDisplayOrder = $maxDisplayOrder['max_display_order'] ?? 0;
 
+// generate new model's hash
+$newHash = md5(microtime(true));
+
 // add the new model
 $stmt = dbExec(
 	'insert into models (name, display_order, hash, category) values (:name, :display_order, :hash, :category)', 
 	[
 		'name' => $params['name'],
 		'display_order' => $maxDisplayOrder + 1,
-		'hash' => md5(microtime(true)),
+		'hash' => $newHash,
 		'category' => $category,
 	]
 );
 
-_success();
+_success(['hash' => $newHash]);
