@@ -1,14 +1,15 @@
 # Models dates manager
 
-Manage models list by dates 
-- every date has several models
-- every new date contains all the available models by default
+Models manager with possible photosession dates
 
+# features/structure
+
+- system contains models (with categories) and dates
+- every date has available/relevant models, chosen models and stand-by models
+- unauthorized visitors are allowed to see only one date with available models, and model page with model's images only.
 
 # TODO
-1. date page - filter models by selected tab
-2. date page - check if "uncategorized" tab has to be added
-3. date page - for unauthorized users - hide the tabs, and show only the relevant models
-4. date page - add token for date + models category
-5. date page - add "chosen models" section + relevant action buttons
+
+* add models without providing name
+* make tabs visible for unauthorized users
 
