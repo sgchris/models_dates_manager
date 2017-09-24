@@ -5,7 +5,10 @@ require_once __DIR__.'/init.php';
 requestShouldBe('post');
 setRestrictedAccess();
 
-$params = receiveParams(['model_id', 'name', 'category', 'notes', 'private_notes', 'tags'], ['model_id']);
+$params = receiveParams(
+	['model_id', 'name', 'category', 'phone', 'instagram', 'notes', 'private_notes', 'tags'], 
+	['model_id']
+);
 
 $modelId = $params['model_id'];
 if (!is_numeric($modelId) || !($modelId > 0)) {
@@ -40,6 +43,33 @@ if (isset($params['category'])) {
 		$updateParams['category'] = $params['category'];
 	} else {
 		$updateParams['category'] = '';
+	}
+}
+
+// check "category" parameter
+if (isset($params['phone'])) {
+	if (!empty($params['phone'])) {
+		$params['phone'] = trim($params['phone']);
+		
+		// validate 
+		if (!preg_match('/^\d+$/', $params['phone'])) {
+			_exit('bad phone parameter. only numbers allowed');
+		}
+		
+		$updateParams['phone'] = $params['phone'];
+	} else {
+		$updateParams['phone'] = '';
+	}
+}
+
+// check "category" parameter
+if (isset($params['instagram'])) {
+	if (!empty($params['instagram'])) {
+		$params['instagram'] = trim($params['instagram']);
+		
+		$updateParams['instagram'] = $params['instagram'];
+	} else {
+		$updateParams['instagram'] = '';
 	}
 }
 

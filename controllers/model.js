@@ -39,6 +39,8 @@ webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$
 				model_id: $scope.model.id,
 				name: $scope.model.details.name,
 				category: $scope.model.details.category,
+				phone: $scope.model.details.phone,
+				instagram: $scope.model.details.instagram,
 				notes: $scope.model.details.notes,
 				private_notes: $scope.model.details.private_notes,
 				tags: $scope.model.details.tags,
