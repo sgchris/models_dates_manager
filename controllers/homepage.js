@@ -135,7 +135,6 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 				
 				// check if uncategorized tab should be added
 				if ($scope.models.thereAreUncategorizedModels($scope.tabs.data)) {
-					console.log('models: there are uncategorized');
 					$scope.tabs.addUncategorizedTab();
 				}
 				
@@ -144,6 +143,25 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 			});
 			
 			return promise;
+		}
+	};
+	
+	$scope.sidebar = {
+		expanded: true,
+		
+		shrinkExpandHomepageSidebar: function() {
+			$scope.sidebar.expanded = !$scope.sidebar.expanded;
+			
+			if (typeof(window.localStorage) != 'undefined') {
+				window.localStorage.setItem('sidebarExpanded', $scope.sidebar.expanded ? '1' : '0');
+			}
+		},
+		
+		init: function() {
+			if (typeof(window.localStorage) != 'undefined') {
+				var currentValue = window.localStorage.getItem('sidebarExpanded');
+				$scope.sidebar.expanded = (currentValue === null) ? true : !!parseInt(currentValue);
+			}
 		}
 	};
 	
@@ -256,8 +274,6 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 			if (!confirm('Delete the dates with all its settings?')) {
 				return;
 			}
-			
-			
 		},
 		
 		data: [],
@@ -285,4 +301,5 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 		}
 	});
 	
+	$scope.sidebar.init();
 }]);

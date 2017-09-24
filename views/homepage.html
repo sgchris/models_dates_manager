@@ -1,7 +1,15 @@
 <!-- add login popup -->
 <ng-include src="'/views/snippets/login-curtain.html'"></ng-include>
 
-<div class="col-xs-12 col-md-3 sidebar-wrapper" ng-if="hasRestrictedAccess">
+<a href="javascript:;" class="shrink-expand-sidebar-button" ng-click="sidebar.shrinkExpandHomepageSidebar();" title="Show or hide the task bar">
+	<span ng-show=" sidebar.expanded"><i class="glyphicon glyphicon-arrow-left"></i> Shrink</span>
+	<span ng-show="!sidebar.expanded"><i class="glyphicon glyphicon-arrow-right"></i> Expand</span>
+	Sidebar
+</a>
+<div class="col-xs-12 col-md-3 sidebar-wrapper" 
+	ng-show="sidebar.expanded" 
+	ng-if="hasRestrictedAccess">
+	
 	<h4>Add new model</h4>
 	
 	<form ng-submit="models.addNewModel()">
@@ -49,7 +57,7 @@
 		</a>
 	</div>
 </div>
-<div class="col-xs-12 col-md-9">
+<div class="col-xs-12" ng-class="{'col-md-9':sidebar.expanded, 'col-md-12':!sidebar.expanded}">
 
 	<!-- models categories -->
 	<ul class="nav nav-tabs">
