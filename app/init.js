@@ -68,6 +68,12 @@ webApp.run(['$rootScope', '$window', '$http', function($rootScope, $window, $htt
 		}
 	});
 	
+	// check the resolution
+	$rootScope.isMobile = false;
+	if ($window.innerWidth < 990) {
+		$rootScope.isMobile = true;
+	}
+	
 	// callback for FB authentication
 	$window.statusChangeCallback = function(response) {
 		var accessToken = response && response.authResponse && response.authResponse.accessToken ? 
