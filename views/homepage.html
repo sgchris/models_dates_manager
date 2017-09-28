@@ -1,78 +1,110 @@
 <!-- add login popup -->
 <ng-include src="'/views/snippets/login-curtain.html'"></ng-include>
 
-<a href="javascript:;" class="shrink-expand-sidebar-button" ng-click="sidebar.shrinkExpandHomepageSidebar();" title="Show or hide the task bar">
-	<span ng-show=" sidebar.expanded"><i class="glyphicon glyphicon-arrow-left"></i> Shrink</span>
-	<span ng-show="!sidebar.expanded"><i class="glyphicon glyphicon-arrow-right"></i> Expand</span>
-	Sidebar
-</a>
-<div class="col-xs-12 col-md-3 sidebar-wrapper" 
-	ng-show="sidebar.expanded" 
-	ng-if="hasRestrictedAccess">
+<div class="mobile" ng-if="isMobile">
 	
-	<h4>Add new model</h4>
-	
-	<form ng-submit="models.addNewModel()">
-		<p class="input-group" ng-class="{'has-error': models.newModelError}">
-			<input type="text" ng-model="models.newModelName" class="form-control" placeholder="Model full name here (e.g. Kate Upton)" />
-			<span class="input-group-btn">
-				<button type="submit" class="btn btn-success" ng-click="addNewModel()"><i class="glyphicon glyphicon-plus"></i> Add</button>
-			</span>
-		</p>
-		<p ng-show="models.newModelError" class="alert alert-warning">{{models.newModelError}}</p>
-	</form>
-	
-	<a href="#/models_categories">Manage models categories</a>
-	
-	<hr />
-	
-	<h4>Add new date</h4>
-	
-	<form ng-submit="dates.addNewDate()">
-		<p class="input-group" ng-class="{'has-error': dates.newDateError}">
-			<input type="text" class="form-control"
-				ng-click="dates.newDateOpen = !dates.newDateOpen"
-				uib-datepicker-popup="dd MMMM yyyy" 
-				ng-model="dates.newDate" 
-				is-open="dates.newDateOpen" 
-				datepicker-options="dates.newDateOptions" 
-				close-text="Close" />
-			<span class="input-group-btn">
-				<button type="button" class="btn btn-default" ng-click="dates.newDateOpen = !dates.newDateOpen"><i class="glyphicon glyphicon-calendar"></i></button>
-			</span>
-			<span class="input-group-btn">
-				<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Add</button>
-			</span>
-		</p>
-		<p ng-show="dates.newDateError" class="alert alert-warning">{{dates.newDateError}}</p>
-	</form>
-	
-	<hr />
-	
-	<h4>Existing dates</h4>
-	<div class="list-group">
-		<a href="#/date/{{date.hash}}" class="list-group-item" ng-repeat="date in dates.data">
-			<span class="badge alert-info" ng-show="true || date.excluded_models.length > 0" title="{{date.excluded_models.length}} excluded models">{{date.excluded_models.length}}</span>
-			{{ date.date_ts | secondsToMilliseconds | date: 'dd MMM yyyy' }}
+	<nav ng-init="selectedMobileTab = 'models';">
+		<a href="javascript:;" ng-class="{'selected': selectedMobileTab == 'models'}" ng-click="selectedMobileTab = 'models';">
+			<i class="glyphicon glyphicon-user"></i> Models
 		</a>
+		<a href="javascript:;" ng-class="{'selected': selectedMobileTab == 'dates'}" ng-click="selectedMobileTab = 'dates';">
+			<i class="glyphicon glyphicon-calendar"></i> Dates
+		</a>
+	</nav>
+	
+	<div ng-if="selectedMobileTab == 'models'">
+		<ul class="mobile-models-list">
+			<li ng-repeat="model in models.data | filterModelsByCategory:tabs.current">
+				<a ng-href="#/model/{{model.hash}}">
+					<div class="mobile-model-image-wrapper">
+						<img ng-show=" model.images[0]" ng-src="{{IMAGES_BASE_URL}}/{{model.images[0]}}">
+						<img ng-show="!model.images[0]" src="images/model_silhouette.png">
+					</div>
+					<p class="mobile-model-name">{{model.name}}</p>
+				</a>
+			</li>
+		</ul>
+	</div>
+	
+	<a href="javascript:;" class="mobile-add-new-model">
+		<i class="glyphicon glyphicon-plus"></i>
+	</a>
+	
+</div>
+
+<div ng-if="!isMobile">
+	<a href="javascript:;" class="shrink-expand-sidebar-button" ng-click="sidebar.shrinkExpandHomepageSidebar();" title="Show or hide the task bar">
+		<span ng-show=" sidebar.expanded"><i class="glyphicon glyphicon-arrow-left"></i> Shrink</span>
+		<span ng-show="!sidebar.expanded"><i class="glyphicon glyphicon-arrow-right"></i> Expand</span>
+		Sidebar
+	</a>
+	<div class="col-xs-12 col-md-3 sidebar-wrapper" 
+		ng-show="sidebar.expanded" 
+		ng-if="hasRestrictedAccess">
+		
+		<h4>Add new model</h4>
+		
+		<form ng-submit="models.addNewModel()">
+			<p class="input-group" ng-class="{'has-error': models.newModelError}">
+				<input type="text" ng-model="models.newModelName" class="form-control" placeholder="Model full name here (e.g. Kate Upton)" />
+				<span class="input-group-btn">
+					<button type="submit" class="btn btn-success" ng-click="addNewModel()"><i class="glyphicon glyphicon-plus"></i> Add</button>
+				</span>
+			</p>
+			<p ng-show="models.newModelError" class="alert alert-warning">{{models.newModelError}}</p>
+		</form>
+		
+		<a href="#/models_categories">Manage models categories</a>
+		
+		<hr />
+		
+		<h4>Add new date</h4>
+		
+		<form ng-submit="dates.addNewDate()">
+			<p class="input-group" ng-class="{'has-error': dates.newDateError}">
+				<input type="text" class="form-control"
+					ng-click="dates.newDateOpen = !dates.newDateOpen"
+					uib-datepicker-popup="dd MMMM yyyy" 
+					ng-model="dates.newDate" 
+					is-open="dates.newDateOpen" 
+					datepicker-options="dates.newDateOptions" 
+					close-text="Close" />
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default" ng-click="dates.newDateOpen = !dates.newDateOpen"><i class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+				<span class="input-group-btn">
+					<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Add</button>
+				</span>
+			</p>
+			<p ng-show="dates.newDateError" class="alert alert-warning">{{dates.newDateError}}</p>
+		</form>
+		
+		<hr />
+		
+		<h4>Existing dates</h4>
+		<div class="list-group">
+			<a href="#/date/{{date.hash}}" class="list-group-item" ng-repeat="date in dates.data">
+				<span class="badge alert-info" ng-show="true || date.excluded_models.length > 0" title="{{date.excluded_models.length}} excluded models">{{date.excluded_models.length}}</span>
+				{{ date.date_ts | secondsToMilliseconds | date: 'dd MMM yyyy' }}
+			</a>
+		</div>
+	</div>
+	<div class="col-xs-12" ng-class="{'col-md-9':sidebar.expanded, 'col-md-12':!sidebar.expanded}">
+
+		<!-- models categories -->
+		<ul class="nav nav-tabs">
+			<li role="presentation" ng-repeat="tab in tabs.data" ng-class="{'active': tab.id == tabs.current}">
+				<a href="javascript:;" ng-click="tabs.current = tab.id;">{{ tab.name }}</a>
+			</li>
+		</ul>
+
+		<br />
+
+		<article ng-repeat="model in models.data | filterModelsByCategory:tabs.current">
+			<model-box ng-model="model" on-relocate="models.load()" on-delete="models.load()"></model-box>
+		</article>
 	</div>
 </div>
-<div class="col-xs-12" ng-class="{'col-md-9':sidebar.expanded, 'col-md-12':!sidebar.expanded}">
-
-	<!-- models categories -->
-	<ul class="nav nav-tabs">
-		<li role="presentation" ng-repeat="tab in tabs.data" ng-class="{'active': tab.id == tabs.current}">
-			<a href="javascript:;" ng-click="tabs.current = tab.id;">{{ tab.name }}</a>
-		</li>
-	</ul>
-
-	<br />
-
-	<article ng-repeat="model in models.data | filterModelsByCategory:tabs.current">
-		<model-box ng-model="model" on-relocate="models.load()" on-delete="models.load()"></model-box>
-	</article>
-</div>
-
 
 
 <!-- modal example -->
