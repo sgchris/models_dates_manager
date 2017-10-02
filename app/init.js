@@ -68,11 +68,19 @@ webApp.run(['$rootScope', '$window', '$http', function($rootScope, $window, $htt
 		}
 	});
 	
-	// check the resolution
-	$rootScope.isMobile = false;
-	if ($window.innerWidth < 990) {
-		$rootScope.isMobile = true;
-	}
+	// check the resolution and determine mobile access
+	var checkResolution = function() {
+		$rootScope.isMobile = false;
+		if ($window.innerWidth < 992) {
+			$rootScope.isMobile = true;
+		}
+	};
+	checkResolution();
+	angular.element($window).on('resize', function() {
+		$rootScope.$apply(function() {
+			checkResolution();
+		});
+	});
 	
 	// callback for FB authentication
 	$window.statusChangeCallback = function(response) {
