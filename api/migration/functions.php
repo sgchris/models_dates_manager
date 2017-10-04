@@ -1,5 +1,6 @@
 <?php
-define('LOG_FILE_PATH', __DIR__.'/migration.log');
+
+define('LOG_FILE_PATH', __DIR__.'/migration.'.date('YmdHis').'.log');
 
 
 /**
@@ -38,13 +39,13 @@ function _log() {
 		}
 	}
 	
-	$parsedUrl = parse_url($_SERVER['REQUEST_URI']);
-	$apiFileName = basename($parsedUrl['path']);
+	$apiFileName = basename($_SERVER['PHP_SELF']);
 	
 	$logStr = date('d.M.Y H:i:s') . ' ' . $apiFileName . ': ' . implode(' ', $logElements) . "\r\n";
 	$res = @file_put_contents(LOG_FILE_PATH, $logStr, FILE_APPEND);
 	return (is_numeric($res) && $res > 0);
 }
+
 
 
 /**
@@ -62,13 +63,15 @@ function executeQuery(PDO $db, $sql, array $paramsArray = array(), $returnResult
 	// prepare
 	$stmt = $db->prepare($sql);
 	if (!$stmt) {
-		_exit($db->errorInfo());
+		_log($db->errorInfo());
+		return false;
 	}
 	
 	// execute
 	$result = $stmt->execute($paramsArray);
 	if (!$result) {
-		_exit($stmt->errorInfo());
+		_log($stmt->errorInfo());
+		return false;
 	}
 	
 	return $returnResultSet ? 
@@ -95,4 +98,24 @@ function dbExec(PDO $db, $sql, array $paramsArray = array()) {
  */
 function dbQuery(PDO $db, $sql, array $paramsArray = array()) {
 	return executeQuery($db, $sql, $paramsArray, $__returnResultSet = true);
+}
+
+/**
+ * Download a file
+ * @param mixed $url 
+ * @return  
+ */
+function download($url) {
+	$opts = array('http' =>
+		array(
+			'method'  => 'GET',
+			'user_agent'  => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+			'header' => array(
+				'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*\/*;q=0.8',
+			), 
+		)
+	);
+	$context  = stream_context_create($opts);
+	
+	return file_get_contents($url, false, $context);
 }
