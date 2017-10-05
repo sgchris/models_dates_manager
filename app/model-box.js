@@ -1,4 +1,4 @@
-var modelBoxCoreFunction = function($http, modelsCategoriesService) {
+var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesService) {
 	
 	return {
 		//require: 'ngModel',
@@ -30,6 +30,10 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService) {
 					});
 				});
 			}
+			
+			scope.getSmallImage = function(imageFile) {
+				return smallImagesService.get(imageFile);
+			};
 			
 			scope.galleryIsOpen = false;
 			
@@ -137,12 +141,12 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService) {
 	}
 };
 
-webApp.directive('modelBox', ['$http', 'modelsCategoriesService', function($http, modelsCategoriesService) {
-	return modelBoxCoreFunction($http, modelsCategoriesService);
+webApp.directive('modelBox', ['$http', 'modelsCategoriesService', 'smallImagesService', function($http, modelsCategoriesService, smallImagesService) {
+	return modelBoxCoreFunction($http, modelsCategoriesService, smallImagesService);
 }]);
 
-webApp.directive('modelBoxSmall', ['$http', 'modelsCategoriesService', function($http, modelsCategoriesService) {
-	var directiveObject = modelBoxCoreFunction($http, modelsCategoriesService);
+webApp.directive('modelBoxSmall', ['$http', 'modelsCategoriesService', 'smallImagesService', function($http, modelsCategoriesService, smallImagesService) {
+	var directiveObject = modelBoxCoreFunction($http, modelsCategoriesService, smallImagesService);
 	
 	// replace the base template with the one for small box
 	directiveObject.templateUrl = 'views/directives/model-box-small.html'

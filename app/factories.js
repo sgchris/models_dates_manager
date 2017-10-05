@@ -47,3 +47,23 @@ webApp.factory('modelsCategoriesService', ['$http', '$q', function($http, $q) {
 		}
 	};
 }]);
+
+
+
+webApp.factory('smallImagesService', ['$http', '$rootScope', function($http, $rootScope) {
+	return {
+		get: function(imageName) {
+			if (!imageName) {
+				return '';
+			}
+			
+			var smallImageName = imageName.replace(/\.jpg$/, '60x60.jpg');
+			if (window.SMALL_IMAGES_DATA && window.SMALL_IMAGES_DATA[smallImageName]) {
+				return window.SMALL_IMAGES_DATA[smallImageName];
+			} else {
+				return $rootScope.IMAGES_BASE_URL + '/small/' + smallImageName;
+			}
+		}
+	};
+	
+}]);

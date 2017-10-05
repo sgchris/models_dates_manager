@@ -20,7 +20,7 @@ webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$
 		
 	$scope.galleryIsOpen = false;
 	$scope.galleryIsOpen = false;
-		
+	
 	$scope.model = {
 		inProgress: false,
 		
@@ -196,7 +196,6 @@ webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$
 					}
 				}, function (evt) {
 					file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-					console.log(file.progress);
 				});
 			});
 
@@ -213,7 +212,7 @@ webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$
 				$scope.models_categories.data = modelsCategories;
 			});
 		}
-	}
+	};
 	
 	$scope.$watch('uploader.files', function(newVal) {
 		$scope.uploader.uploadFiles();

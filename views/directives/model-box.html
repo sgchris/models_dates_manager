@@ -20,7 +20,7 @@
 				'defined-small-image': model.images[i], 
 				'selected-small-image': mainImage == $root.IMAGES_BASE_URL + '/' + model.images[i]
 			}">
-			<img ng-show=" model.images[i]" ng-src="{{$root.IMAGES_BASE_URL}}/{{model.images[i]}}" ng-click="setMainImage(i);">
+			<img ng-show=" model.images[i]" ng-src="{{getSmallImage(model.images[i])}}" ng-click="setMainImage(i);">
 			<img ng-show="!model.images[i]" ng-src="{{defaultImage}}">
 		</div>
 	</div>
