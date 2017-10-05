@@ -9,6 +9,9 @@ api/config.php
 # vendor
 vendor
 
+# log files
+api/migration/*.log
+
 # database
 api/db/*.db
 
