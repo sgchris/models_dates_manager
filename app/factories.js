@@ -61,7 +61,7 @@ webApp.factory('smallImagesService', ['$http', '$rootScope', function($http, $ro
 			if (window.SMALL_IMAGES_DATA && window.SMALL_IMAGES_DATA[smallImageName]) {
 				return window.SMALL_IMAGES_DATA[smallImageName];
 			} else {
-				return $rootScope.IMAGES_BASE_URL + '/small/' + smallImageName;
+				return $rootScope.IMAGES_BASE_URL + '/' + imageName;
 			}
 		}
 	};

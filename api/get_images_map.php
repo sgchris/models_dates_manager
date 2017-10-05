@@ -32,11 +32,11 @@ readfile(JSON_DATA_PATH);
  */
 function checkThumbnailsFolder() {
 	if (!is_dir(SMALL_IMAGES_PATH)) {
-		if (!is_writable(SMALL_IMAGES_PATH)) {
+		if (!is_writable(dirname(SMALL_IMAGES_PATH))) {
 			_exit('cannot create small folder');
 		}
 		 
-		$result = mkdir(SMALL_IMAGES_PATH, 0664);
+		$result = mkdir(SMALL_IMAGES_PATH);
 		if (!$result) {
 			_exit('creating small folder failed');
 		}
