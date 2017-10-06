@@ -31,6 +31,10 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesS
 				});
 			}
 			
+			scope.getModelTags = function() {
+				return scope.model.tags ? scope.model.tags.split(/\s*\,\s*/) : [];
+			};
+			
 			scope.getSmallImage = function(imageFile) {
 				return smallImagesService.get(imageFile);
 			};

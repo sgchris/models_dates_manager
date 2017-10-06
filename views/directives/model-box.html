@@ -2,7 +2,15 @@
 	<!-- the gallery -->
 	<an-gri-gal ng-if="galleryIsOpen" images="model.images" on-close="openGallery();"></an-gri-gal>
 	
-	<div class="model-tag">Model #{{model.id}}</div>
+	<!-- display model tags -->
+	<div 
+		ng-show="model.tags" 
+		ng-repeat="modelTag in getModelTags()" 
+		class="model-tag" 
+		ng-attr-title="{{modelTag}}" 
+		ng-style="{'top': ($index * 25 + 10) + 'px'}"
+		>#{{modelTag}}</div>
+	
 	<div class="main-image-wrapper">
 		<!-- the category badge -->
 		<span class="model-category-name-badge" ng-if="modelCategoryName && showExcludeButton">{{modelCategoryName}}</span>
