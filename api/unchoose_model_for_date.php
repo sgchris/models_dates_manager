@@ -42,6 +42,7 @@ if (!in_array($modelObj['id'], $chosenModels)) {
 	_exit('The model is already not chosen for this date');
 }
 
+// add the model back to the available models list
 if (!in_array($modelObj['id'], $availableModels)) {
 	$availableModels[] = $modelObj['id'];
 }

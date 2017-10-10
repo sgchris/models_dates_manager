@@ -36,9 +36,15 @@ $modelObj = getModelDetails($params['model_id']);
 
 // get already excluded models for the date
 $excludedModels = json_decode($date['excluded_models']) ?? array();
+$availableModels = json_decode($date['available_models']) ?? array();
 
 if (!in_array($modelObj['id'], $excludedModels)) {
 	_exit('The model is already included in this date');
+}
+
+// add the model back to the available models list
+if (!in_array($modelObj['id'], $availableModels)) {
+	$availableModels[] = $modelObj['id'];
 }
 
 // remove the model from the "excluded" array
@@ -48,8 +54,9 @@ array_splice(
 	1
 );
 
-dbExec('update dates_list set excluded_models = :excluded_models where date_ts = :date_ts', array(
+dbExec('update dates_list set excluded_models = :excluded_models, available_models = :available_models where date_ts = :date_ts', array(
 	':excluded_models' => json_encode($excludedModels),
+	':available_models' => json_encode($availableModels),
 	':date_ts' => $date['date_ts'],
 ));
 

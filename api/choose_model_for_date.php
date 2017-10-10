@@ -42,8 +42,8 @@ if (in_array($modelObj['id'], $chosenModels)) {
 	_exit('The model is already chosen for this date');
 }
 
+// remove the model from the "available" models
 if (in_array($modelObj['id'], $availableModels)) {
-	// remove the model from the "available" models
 	array_splice(
 		$availableModels, 
 		array_search($modelObj['id'], $availableModels), 
