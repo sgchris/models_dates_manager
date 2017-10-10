@@ -2,6 +2,7 @@
 .codelite
 *.phprj
 *.workspace
+.vscode
 
 # config 
 api/config.php
