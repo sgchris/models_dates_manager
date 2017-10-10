@@ -36,16 +36,36 @@ $modelObj = getModelDetails($params['model_id']);
 
 // get already chosen models for the date
 $chosenModels = json_decode($date['chosen_models']) ?? array();
+$availableModels = json_decode($date['available_models']) ?? array();
 
 if (in_array($modelObj['id'], $chosenModels)) {
 	_exit('The model is already chosen for this date');
 }
 
+if (in_array($modelObj['id'], $availableModels)) {
+	// remove the model from the "available" models
+	array_splice(
+		$availableModels, 
+		array_search($modelObj['id'], $availableModels), 
+		1
+	);
+}
+
 $chosenModels[] = $modelObj['id'];
 
-dbExec('update dates_list set chosen_models = :chosen_models where date_ts = :date_ts', array(
-	':chosen_models' => json_encode($chosenModels),
-	':date_ts' => $date['date_ts'],
-));
+dbExec('
+	update dates_list 
+	set 
+		chosen_models = :chosen_models, 
+		available_models = :available_models 
+	where 
+		date_ts = :date_ts', 
+		
+	array(
+		':chosen_models' => json_encode($chosenModels),
+		':available_models' => json_encode($availableModels),
+		':date_ts' => $date['date_ts'],
+	)
+);
 
 _success();
