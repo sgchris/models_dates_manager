@@ -92,7 +92,7 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 			
 			$http({
 				method: 'post',
-				url: 'api/exlude_model_from_date.php',
+				url: 'api/exclude_model_from_date.php',
 				data: apiData
 			}).then(function(res) {
 				if (res.data && res.data.result == 'ok') {
