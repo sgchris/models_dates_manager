@@ -1,7 +1,8 @@
 <!-- add login popup -->
 <ng-include src="'/views/snippets/login-curtain.html'"></ng-include>
 
-<div class="mobile" ng-if="isMobile">
+<!-- ng-if="!isMobile" -->
+<div class="mobile" ng-if="false">
 	<nav class="row" ng-init="selectedMobileTab = 'models';">
 		<a href="javascript:;" class="col-xs-6" ng-class="{'selected': selectedMobileTab == 'models'}" ng-click="selectedMobileTab = 'models';">
 			<i class="glyphicon glyphicon-user"></i> Models
@@ -15,12 +16,13 @@
 	<br />
 	
 	<div ng-if="selectedMobileTab == 'models'">
-		<div class="col-xs-4 mobile-model-box" ng-repeat="model in models.data | filterModelsByCategory:tabs.current">
-			<div class="thumbnail">
+		<!-- <div class="col-xs-4 "> 
+			<div class="thumbnail mobile-model-box" ng-repeat="model in models.data | filterModelsByCategory:tabs.current">
 				<a ng-href="#/model/{{model.hash}}" class="mobile-model-box-image-wrapper">
 					<img ng-show=" model.images[0]" ng-src="{{IMAGES_BASE_URL}}/{{model.images[0]}}">
 					<img ng-show="!model.images[0]" src="images/model_silhouette.png">
 				</a>
+				
 				<div class="caption">
 					<h3>{{model.name}}</h3>
 					<p>
@@ -30,9 +32,10 @@
 						<a ng-click="models.deleteModel(model.id)" class="btn btn-danger">Delete</a>
 					</p>
 				</div>
+				
 			</div>
-		</div>
-		<!--
+		</div> -->
+		
 		<ul class="mobile-models-list">
 			<li ng-repeat="model in models.data | filterModelsByCategory:tabs.current">
 				<a ng-href="#/model/{{model.hash}}">
@@ -44,7 +47,7 @@
 				</a>
 			</li>
 		</ul>
-		-->
+		
 	</div>
 	
 	<div ng-if="selectedMobileTab == 'dates'">
@@ -72,7 +75,9 @@
 	</a>
 </div>
 
-<div ng-if="!isMobile">
+<!-- ng-if="!isMobile" -->
+
+<div>
 	<a href="javascript:;" class="shrink-expand-sidebar-button" ng-click="sidebar.shrinkExpandHomepageSidebar();" title="Show or hide the task bar">
 		<span ng-show=" sidebar.expanded"><i class="glyphicon glyphicon-arrow-left"></i> Shrink</span>
 		<span ng-show="!sidebar.expanded"><i class="glyphicon glyphicon-arrow-right"></i> Expand</span>
@@ -129,7 +134,10 @@
 			</a>
 		</div>
 	</div>
+	
 	<div class="col-xs-12" ng-class="{'col-md-9':sidebar.expanded, 'col-md-12':!sidebar.expanded}">
+		
+		<br ng-if="isMobile" />
 
 		<!-- models categories -->
 		<ul class="nav nav-tabs">
