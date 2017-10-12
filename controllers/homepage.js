@@ -9,6 +9,10 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 		// new model related
 		newModelName: '',
 		newModelError: false,
+		_mobile_addNewModel: function() {
+			$scope.models.newModelName = prompt('New Model Name');
+			$scope.models.addNewModel();
+		},
 		addNewModel: function() {
 			if (!$rootScope.loggedInUser) {
 				return;
@@ -68,6 +72,57 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 				$scope.models.inProgress = true;
 			});
 			
+		},
+		
+		relocateModel: function(modelId, newLocation) {
+			if (!confirm('Move the model to the ' + newLocation + '?')) {
+				return;
+			}
+			
+			// call the API
+			$http({
+				method: 'post',
+				url: 'api/relocate_model.php',
+				data: {
+					model_id: modelId,
+					new_location: newLocation
+				}
+			}).then(function(res) {
+				if (res.data && res.data.result == 'ok') {
+					$scope.models.load();
+					return;
+				}
+				
+				var errorString = res.data.error || 'Relocation failed';
+				alert(errorString);
+			}, function() {
+				alert('Relocation failed - server error');
+			});
+		},
+		
+		deleteModel: function(modelId) {
+			if (!confirm('Delete the model?')) {
+				return;
+			}
+			
+			// call the API
+			$http({
+				method: 'post',
+				url: 'api/delete_model.php',
+				data: {
+					model_id: modelId
+				}
+			}).then(function(res) {
+				if (res.data && res.data.result == 'ok') {
+					$scope.models.load();
+					return;
+				}
+				
+				var errorString = res.data.error || 'Delete failed';
+				alert(errorString);
+			}, function() {
+				alert('Delete failed - server error');
+			});
 		},
 		
 		// models list
