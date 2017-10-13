@@ -36,7 +36,11 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesS
 			};
 			
 			scope.getSmallImage = function(imageFile) {
-				return smallImagesService.get(imageFile);
+				return smallImagesService.getSmall(imageFile);
+			};
+			
+			scope.getMediumImage = function(imageFile) {
+				return smallImagesService.getMedium(imageFile);
 			};
 			
 			scope.galleryIsOpen = false;

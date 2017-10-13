@@ -52,7 +52,7 @@ webApp.factory('modelsCategoriesService', ['$http', '$q', function($http, $q) {
 
 webApp.factory('smallImagesService', ['$http', '$rootScope', function($http, $rootScope) {
 	return {
-		get: function(imageName) {
+		getSmall: function(imageName) {
 			if (!imageName) {
 				return '';
 			}
@@ -63,6 +63,19 @@ webApp.factory('smallImagesService', ['$http', '$rootScope', function($http, $ro
 			} else {
 				return $rootScope.IMAGES_BASE_URL + '/' + imageName;
 			}
+		},
+		
+		getMedium: function(imageName) {
+			if (!imageName) {
+				return '';
+			}
+			
+			// add 180x180 suffix
+			var smallImageName = imageName.replace(/\.jpg$/, '180x180.jpg');
+			// add "medium" folder
+			var smallImageName = smallImageName.replace(/\/([^\/]*?)\.jpg$/, '/medium/$1.jpg');
+			
+			return smallImageName;
 		}
 	};
 	

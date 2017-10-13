@@ -52,6 +52,16 @@ if (!empty($_FILES)) {
 			continue;
 		}
 		
+		// create small image
+		$smallImagePath = $destinationFolder.'/small/'.$newImageFileName;
+		$smallImagePath = str_ireplace('.jpg', '60x60.jpg', $smallImagePath);
+		resizeImage($destinationFolder.'/'.$newImageFileName, $smallImagePath, 60, 60);
+		
+		// create medium image
+		$mediumImagePath = $destinationFolder.'/medium/'.$newImageFileName;
+		$mediumImagePath = str_ireplace('.jpg', '180x180.jpg', $mediumImagePath);
+		resizeImage($destinationFolder.'/'.$newImageFileName, $mediumImagePath, 180, 180);
+		
 		// update the DB
 		$modelImages = json_decode($modelRow['images']) ?? [];
 		$modelImages[] = $newImageFileName;
