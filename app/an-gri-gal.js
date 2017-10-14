@@ -1,5 +1,5 @@
 
-webApp.directive('anGriGal', ['$window', function($window) {
+webApp.directive('anGriGal', ['$window', 'smallImagesService', function($window, smallImagesService) {
 	return {
 		replace: true,
 		scope: {
@@ -38,6 +38,10 @@ webApp.directive('anGriGal', ['$window', function($window) {
 				if (typeof(scope.onClose) == 'function') {
 					scope.onClose();
 				}
+			};
+			
+			scope.getMediumImage = function(imgSrc) {
+				return smallImagesService.getMedium(imgSrc);
 			};
 			
 		},
