@@ -54,12 +54,12 @@ if (!empty($_FILES)) {
 		
 		// create small image
 		$smallImagePath = $destinationFolder.'/small/'.$newImageFileName;
-		$smallImagePath = str_ireplace('.jpg', '60x60.jpg', $smallImagePath);
+		$smallImagePath = str_ireplace('.jpg', '_small.jpg', $smallImagePath);
 		resizeImage($destinationFolder.'/'.$newImageFileName, $smallImagePath, 60, 60);
 		
 		// create medium image
 		$mediumImagePath = $destinationFolder.'/medium/'.$newImageFileName;
-		$mediumImagePath = str_ireplace('.jpg', '180x180.jpg', $mediumImagePath);
+		$mediumImagePath = str_ireplace('.jpg', '_medium.jpg', $mediumImagePath);
 		resizeImage($destinationFolder.'/'.$newImageFileName, $mediumImagePath, 180, 180);
 		
 		// update the DB

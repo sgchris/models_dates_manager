@@ -48,60 +48,6 @@ function checkThumbnailsFolder() {
 }
 
 
-/**
-* Resize an image and keep the proportions
-* 
-* @author Allison Beckwith <allison@planetargon.com>
-* @param string $filename
-* @param integer $max_width
-* @param integer $max_height
-* @return image
-*/
-function resizeImage($filename, $destinationFile, $max_width, $max_height) {
-	if (!file_exists($filename)) {
-		return false;
-	}
-	
-	if (!preg_match('/\.jpg$/i', $filename)) {
-		return false;
-	}
-	
-    list($orig_width, $orig_height) = @getimagesize($filename);
-	if (!$orig_width || !$orig_height) {
-		return false;
-	}
-
-    $width = $orig_width;
-    $height = $orig_height;
-
-    # taller
-    if ($height > $max_height) {
-        $width = ($max_height / $height) * $width;
-        $height = $max_height;
-    }
-
-    # wider
-    if ($width > $max_width) {
-        $height = ($max_width / $width) * $height;
-        $width = $max_width;
-    }
-
-    $image_p = imagecreatetruecolor($width, $height);
-
-    $image = imagecreatefromjpeg($filename);
-
-    imagecopyresampled($image_p, $image, 0, 0, 0, 0, 
-                                     $width, $height, $orig_width, $orig_height);
-
-	if (!is_writable(dirname($destinationFile))) {
-		_exit(dirname($destinationFile).' is not writeable');
-	} else {
-		touch($destinationFile);
-	}
-	
-    return imagejpeg($image_p, $destinationFile);
-}
-
 
 /**
  * create small images 
@@ -120,7 +66,7 @@ function createThumbnails() {
 		}
 		 
 		// skip the small files
-		if (preg_match('/60x60\.jpg$/i', $imageFile)) {
+		if (preg_match('/_small\.jpg$/i', $imageFile)) {
 			continue;
 		}
 		 
@@ -129,7 +75,7 @@ function createThumbnails() {
 			continue;
 		}
 		
-		$newImagePath = realpath(dirname($imagePath)).'/small/'.preg_replace('/\.jpg$/i', '60x60.jpg', basename($imagePath));
+		$newImagePath = realpath(dirname($imagePath)).'/small/'.preg_replace('/\.jpg$/i', '_small.jpg', basename($imagePath));
 		if (!file_exists($newImagePath)) {
 			$resizeResult = resizeImage($imagePath, $newImagePath, 60, 60);
 		}
@@ -164,7 +110,7 @@ function createJsonFile() {
 		}
 		 
 		// skip the small files
-		if (!preg_match('/60x60\.jpg$/i', $imageFile)) {
+		if (!preg_match('/_small\.jpg$/i', $imageFile)) {
 			continue;
 		}
 		 

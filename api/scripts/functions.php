@@ -8,7 +8,7 @@ define('LOG_FILE_PATH', __DIR__.'/migration.'.date('YmdHis').'.log');
  * @param <unknown> $errorStr 
  * @return  
  */
-function _exit($errorStr) {
+function _exit($errorStr = '') {
 	echo json_encode(['result' => 'error', 'error' => $errorStr], JSON_PRETTY_PRINT), "\n";
 	exit;
 }

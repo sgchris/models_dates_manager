@@ -57,7 +57,7 @@ webApp.factory('smallImagesService', ['$http', '$rootScope', function($http, $ro
 				return '';
 			}
 			
-			var smallImageName = imageName.replace(/\.jpg$/, '60x60.jpg');
+			var smallImageName = imageName.replace(/\.jpg$/, '_small.jpg');
 			if (window.SMALL_IMAGES_DATA && window.SMALL_IMAGES_DATA[smallImageName]) {
 				return window.SMALL_IMAGES_DATA[smallImageName];
 			} else {
@@ -70,8 +70,8 @@ webApp.factory('smallImagesService', ['$http', '$rootScope', function($http, $ro
 				return '';
 			}
 			
-			// add 180x180 suffix
-			var smallImageName = imageName.replace(/\.jpg$/, '180x180.jpg');
+			// add "_medium" suffix
+			var smallImageName = imageName.replace(/\.jpg$/, '_medium.jpg');
 			// add "medium" folder
 			var smallImageName = smallImageName.replace(/\/([^\/]*?)\.jpg$/, '/medium/$1.jpg');
 			
