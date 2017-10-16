@@ -6,6 +6,8 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 	$scope.models = {
 		inProgress: false,
 		
+		filterString: '',
+		
 		// new model related
 		newModelName: '',
 		newModelError: false,
