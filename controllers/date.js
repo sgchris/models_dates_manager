@@ -81,7 +81,7 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 		},
 		
 		excludeModel: function(date, model) {
-			if (!confirm('Exclude ' + model.name + '?')) {
+			if (!confirm('Put "' + model.name + '" on stand-by?')) {
 				return;
 			}
 			
@@ -109,7 +109,7 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 		
 		// remove the model from the "Excluded" list (i.e. include the model in that date)
 		includeModel: function(date, model) {
-			if (!confirm('Re-include ' + model.name + '?')) {
+			if (!confirm('Remove "' + model.name + '" from stand-by?')) {
 				return;
 			}
 			

@@ -7,7 +7,7 @@
 		<span ng-show="!sidebar.expanded"><i class="glyphicon glyphicon-arrow-right"></i> Expand</span>
 		Sidebar
 	</a>
-	<div class="col-xs-12 col-md-3 sidebar-wrapper" 
+	<div class="col-xs-12 col-md-2 sidebar-wrapper" 
 		ng-show="sidebar.expanded" 
 		ng-if="hasRestrictedAccess">
 		
@@ -50,7 +50,7 @@
 		
 		<hr />
 		
-		<h4>Filter the list</h4>
+		<h4>Search</h4>
 		
 		<form>
 			<div class="input-group">
@@ -75,13 +75,16 @@
 		<h4>Existing dates</h4>
 		<div class="list-group">
 			<a ng-href="#/date/{{date.hash}}" class="list-group-item" ng-repeat="date in dates.data">
-				<span class="badge alert-info" ng-show="true || date.excluded_models.length > 0" title="{{date.excluded_models.length}} excluded models">{{date.excluded_models.length}}</span>
+				<span class="badge alert-info" 
+					title="{{date.excluded_models.length}} models on stand-by">{{date.excluded_models.length}}</span>
+				<span class="badge alert-success" 
+					title="{{date.chosen_models.length}} chosen models">{{date.chosen_models.length}}</span>
 				{{ date.date_ts | secondsToMilliseconds | date: 'dd MMM yyyy' }}
 			</a>
 		</div>
 	</div>
 	
-	<div class="col-xs-12" ng-class="{'col-md-9':sidebar.expanded, 'col-md-12':!sidebar.expanded}">
+	<div class="col-xs-12" ng-class="{'col-md-10':sidebar.expanded, 'col-md-12':!sidebar.expanded}">
 		
 		<!-- models categories -->
 		<ul class="nav nav-tabs">
