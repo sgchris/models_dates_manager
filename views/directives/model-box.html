@@ -30,7 +30,7 @@
 			<img ng-show="!model.images[i]" ng-src="{{defaultImage}}">
 		</div>
 	</div>
-	<h2 class="model-name"><a href="#/model/{{model.hash}}">{{model.name}}</a></h2>
+	<h2 class="model-name"><a ng-href="#/model/{{model.hash}}" ng-attr-title="{{model.name}}">{{model.name}}</a></h2>
 	<p class="model-notes" ng-attr-title="{{model.notes}}">{{model.notes}}</p>
 	<p class="model-notes model-private-notes" ng-class="{'invisible': !$root.hasRestrictedAccess || !model.private_notes}" ng-attr-title="{{model.private_notes}}">{{model.private_notes}}</p>
 	<div class="model-toolbar"><!--  ng-if="hasRestrictedAccess" -->
