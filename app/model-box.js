@@ -1,4 +1,12 @@
 var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesService) {
+	// available model box color
+	var colors = {
+		magenta: '#e1bee7',
+		lightgreen: '#dcedc8',
+		orange: '#ffccbc',
+		blue: '#b3e5fc',
+		turquoise: '#a7ffeb'
+	};
 	
 	return {
 		//require: 'ngModel',
@@ -49,7 +57,7 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesS
 			scope.mainImage = scope.model.images[0] ? 
 				(scope.$root.IMAGES_BASE_URL + '/' + scope.model.images[0]) : 
 				scope.defaultImage;
-				
+			
 			scope.setMainImage = function(imageNumber) {
 				scope.mainImage = scope.$root.IMAGES_BASE_URL + '/' + scope.model.images[imageNumber];
 			};
@@ -81,6 +89,49 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesS
 			
 			// check if "UnChoose" callback is defined
 			scope.showMakeUnavailableButton = (typeof(scope.onMakeUnavailable) == 'function');
+			
+			scope.showColorsPalette = false;
+			
+			// get the color code (e.g. #A23B23) by color name (the list is on the top)
+			scope.getColorNumber = function(colorName) {
+				var defaultColor = '#F6F6F6';
+				if (!colorName) {
+					return defaultColor;
+				}
+				
+				return colors[colorName] || '#F6F6F6';
+			};
+			
+			/**
+			 * Choose model's color
+			 * @param string newColor
+			 */
+			scope.chooseModelColor = function(newColor) {
+				// set the color locally 
+				scope.model.color = newColor || null;
+				
+				// call the API
+				$http({
+					method: 'post',
+					url: 'api/update_model.php',
+					data: {
+						model_id: scope.model.id,
+						color: newColor || ''
+					}
+				}).then(function(res) {
+					if (res.data && res.data.result == 'ok') {
+						return;
+					}
+					
+					var errorString = res.data.error || 'Saving color failed';
+					alert(errorString);
+				}, function() {
+					alert('Saving color failed');
+				}).finally(function() {
+					scope.showColorsPalette = !scope.showColorsPalette;
+				});
+			};
+			
 			
 			/**
 			 * move the model to the top/bottom of the list

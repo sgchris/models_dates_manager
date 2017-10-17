@@ -6,7 +6,7 @@ requestShouldBe('post');
 setRestrictedAccess();
 
 $params = receiveParams(
-	['model_id', 'name', 'category', 'phone', 'instagram', 'notes', 'private_notes', 'tags'], 
+	['model_id', 'name', 'category', 'phone', 'instagram', 'notes', 'private_notes', 'tags', 'color'], 
 	['model_id']
 );
 
@@ -22,10 +22,10 @@ $modelRow = getModelDetails($params['model_id']);
 $updateParams = [];
 
 // check "name" parameter
-if (!empty($params['name'])) {
+if (isset($params['name'])) {
 	
 	// validate 
-	if (!between(strlen($params['name']), 2, 255)) {
+	if (!empty($params['name']) && !between(strlen($params['name']), 2, 255)) {
 		_exit('bad name parameter');
 	}
 	
@@ -74,9 +74,9 @@ if (isset($params['instagram'])) {
 }
 
 // check "notes" parameter
-if (!empty($params['notes'])) {
+if (isset($params['notes'])) {
 	// validate 
-	if (!between(strlen($params['notes']), 1, 2047)) {
+	if (!empty($params['notes']) && !between(strlen($params['notes']), 1, 2047)) {
 		_exit('bad notes parameter');
 	}
 	
@@ -84,9 +84,9 @@ if (!empty($params['notes'])) {
 }
 
 // check "notes" parameter
-if (!empty($params['private_notes'])) {
+if (isset($params['private_notes'])) {
 	// validate 
-	if (!between(strlen($params['private_notes']), 1, 2047)) {
+	if (!empty($params['private_notes']) && !between(strlen($params['private_notes']), 1, 2047)) {
 		_exit('bad private_notes parameter');
 	}
 	
@@ -94,13 +94,22 @@ if (!empty($params['private_notes'])) {
 }
 
 // check "notes" parameter
-if (!empty($params['tags'])) {
+if (isset($params['tags'])) {
 	// validate 
-	if (!between(strlen($params['tags']), 1, 2047)) {
+	if (!empty($params['tags']) && !between(strlen($params['tags']), 1, 2047)) {
 		_exit('bad tags parameter');
 	}
 	
 	$updateParams['tags'] = $params['tags'];
+}
+
+// check "color" parameter
+if (isset($params['color'])) {
+	// validate 
+	if (!empty($params['color']) && !between(strlen($params['color']), 1, 15)) {
+		_exit('bad color parameter');
+	}
+	$updateParams['color'] = $params['color'];
 }
 
 // perform the update (only one parameter is model_id)

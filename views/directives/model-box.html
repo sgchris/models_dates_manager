@@ -2,13 +2,26 @@
 	<!-- the gallery -->
 	<an-gri-gal ng-if="galleryIsOpen" images="model.images" on-close="openGallery();"></an-gri-gal>
 	
+	<div class="model-box-color-span" ng-style="{background: getColorNumber(model.color)}">
+		<a href="javascript:;" title="Click to change the color" class="choose-color-button" ng-click="showColorsPalette = !showColorsPalette;">
+			<i class="glyphicon glyphicon-tint"></i>
+		</a>
+		
+		<a ng-if="showColorsPalette" href="javascript:;" class="color-box color-box-default" ng-click="chooseModelColor();"></a>
+		<a ng-if="showColorsPalette" href="javascript:;" class="color-box color-box-magenta" ng-click="chooseModelColor('magenta');"></a>
+		<a ng-if="showColorsPalette" href="javascript:;" class="color-box color-box-lightgreen" ng-click="chooseModelColor('lightgreen');"></a>
+		<a ng-if="showColorsPalette" href="javascript:;" class="color-box color-box-orange" ng-click="chooseModelColor('orange');"></a>
+		<a ng-if="showColorsPalette" href="javascript:;" class="color-box color-box-blue" ng-click="chooseModelColor('blue');"></a>
+		<a ng-if="showColorsPalette" href="javascript:;" class="color-box color-box-turquoise" ng-click="chooseModelColor('turquoise');"></a>
+	</div>
+	
 	<!-- display model tags -->
 	<div 
 		ng-show="model.tags" 
 		ng-repeat="modelTag in getModelTags()" 
 		class="model-tag" 
 		ng-attr-title="{{modelTag}}" 
-		ng-style="{'top': ($index * 25 + 10) + 'px'}"
+		ng-style="{'top': ($index * 25 + 30) + 'px'}"
 		>{{modelTag}}</div>
 	
 	<div class="main-image-wrapper">
@@ -30,7 +43,7 @@
 			<img ng-show="!model.images[i]" ng-src="{{defaultImage}}">
 		</div>
 	</div>
-	<h2 class="model-name"><a ng-href="#/model/{{model.hash}}" ng-attr-title="{{model.name}}">{{model.name}}</a></h2>
+	<h2 class="model-name"><a ng-href="#/model/{{model.hash}}" ng-attr-title="{{model.name}}">{{model.name}}&nbsp;</a></h2>
 	<p class="model-notes" ng-attr-title="{{model.notes}}">{{model.notes}}</p>
 	<p class="model-notes model-private-notes" ng-class="{'invisible': !$root.hasRestrictedAccess || !model.private_notes}" ng-attr-title="{{model.private_notes}}">{{model.private_notes}}</p>
 	<div class="model-toolbar"><!--  ng-if="hasRestrictedAccess" -->

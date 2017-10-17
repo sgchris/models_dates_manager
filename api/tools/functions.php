@@ -111,13 +111,15 @@ function receiveParams(array $paramsList, array $mandatoryParams = array()) {
 	$params = array();
 	if (!empty($paramsList)) {
 		foreach($paramsList as $paramName) {
-			$params[$paramName] = (isset($_REQUEST[$paramName])) ? $_REQUEST[$paramName] : '';
+			if (isset($_REQUEST[$paramName])) {
+				$params[$paramName] = $_REQUEST[$paramName];
+			}
 		}
 	}
 	
 	// check mandatory params
 	foreach ($mandatoryParams as $mandatoryParam) {
-		if (empty($params[$mandatoryParam])) {
+		if (!isset($params[$mandatoryParam])) {
 			_exit('missing '.$mandatoryParam.' parameter');
 		}
 	}
