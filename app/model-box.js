@@ -90,7 +90,10 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesS
 			// check if "UnChoose" callback is defined
 			scope.showMakeUnavailableButton = (typeof(scope.onMakeUnavailable) == 'function');
 			
-			scope.showColorsPalette = false;
+			// show/hide the "choose color" boxes
+			scope.colorPalette = {
+				show: false
+			};
 			
 			// get the color code (e.g. #A23B23) by color name (the list is on the top)
 			scope.getColorNumber = function(colorName) {
@@ -128,10 +131,9 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesS
 				}, function() {
 					alert('Saving color failed');
 				}).finally(function() {
-					scope.showColorsPalette = !scope.showColorsPalette;
+					scope.colorPalette.show = false;
 				});
 			};
-			
 			
 			/**
 			 * move the model to the top/bottom of the list
