@@ -13,3 +13,8 @@ define('DB_FILE_PATH', __DIR__.DS.'db'.DS.'models.db');
 // facebook info
 define('FB_APP_ID', '<your facebook app ID>');
 define('FB_APP_SECRET', '<your facebook app secret>');
+
+// set FB users allowed to change things
+$allowedUsers = [
+	'<your facebook name>', 
+];
