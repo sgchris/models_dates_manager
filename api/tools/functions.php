@@ -257,57 +257,59 @@ function getModelDetails($modelId) {
 
 
 
-/**
-* Resize an image and keep the proportions
-* 
-* @author Allison Beckwith <allison@planetargon.com>
-* @param string $filename
-* @param integer $max_width
-* @param integer $max_height
-* @return image
-*/
-function resizeImage($filename, $destinationFile, $max_width, $max_height) {
-	if (!file_exists($filename)) {
-		return false;
+if (!function_exists('resizeImage')) {
+	/**
+	* Resize an image and keep the proportions
+	* 
+	* @author Allison Beckwith <allison@planetargon.com>
+	* @param string $filename
+	* @param integer $max_width
+	* @param integer $max_height
+	* @return image
+	*/
+	function resizeImage($filename, $destinationFile, $max_width, $max_height) {
+		if (!file_exists($filename)) {
+			return false;
+		}
+		
+		if (!preg_match('/\.jpg$/i', $filename)) {
+			return false;
+		}
+		
+		list($orig_width, $orig_height) = @getimagesize($filename);
+		if (!$orig_width || !$orig_height) {
+			return false;
+		}
+
+		$width = $orig_width;
+		$height = $orig_height;
+
+		# taller
+		if ($height > $max_height) {
+			$width = ($max_height / $height) * $width;
+			$height = $max_height;
+		}
+
+		# wider
+		if ($width > $max_width) {
+			$height = ($max_width / $width) * $height;
+			$width = $max_width;
+		}
+
+		$image_p = imagecreatetruecolor($width, $height);
+
+		$image = imagecreatefromjpeg($filename);
+
+		imagecopyresampled($image_p, $image, 0, 0, 0, 0, 
+										 $width, $height, $orig_width, $orig_height);
+
+		if (!is_writable(dirname($destinationFile))) {
+			return false;
+		} else {
+			touch($destinationFile);
+		}
+		
+		return imagejpeg($image_p, $destinationFile);
 	}
-	
-	if (!preg_match('/\.jpg$/i', $filename)) {
-		return false;
-	}
-	
-    list($orig_width, $orig_height) = @getimagesize($filename);
-	if (!$orig_width || !$orig_height) {
-		return false;
-	}
-
-    $width = $orig_width;
-    $height = $orig_height;
-
-    # taller
-    if ($height > $max_height) {
-        $width = ($max_height / $height) * $width;
-        $height = $max_height;
-    }
-
-    # wider
-    if ($width > $max_width) {
-        $height = ($max_width / $width) * $height;
-        $width = $max_width;
-    }
-
-    $image_p = imagecreatetruecolor($width, $height);
-
-    $image = imagecreatefromjpeg($filename);
-
-    imagecopyresampled($image_p, $image, 0, 0, 0, 0, 
-                                     $width, $height, $orig_width, $orig_height);
-
-	if (!is_writable(dirname($destinationFile))) {
-		return false;
-	} else {
-		touch($destinationFile);
-	}
-	
-    return imagejpeg($image_p, $destinationFile);
 }
 

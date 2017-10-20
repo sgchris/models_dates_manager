@@ -6,8 +6,7 @@ require_once __DIR__.'/functions.php';
 
 $db = new PDO('sqlite:'.__DIR__.'/../db/models.db');
 if (!$db) {
-	_exit('cannot connect to the database');
-}
+	_exit('cannot connect to the database'); }
 
 
 $models = dbQuery($db, 'select * from models');
@@ -55,45 +54,40 @@ foreach ($models as $model) {
 		
 		// convert the regular image
 		$newNameFullPath = dirname($fullImagePath).'/'.$newName;
-		echo "Renaming '{$fullImagePath}' to {$newNameFullPath}\n";
+		echo "Renaming:\n{$fullImagePath}\n{$newNameFullPath}\n";
 		$renameResult = rename($fullImagePath, $newNameFullPath);
 		if (!$renameResult) {
 			echo "Renaming failed!\n";
 		}
 		
 		// convert the small image
-		$fullImagePath_small = dirname($fullImagePath).'/small/'.str_ireplace('.jpg', '60x60.jpg', basename($fullImagePath));
-		if (file_exists($fullImagePath_small)) {
-			$newNameFullPath_small = dirname($fullImagePath_small).'/'.str_replace('.jpg', '_small.jpg', $newName);
-			echo "Renaming [SMALL] '{$fullImagePath_small}' to {$newNameFullPath_small}\n";
-			
-			$renameResult = rename($fullImagePath_small, $newNameFullPath_small);
-			if (!$renameResult) {
-				echo "Renaming failed!\n";
-			}
+		$newNameFullPath_small = dirname($newNameFullPath).'/small/'.str_ireplace('.jpg', '_small.jpg', basename($newNameFullPath));
+		echo "Checking {$newNameFullPath_small}\n";
+		if (!file_exists($newNameFullPath_small)) {
+			resizeImage($newNameFullPath, $newNameFullPath_small, 60, 60);
+			echo "Created {$newNameFullPath_small}\n";
+		} else {
+			echo "The file {$newNameFullPath_small} exists!\n";
 		}
 		
 		// convert the medium image
-		$fullImagePath_medium = dirname($fullImagePath).'/medium/'.str_ireplace('.jpg', '180x180.jpg', basename($fullImagePath));
-		if (file_exists($fullImagePath_medium)) {
-			$newNameFullPath_medium = dirname($fullImagePath_medium).'/'.str_replace('.jpg', '_medium.jpg', $newName);
-			echo "Renaming [MEDIUM] '{$fullImagePath_medium}' to {$newNameFullPath_medium}\n";
-			
-			$renameResult = rename($fullImagePath_medium, $newNameFullPath_medium);
-			if (!$renameResult) {
-				echo "Renaming failed!\n";
-			}
+		$newNameFullPath_medium = dirname($newNameFullPath).'/medium/'.str_ireplace('.jpg', '_medium.jpg', basename($newNameFullPath));
+		if (!file_exists($newNameFullPath_medium)) {
+			resizeImage($newNameFullPath, $newNameFullPath_medium, 180, 180);
+			echo "Created {$newNameFullPath_medium}\n";
+		} else {
+			echo "The file {$newNameFullPath_medium} exists!\n";
 		}
 		
 		$images[$imgNumber] = $newName;
 	}
 	
-	dbExec($db, 'update models set images = :images where id = :id', array(
+	$dbRes = dbExec($db, 'update models set images = :images where id = :id', array(
 		'id' => $model['id'],
 		'images' => json_encode($images),
 	));
 	
-	echo "Updated model {$modelName}\n";
+	echo "Updated model {$modelName} - db res = ", var_export($dbRes), "\n";
 }
 
 echo "Done!\n";

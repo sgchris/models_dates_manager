@@ -31,8 +31,8 @@
 		<a ng-click="openGallery();" class="main-image-lightbox-link" title="Click to see model images in original size">
 			<i class="fa fa-search"></i>
 		</a>
-		<img ng-show=" model.images[0]" ng-src="{{getMediumImage(mainImage)}}">
-		<img ng-show="!model.images[0]" ng-src="{{defaultImage}}">
+		<img ng-if=" model.images[0]" ng-src="{{getMediumImage(mainImage)}}">
+		<img ng-if="!model.images[0]" ng-src="{{defaultImage}}">
 	</div>
 	<div class="small-images-wrapper">
 		<div class="small-image-wrapper" ng-repeat="i in [0, 1, 2]"
@@ -40,8 +40,8 @@
 				'defined-small-image': model.images[i], 
 				'selected-small-image': mainImage == $root.IMAGES_BASE_URL + '/' + model.images[i]
 			}">
-			<img ng-show=" model.images[i]" ng-src="{{getSmallImage(model.images[i])}}" ng-click="setMainImage(i);">
-			<img ng-show="!model.images[i]" ng-src="{{defaultImage}}">
+			<img ng-if=" model.images[i]" ng-src="{{getSmallImage(model.images[i])}}" ng-click="setMainImage(i);">
+			<img ng-if="!model.images[i]" ng-src="{{defaultImage}}">
 		</div>
 	</div>
 	<h2 class="model-name" ng-style="{background: ((model.color && (showChooseButton || showDeleteButton)) ? getColorNumber(model.color) : '#FFF')}">
