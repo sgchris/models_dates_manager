@@ -1,5 +1,44 @@
 
 
+webApp.directive('imageFitScreenSize', function() {
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs) {
+			element.bind('load', function() {
+				var $el = angular.element(element);
+				
+				// get image source
+				var imgSrc = attrs.imageFitScreenSize && attrs.imageFitScreenSize.length > 0 ? attrs.imageFitScreenSize : $el.attr('src');
+				if (!imgSrc) {
+					return;
+				}
+				
+				// get image dimensions (by name)
+				var dims = /(\d+)x(\d+)/.exec(imgSrc);
+				if (!dims || dims.length < 3) {
+					return;
+				}
+				
+				// git image ratio
+				var imgX = dims[1];
+				var imgY = dims[2];
+				var imgRatio = parseInt(imgX) / parseInt(imgY);
+				
+				// get window ratio
+				var winRatio = window.innerWidth / window.innerHeight;
+				// set width/height
+				if (imgRatio > winRatio) {
+					$el.attr('width', '100%');
+					$el.attr('height', 'auto');
+				} else {
+					$el.attr('width', 'auto');
+					$el.attr('height', '100%');
+				}
+			});
+		}
+	};
+});
+
 webApp.directive('imageOnLoad', function() {
 	return {
 		restrict: 'A',
@@ -60,13 +99,11 @@ webApp.directive('anGriGal', ['$window', 'smallImagesService', function($window,
 			// images loading steps
 			scope.getSmallImage = function(imgSrc) {
 				var smallImagesSrc = smallImagesService.getSmall(imgSrc);
-				console.log('imgSrc', imgSrc, 'smallImagesSrc', smallImagesSrc);
 				return smallImagesSrc;
 			};
 			
 			scope.getMediumImage = function(imgSrc) {
 				var mediumImageSrc = smallImagesService.getMedium(imgSrc);
-				console.log('imgSrc', imgSrc, 'mediumImageSrc', mediumImageSrc);
 				return mediumImageSrc;
 			};
 			scope.mediumImageLoaded = {};
@@ -103,19 +140,20 @@ webApp.directive('anGriGal', ['$window', 'smallImagesService', function($window,
 				'<div class="ang-gri-gal-main-image">' + 
 				'	{{bigImageLoaded[mainImage]}}' + 
 					// small image
-				'	<img ng-show="!isMediumImageLoaded(mainImage) && !isBigImageLoaded(mainImage)" ' + 
-				'		height="100%" ' + 
+				'<img ng-show="!isMediumImageLoaded(mainImage) && !isBigImageLoaded(mainImage)" ' + 
+				'		image-fit-screen-size="{{mainImage}}" ' + 
 				'		ng-src="{{getSmallImage(mainImage)}}" ' + 
 				'		ng-click="next();" />' +
 					// medium image
-				'	<img ng-show=" isMediumImageLoaded(mainImage) && !isBigImageLoaded(mainImage)" ' + 
-				'		height="100%" ' + 
-				'		ng-src="{{getMediumImage($root.IMAGES_BASE_URL + \'/\' + mainImage)}}" ' + 
+				'<img ng-show=" isMediumImageLoaded(mainImage) && !isBigImageLoaded(mainImage)" ' + 
+				'		image-fit-screen-size ' + 
+				'		src="{{getMediumImage($root.IMAGES_BASE_URL + \'/\' + mainImage)}}" ' + 
 				'		image-on-load="markMediumImageLoaded(mainImage)" ' + 
 				'		ng-click="next();" />' +
 					// big image
-				'	<img ng-show=" isBigImageLoaded(mainImage)" ' + 
-				'		ng-src="{{$root.IMAGES_BASE_URL + \'/\' + mainImage}}" ' + 
+				'<img ng-show=" isBigImageLoaded(mainImage)" ' + 
+				'		image-fit-screen-size ' + 
+				'		src="{{$root.IMAGES_BASE_URL + \'/\' + mainImage}}" ' + 
 				'		image-on-load="markBigImageLoaded(mainImage)" ' + 
 				'		ng-click="next();" />' +
 				'</div>' +
