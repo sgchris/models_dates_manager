@@ -218,6 +218,33 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 			$scope.data.changeAvailability(date, model, false);
 		},
 		
+		updateDescription: function() {
+			// call the API
+			$http({
+				method: 'post',
+				url: 'api/update_date.php',
+				data: {
+					date: $scope.data.date.date_ts,
+					description: $scope.data.date.description
+				}
+			}).then(function(res) {
+				if (res.data && res.data.result == 'ok') {
+					$scope.data.load();
+					
+					if ($scope.data.updateDescriptionForm && $scope.data.updateDescriptionForm.$dirty) {
+						$scope.data.updateDescriptionForm.$setPristine();
+					}
+					
+					return;
+				}
+				
+				alert('Error updating the description');
+				console.error('Error updating the descriptio', res);
+			}, function(res) {
+				console.error('Error updating the descriptio', res);
+			});
+		},
+		
 		loadModels: function(dateTs) {
 			
 			// get all models in restricted mode / relevant models for free mode

@@ -7,6 +7,20 @@
 
 	<h1>{{data.date.date_ts * 1000 | date:'EEEE, dd LLLL yyyy' }}</h1>
 	
+	
+	<form ng-if="hasRestrictedAccess" class="form-horizontal" ng-submit="data.updateDescription()" name="data.updateDescriptionForm">
+		<hr />
+		<label><i class="glyphicon glyphicon-pencil"></i> Description</label>
+		<div>
+			<textarea class="form-control" ng-model="data.date.description"></textarea>
+		</div>
+		<br />
+		<input type="submit" value="Update description" class="btn btn-primary" />
+		<span class="text-warning" ng-if="data.updateDescriptionForm.$dirty">&nbsp;&nbsp;<i class="glyphicon glyphicon-warning-sign"></i> Please update!</span>
+	</form>
+	
+	<p ng-if="!hasRestrictedAccess && data.date.description.length > 0" ng-bind-html="data.date.description | nl2br"></p>
+	
 	<hr />
 	
 	<div ng-if="data.chosenModels.length > 0 && hasRestrictedAccess">
