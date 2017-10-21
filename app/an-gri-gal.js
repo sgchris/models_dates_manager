@@ -138,7 +138,6 @@ webApp.directive('anGriGal', ['$window', 'smallImagesService', function($window,
 				'	<i class="fa fa-chevron-left"></i>' + 
 				'</div>' +
 				'<div class="ang-gri-gal-main-image">' + 
-				'	{{bigImageLoaded[mainImage]}}' + 
 					// small image
 				'<img ng-show="!isMediumImageLoaded(mainImage) && !isBigImageLoaded(mainImage)" ' + 
 				'		image-fit-screen-size="{{mainImage}}" ' + 
