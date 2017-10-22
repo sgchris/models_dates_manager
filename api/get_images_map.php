@@ -4,7 +4,6 @@
  * with max dimensions 60x60, and create a "map" file with base64 encoded
  * images
  */
-
 require_once __DIR__.'/init.php';
 
 requestShouldBe('GET');

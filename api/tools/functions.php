@@ -60,6 +60,14 @@ function _log() {
 	return (is_numeric($res) && $res > 0);
 }
 
+/**
+ * Check if the script is running from web or as a CLI
+ * 
+ * @return bool
+ */
+function isCommandLineInterface() {
+    return (php_sapi_name() === 'cli');
+}
 
 /**
  * define that the current request should be allowed only to "$allowedUsers"
