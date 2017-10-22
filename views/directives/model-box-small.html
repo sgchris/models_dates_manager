@@ -4,10 +4,10 @@
 		<img ng-show=" model.images[0]" ng-src="{{getMediumImage(mainImage)}}">
 		<img ng-show="!model.images[0]" ng-src="{{defaultImage}}">
 	</div>
-	<div class="model-box-small-name">
+	<div class="model-box-small-name" ng-style="{background: ((model.color && (showChooseButton || showDeleteButton || showMakeAvailableButton)) ? getColorNumber(model.color) : '#FFF')}">
 		<a href="#/model/{{model.hash}}" ng-attr-title="{{model.name}}">{{model.name}}&nbsp;</a>
 	</div>
-	<div class="model-box-small-toolbar">
+	<div class="model-box-small-toolbar" ng-style="{background: ((model.color && (showChooseButton || showDeleteButton || showMakeAvailableButton)) ? getColorNumber(model.color) : '#FFF')}">
 		<a href="javascript:;" class="btn btn-link pull-right icon-red" 
 			ng-if="showDeleteButton"
 			ng-click="deleteModel(model.id);" 
