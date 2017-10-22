@@ -47,14 +47,34 @@
 	<h2 class="model-name" ng-style="{background: ((model.color && (showChooseButton || showDeleteButton)) ? getColorNumber(model.color) : '#FFF')}">
 		<a ng-href="#/model/{{model.hash}}" ng-attr-title="{{model.name}}">{{model.name}}&nbsp;</a>
 	</h2>
-	<p class="model-notes" 
+	<div ng-init="notesEditor.public_notes = false"
+		ng-dblclick="notesEditor.public_notes = true"
+		ng-show="!notesEditor.public_notes"
+		class="model-notes" 
 		ng-style="{background: ((model.color && (showChooseButton || showDeleteButton)) ? getColorNumber(model.color) : '#FFF')}"
-		ng-attr-title="{{model.notes}}">{{model.notes}}&nbsp;</p>
-	<p class="model-notes model-private-notes" 
+		ng-attr-title="{{model.notes}}">{{model.notes}}&nbsp;</div>
+	<div class="model-notes" ng-show="notesEditor.public_notes">
+		<form class="model-box-notes-editor" ng-submit="updateModelNote('public')">
+			<input type="text" name="public-note" ng-model="model.notes" />
+			<input type="submit" class="btn-primary" value="V" />
+			<input type="button" class="btn-default" value="X" ng-click="notesEditor.public_notes = false;"/>
+		</form>
+	</div>
+	<div ng-init="notesEditor.private_notes = false"
+		ng-dblclick="notesEditor.private_notes = true"
+		ng-show="!notesEditor.private_notes"
+		class="model-notes model-private-notes" 
 		ng-style="{background: ((model.color && (showChooseButton || showDeleteButton)) ? getColorNumber(model.color) : '#FFF')}"
 		ng-attr-title="{{model.private_notes}}">
 		<span ng-class="{'invisible': !$root.hasRestrictedAccess || !model.private_notes}">{{model.private_notes}}&nbsp;</span>
-	</p>
+	</div>
+	<div class="model-notes" ng-show="notesEditor.private_notes">
+		<form class="model-box-notes-editor" ng-submit="updateModelNote('private')">
+			<input type="text" name="private-note" ng-model="model.private_notes" />
+			<input type="submit" class="btn-primary" value="V" />
+			<input type="button" class="btn-default" value="X" ng-click="notesEditor.private_notes = false;"/>
+		</form>
+	</div>
 	<div class="model-toolbar"><!--  ng-if="hasRestrictedAccess" -->
 		<a href="javascript:;" class="btn btn-link pull-right icon-red" 
 			ng-if="showDeleteButton"

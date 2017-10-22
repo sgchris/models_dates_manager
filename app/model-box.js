@@ -39,6 +39,12 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesS
 				});
 			}
 			
+			// indication to display inputs for the notes
+			scope.notesEditor = {
+				public_notes: false,
+				private_notes: false
+			};
+			
 			scope.getModelTags = function() {
 				return scope.model.tags ? scope.model.tags.split(/\s*\,\s*/) : [];
 			};
@@ -123,6 +129,40 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesS
 					}
 				}).then(function(res) {
 					if (res.data && res.data.result == 'ok') {
+						return;
+					}
+					
+					var errorString = res.data.error || 'Saving color failed';
+					alert(errorString);
+				}, function() {
+					alert('Saving color failed');
+				}).finally(function() {
+					scope.colorPalette.show = false;
+				});
+			};
+			
+			scope.updateModelNote = function(type) {
+				var data = {
+					model_id: scope.model.id
+				};
+				
+				if (type == 'public') {
+					data['notes'] = scope.model.notes;
+				} else {
+					data['private_notes'] = scope.model.private_notes;
+				}
+				
+				
+				// call the API
+				$http({
+					method: 'post',
+					url: 'api/update_model.php',
+					data: data
+				}).then(function(res) {
+					if (res.data && res.data.result == 'ok') {
+						// close the editor
+						scope.notesEditor[(type == 'public' ? 'public_notes' : 'private_notes')] = false;
+						
 						return;
 					}
 					
