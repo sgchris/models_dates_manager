@@ -3,10 +3,12 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 	
 	var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 	
+	
+	
 	$scope.models = {
 		inProgress: false,
 		
-		filterString: localStorage.getItem('vipmodels_homepage_filterString'),
+		filterString: (localStorage.getItem('vipmodels_homepage_filterString') || ''),
 		
 		// new model related
 		newModelName: '',
@@ -245,9 +247,13 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 				tabsList.forEach(function(tabInfo) {
 					if (tabInfo.name == $scope.tabs.initialTab) {
 						$scope.tabs.current = tabInfo.id;
-						console.log('current tab', tabInfo);
 					}
 				});
+			}
+			
+			// check if the stored tab was found
+			if (!$scope.tabs.current && tabsList && tabsList.length) {
+				$scope.tabs.current = tabsList[0].id;
 			}
 		}
 	};

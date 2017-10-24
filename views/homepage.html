@@ -93,6 +93,7 @@
 				on-load="tabs.loaded(modelsCategories)"></models-categories-tabs>
 		
 		<br />
+		
 		<article ng-repeat="model in models.data | filterModelsByCategory:tabs.current | filterModelsByName:models.filterString">
 			<model-box ng-model="model" on-relocate="models.load()" on-delete="models.load()"></model-box>
 		</article>
