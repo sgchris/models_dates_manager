@@ -55,6 +55,7 @@
 		<form>
 			<div class="input-group">
 				<input type="text" class="form-control" 
+					ng-class="{'non-empty-filter-input': models.filterString}"
 					ng-model="models.filterString" 
 					ng-model-options="{updateOn: 'default', debounce: {default: 1000}}"
 					placeholder="Start typing model name" />
