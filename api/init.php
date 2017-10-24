@@ -14,7 +14,7 @@ session_start();
 header('Content-Type: application/json');
 
 // Check if the API call was to that file
-$isCheckDbApi = (stripos($_SERVER['REQUEST_URI'], basename(__FILE__)) !== false);
+$isCheckDbApi = !isCommandLineInterface() && (stripos($_SERVER['REQUEST_URI'], basename(__FILE__)) !== false);
 
 // check the request method if the API is to that file
 if ($isCheckDbApi) {

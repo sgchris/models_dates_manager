@@ -91,23 +91,3 @@ foreach ($models as $model) {
 }
 
 echo "Done!\n";
-
-//////////////////////////////////////////////////
-
-/**
- * Get name that consists only of letters and numbers
- * @param string $name 
- * @return string
- */
-function getAlphanumericName($name) {
-	return preg_replace('/[^A-Za-z0-9]+/i', '', $name);
-}
-
-/**
- * Get random hash
- * @param integer $length 
- * @return string
- */
-function getRandHash($length = 16) {
-	return substr(md5(mt_rand(0, pow(10, 10))), 0, $length);
-}

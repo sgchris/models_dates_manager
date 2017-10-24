@@ -277,15 +277,13 @@ if (!function_exists('resizeImage')) {
 	*/
 	function resizeImage($filename, $destinationFile, $max_width, $max_height) {
 		if (!file_exists($filename)) {
-			return false;
-		}
-		
-		if (!preg_match('/\.jpg$/i', $filename)) {
+			error_log("resizing file {$filename}, but it does not exist");
 			return false;
 		}
 		
 		list($orig_width, $orig_height) = @getimagesize($filename);
 		if (!$orig_width || !$orig_height) {
+			error_log("resizing file {$filename}, but it is not an image (cannot get size)");
 			return false;
 		}
 
@@ -309,9 +307,10 @@ if (!function_exists('resizeImage')) {
 		$image = imagecreatefromjpeg($filename);
 
 		imagecopyresampled($image_p, $image, 0, 0, 0, 0, 
-										 $width, $height, $orig_width, $orig_height);
+			$width, $height, $orig_width, $orig_height);
 
 		if (!is_writable(dirname($destinationFile))) {
+			error_log("resizing file {$filename}, but it the destination {$destinationFile} is not writable");
 			return false;
 		} else {
 			touch($destinationFile);
@@ -321,3 +320,22 @@ if (!function_exists('resizeImage')) {
 	}
 }
 
+
+/**
+ * Get name that consists only of letters and numbers
+ * @param string $name 
+ * @return string
+ */
+function getAlphanumericName($name) {
+	return preg_replace('/[^A-Za-z0-9]+/i', '', $name);
+}
+
+
+/**
+ * Get random hash
+ * @param integer $length 
+ * @return string
+ */
+function getRandHash($length = 16) {
+	return substr(md5(mt_rand(0, pow(10, 10))), 0, $length);
+}

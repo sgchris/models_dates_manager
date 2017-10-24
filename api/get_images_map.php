@@ -6,11 +6,13 @@
  */
 require_once __DIR__.'/init.php';
 
-requestShouldBe('GET');
+if (!isCommandLineInterface()) {
+	requestShouldBe('GET');
+}
 
 define('UPLOADED_IMAGES_PATH', __DIR__.'/../images/upload');
 define('SMALL_IMAGES_PATH', UPLOADED_IMAGES_PATH.'/small');
-define('JSON_DATA_PATH', UPLOADED_IMAGES_PATH.'/small/images.json');
+define('JSON_DATA_PATH', SMALL_IMAGES_PATH.'/images.json');
 
 // validate small folder
 checkThumbnailsFolder();
@@ -21,7 +23,12 @@ createThumbnails();
 // create JSON file
 createJsonFile();
 
-readfile(JSON_DATA_PATH);
+// supress the output of the json file content when on CLI
+if (isCommandLineInterface()) {
+	echo "Ok\n";
+} else {
+	readfile(JSON_DATA_PATH);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 

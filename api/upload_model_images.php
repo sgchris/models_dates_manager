@@ -21,6 +21,12 @@ checkUploadFolder();
 // get the model from the DB
 $modelRow = getModelDetails($modelId);
 
+// get model name
+$modelName = getAlphanumericName($modelRow['name']);
+if (empty($modelName)) {
+	$modelName = getRandHash($__length = 12);
+}
+
 $errors = [];
 $successfulFiles = 0;
 if (!empty($_FILES)) {
@@ -32,6 +38,12 @@ if (!empty($_FILES)) {
 			continue;
 		}
 		
+		// check the upload
+		if (!is_uploaded_file($file['tmp_name'])) {
+			$errors[] = 'Upload file '.$file['name'].' failed';
+			continue;
+		}
+		
 		// check that this is an image
 		list ($width, $height) = getimagesize($file['tmp_name']);
 		if (!$width || !$height) {
@@ -39,18 +51,32 @@ if (!empty($_FILES)) {
 			continue;
 		}
 		
-		// check the upload
-		if (!is_uploaded_file($file['tmp_name'])) {
-			$errors[] = 'Upload file '.$file['name'].' failed';
-			continue;
+		// resize the oiginal file, if needed
+		if ($width > 1920 || $height > 1280) {
+			$r_hash = getRandHash();
+			$tempImgPath = sys_get_temp_dir().'/resized_img_'.$r_hash;
+			
+			// resize
+			$result = resizeImage(
+				$file['tmp_name'],
+				$file['tmp_name'],
+				1920,
+				1280
+			);
+			
+			// renew the w/h values
+			list($width, $height) = getimagesize($file['tmp_name']);
 		}
 		
 		// relocate the file
+		$hash = getRandHash();
 		$newImageFileName = uniqid('model_').$file['name'];
+		$newImageFileName = "model_{$modelName}_{$hash}_{$width}x{$height}.jpg";
 		if (!move_uploaded_file($file['tmp_name'], $destinationFolder.'/'.$newImageFileName)) {
 			$errors[] = 'Could not relocate uploaded file '.$file['name'];
 			continue;
 		}
+		
 		
 		// create small image
 		$smallImagePath = $destinationFolder.'/small/'.$newImageFileName;
@@ -79,7 +105,11 @@ if (!$successfulFiles && !empty($errors)) {
 	_exit(['errors' => $errors]);
 }
 
-_success();
+// update images map JSON file
+$phpExecutable = trim(shell_exec('/usr/bin/which php'));
+_success([
+	'images_map_result' => shell_exec(escapeshellcmd($phpExecutable).' '.escapeshellarg(realpath(__DIR__.'/get_images_map.php'))),
+]);
 
 
 ///////////////////////////////
