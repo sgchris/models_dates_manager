@@ -6,7 +6,7 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 	$scope.models = {
 		inProgress: false,
 		
-		filterString: '',
+		filterString: localStorage.getItem('vipmodels_homepage_filterString'),
 		
 		// new model related
 		newModelName: '',
@@ -203,6 +203,11 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 		}
 	};
 	
+	// update the filter string in the local storage
+	$scope.$watch('models.filterString', function(newVal) {
+		localStorage.setItem('vipmodels_homepage_filterString', newVal);
+	})
+	
 	$scope.sidebar = {
 		expanded: true,
 		
@@ -223,44 +228,27 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 	};
 	
 	$scope.tabs = {
-		data: [],
-		
-		otherTabCaption: 'Other',
-		
-		addUncategorizedTab: function() {
-			var otherTabExists = false;
-			
-			// find max ID of the models categories
-			$scope.tabs.data.forEach(function(tabData) {
-				if (tabData.name == $scope.tabs.otherTabCaption) {
-					otherTabExists = true;
-				}
-			});
-			
-			// add to the tabs
-			if (!otherTabExists) {
-				$scope.tabs.data.push({
-					id: -1, 
-					name: $scope.tabs.otherTabCaption
-				});
-			}
-		},
 		
 		current: '',
+
+		initialTab: localStorage.getItem('vipmodels_homepage_tab') || false,
 		
-		load: function() {
-			modelsCategoriesService.load(function(modelsCategories) {
-				$scope.tabs.data = modelsCategories;
-				
-				// check if there are uncategorized models
-				if ($scope.models.thereAreUncategorizedModels(modelsCategories)) {
-					$scope.tabs.addUncategorizedTab();
-				}
-				
-				if ($scope.tabs.data.length > 0) {
-					$scope.tabs.current = $scope.tabs.data[0].id;
-				}
-			});
+		// callback
+		tabClicked: function(newSelectedTab) {
+			$scope.tabs.current = newSelectedTab.id;
+			localStorage.setItem('vipmodels_homepage_tab', newSelectedTab.name)
+		},
+		
+		// callback when tabs data is loaded
+		loaded: function(tabsList) {
+			if (tabsList && tabsList.length) {
+				tabsList.forEach(function(tabInfo) {
+					if (tabInfo.name == $scope.tabs.initialTab) {
+						$scope.tabs.current = tabInfo.id;
+						console.log('current tab', tabInfo);
+					}
+				});
+			}
 		}
 	};
 	
@@ -354,7 +342,6 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 		if (hasRestrictedAccess) {
 			$scope.models.load();
 			$scope.dates.load();
-			$scope.tabs.load();
 		}
 	});
 	

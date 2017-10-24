@@ -38,7 +38,7 @@ webApp.directive('modelsCategoriesTabs', ['$http', 'modelsCategoriesService', fu
 				}
 				
 				// Check if the initial value was provided
-				if (scope.initialValue) {
+				if (scope.initialValue && scope.initialValue.length) {
 					// find the value in the models categories list
 					if (scope.modelsCategories && scope.modelsCategories.length > 0) {
 						scope.modelsCategories.forEach(function(modelCategory) {
