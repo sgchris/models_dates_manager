@@ -96,7 +96,7 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesS
 			};
 			
 			// get the color code (e.g. #A23B23) by color name (the list is on the top)
-			scope.getColorNumber = colorsService.getColorNumber;			
+			scope.getColorNumber = colorsService.getColorNumber;
 
 			/**
 			 * Choose model's color
