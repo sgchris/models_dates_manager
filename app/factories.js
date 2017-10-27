@@ -8,6 +8,33 @@ webApp.filter('nl2br', ['$sce', function($sce) {
 	};
 }]);
 
+// the colors service
+webApp.factory('colorsService', [function() {
+	// list of available colors
+	var colors = {
+		'default': '#F6F6F6',
+		magenta: '#e1bee7',
+		lightgreen: '#dcedc8',
+		orange: '#ffccbc',
+		blue: '#b3e5fc',
+		turquoise: '#a7ffeb'
+	};
+
+	return {
+		getColorNumber: function(colorName) {
+			if (!colorName || typeof(colors[colorName]) == 'undefined') {
+				return colors['default'];
+			}
+			
+			return colors[colorName];
+		},
+
+		getAvailableColors: function() {
+			return colors;
+		}
+	};
+}]);
+
 // models' categories service
 webApp.factory('modelsCategoriesService', ['$http', '$q', function($http, $q) {
 	

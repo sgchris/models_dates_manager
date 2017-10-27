@@ -3,6 +3,7 @@
 *.phprj
 *.workspace
 .vscode
+*.swp
 
 # config 
 api/config.php

@@ -1,5 +1,5 @@
-webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$http', '$timeout', 'Upload', 'modelsCategoriesService',
-	function($rootScope, $stateParams, $scope, $http, $timeout, Upload, modelsCategoriesService) {
+webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$http', '$timeout', 'Upload', 'modelsCategoriesService', 'colorsService',
+	function($rootScope, $stateParams, $scope, $http, $timeout, Upload, modelsCategoriesService, colorsService) {
 	
 	$scope.gallery = {
 		isOpen: false,
@@ -20,6 +20,9 @@ webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$
 		
 	$scope.galleryIsOpen = false;
 	$scope.galleryIsOpen = false;
+
+	$scope.availableColors = colorsService.getAvailableColors();
+	$scope.getColorNumber = colorsService.getColorNumber;
 	
 	$scope.model = {
 		inProgress: false,
@@ -31,6 +34,11 @@ webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$
 		details: {},
 		
 		detailsForm: null,
+
+		setColor: function(newColor) {
+			$scope.model.details.color = newColor;
+			$scope.model.detailsForm.$setDirty();
+		},
 		
 		update: function() {
 			$scope.model.inProgress = true;
@@ -44,6 +52,7 @@ webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$
 				notes: $scope.model.details.notes,
 				private_notes: $scope.model.details.private_notes,
 				tags: $scope.model.details.tags,
+				color: $scope.model.details.color,
 			};
 			
 			$http({
