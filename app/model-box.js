@@ -1,12 +1,6 @@
-var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesService) {
+var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesService, colorsService) {
 	// available model box color
-	var colors = {
-		magenta: '#e1bee7',
-		lightgreen: '#dcedc8',
-		orange: '#ffccbc',
-		blue: '#b3e5fc',
-		turquoise: '#a7ffeb'
-	};
+	var colors = colorsService.getAvailableColors();
 	
 	return {
 		//require: 'ngModel',
@@ -102,15 +96,8 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesS
 			};
 			
 			// get the color code (e.g. #A23B23) by color name (the list is on the top)
-			scope.getColorNumber = function(colorName) {
-				var defaultColor = '#F6F6F6';
-				if (!colorName) {
-					return defaultColor;
-				}
-				
-				return colors[colorName] || '#F6F6F6';
-			};
-			
+			scope.getColorNumber = colorsService.getColorNumber;			
+
 			/**
 			 * Choose model's color
 			 * @param string newColor
@@ -242,12 +229,14 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesS
 	}
 };
 
-webApp.directive('modelBox', ['$http', 'modelsCategoriesService', 'smallImagesService', function($http, modelsCategoriesService, smallImagesService) {
-	return modelBoxCoreFunction($http, modelsCategoriesService, smallImagesService);
+webApp.directive('modelBox', ['$http', 'modelsCategoriesService', 'smallImagesService', 'colorsService', 
+	function($http, modelsCategoriesService, smallImagesService, colorsService) {
+	return modelBoxCoreFunction($http, modelsCategoriesService, smallImagesService, colorsService);
 }]);
 
-webApp.directive('modelBoxSmall', ['$http', 'modelsCategoriesService', 'smallImagesService', function($http, modelsCategoriesService, smallImagesService) {
-	var directiveObject = modelBoxCoreFunction($http, modelsCategoriesService, smallImagesService);
+webApp.directive('modelBoxSmall', ['$http', 'modelsCategoriesService', 'smallImagesService', 'colorsService', 
+	function($http, modelsCategoriesService, smallImagesService, colorsService) {
+	var directiveObject = modelBoxCoreFunction($http, modelsCategoriesService, smallImagesService, colorsService);
 	
 	// replace the base template with the one for small box
 	directiveObject.templateUrl = 'views/directives/model-box-small.html'
