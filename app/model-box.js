@@ -32,6 +32,14 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesS
 					});
 				});
 			}
+
+			// add country code to the phone number
+			scope.addCountryCode = function(phoneNumber) {
+				if (phoneNumber.indexOf('05') == 0) {
+					return '972' + phoneNumber.substr(1);
+				}
+				return phoneNumber;
+			};
 			
 			// indication to display inputs for the notes
 			scope.notesEditor = {
