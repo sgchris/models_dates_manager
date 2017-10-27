@@ -55,19 +55,19 @@
 		</a>
 		<!-- Phone -->
 		<a ng-href="tel:{{model.phone}}" class="btn btn-link" 
-			ng-if="(showDeleteButton || showChooseButton || showMakeAvailableButton) && model.phone" 
+			ng-if="hasRestrictedAccess && model.phone" 
 			ng-attr-title="Call {{model.phone}}" target="_blank">
 			<i class="glyphicon glyphicon-phone-alt"></i>
 		</a>
 		<!-- whatsapp mobile -->
 		<a ng-href="https://api.whatsapp.com/send?phone={{addCountryCode(model.phone)}}" class="btn btn-link" 
-			ng-if="(showDeleteButton || showChooseButton || showMakeAvailableButton) && model.phone && $root.isMobile" 
+			ng-if="hasRestrictedAccess && model.phone && $root.isMobile" 
 			title="Send WhatsApp message" target="_blank">
 			<img src="/images/icons/whatsapp.png" width="14" height="14" />
 		</a>
 		<!-- whatsapp web -->
 		<a ng-href="https://web.whatsapp.com/send?phone={{addCountryCode(model.phone)}}" class="btn btn-link" 
-			ng-if="(showDeleteButton || showChooseButton || showMakeAvailableButton) && model.phone && !$root.isMobile" 
+			ng-if="hasRestrictedAccess && model.phone && !$root.isMobile" 
 			title="Send WhatsApp message" target="_blank">
 			<img src="/images/icons/whatsapp.png" width="14" height="14" />
 		</a>
