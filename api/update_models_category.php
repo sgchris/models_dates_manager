@@ -4,10 +4,10 @@ require_once __DIR__.DIRECTORY_SEPARATOR.'init.php';
 
 requestShouldBe('POST');
 
-$params = receiveParams(['name', 'description'], ['name']);
+$params = receiveParams(['id', 'name', 'description'], ['id']);
 
 // validate the parameter
-if (!between(strlen($params['name']), 2, 150)) {
+if (isset($params['name']) && !between(strlen($params['name']), 2, 150)) {
 	_exit('name parameter is not valid');
 }
 
@@ -22,17 +22,19 @@ if (isset($params['description']) && !between(strlen($params['name']), 2, 2048))
 $modelsCategories = dbRow('
 	SELECT * 
 	FROM models_categories 
-	WHERE name = :name', 
-	['name' => $params['name']]
+	WHERE id = :id', 
+	['id' => $params['id']]
 );
 
-if (!empty($modelsCategories)) {
-	_exit('The models category already exists');
+if (empty($modelsCategories)) {
+	_exit('The models category does not exist');
 }
 
 dbExec(
-	'INSERT INTO models_categories (name, description) values (:name, :description)', 
+	'UPDATE models_categories set name=:name, description=:description
+	WHERE id=:id', 
 	[
+		'id' => $params['id'],
 		'name' => $params['name'],
 		'description' => $params['description'],
 	]

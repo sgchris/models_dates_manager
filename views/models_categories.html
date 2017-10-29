@@ -10,7 +10,22 @@
 			<form class="form-horizontal" ng-submit="models_categories.add()" name="model.detailsForm">
 				<div class="form-group">
 					<label class="col-sm-2">Name</label>
-					<div class="col-sm-10"><input type="text" class="form-control" ng-model="models_categories.new_models_category_name" /></div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" 
+							placeholder="New category name"
+							ng-model="models_categories.new_models_category_name" 
+							fix-direction />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-2">Description</label>
+					<div class="col-sm-10">
+						<textarea class="form-control" rows="2"
+							placeholder="New category description"
+							ng-model="models_categories.new_models_category_description"
+							fix-direction></textarea>
+					</div>
 				</div>
 				
 				<div class="form-group">
@@ -30,12 +45,37 @@
 			<ul class="list-group">
 				<li class="list-group-item" ng-repeat="modelCategory in models_categories.data">
 					<span class="badge" title="Remove" style="background-color: transparent;">
-						<a href="javascript:;" ng-click="models_categories.delete(modelCategory.id);" class="text-danger">
-							<i class="glyphicon glyphicon-trash"></i>
-						</a>
 					</span>
 					
-					<i class="glyphicon glyphicon-list"></i> {{ modelCategory.name }}
+					<form class="form-horizontal" ng-submit="models_categories.update(modelCategory.id)" name="model.existingDetailsForm[modelCategory.id]">
+						<div class="form-group">
+							<label class="col-sm-2">Name</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" ng-model="modelCategory.name" fix-direction />
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2">Description</label>
+							<div class="col-sm-10">
+								<textarea class="form-control" rows="2" ng-model="modelCategory.description" fix-direction></textarea>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" class="btn btn-primary">
+									<i class="glyphicon glyphicon-ok"></i> Update
+								</button>
+								<button type="button" class="btn btn-link pull-right" ng-click="models_categories.delete(modelCategory.id);">
+									<span class="text-danger"><i class="glyphicon glyphicon-trash"></i> Delete</span>
+								</button>
+								<span class="text-warning" ng-if="model.existingDetailsForm[modelCategory.id].$dirty">
+									<i class="glyphicon glyphicon-warning-sign"></i> Please update
+								</span>
+							</div>
+						</div>
+					</form>
 				</li>
 			</ul>
 		</div>

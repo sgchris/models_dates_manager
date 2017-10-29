@@ -59,7 +59,6 @@ webApp.run(['$rootScope', '$window', '$http', function($rootScope, $window, $htt
 
 	// add country code to the phone number
 	$rootScope.addCountryCode = function(phoneNumber) {
-		console.log('checking number', phoneNumber);
 		if (!phoneNumber) {
 			return phoneNumber;
 		}

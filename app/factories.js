@@ -1,13 +1,4 @@
 
-webApp.filter('nl2br', ['$sce', function($sce) {
-	var tag = (/xhtml/i).test(document.doctype) ? '<br />' : '<br>';
-	return function(msg) {
-		// ngSanitize's linky filter changes \r and \n to &#10; and &#13; respectively
-		msg = (msg + '').replace(/(\r\n|\n\r|\r|\n|&#10;&#13;|&#13;&#10;|&#10;|&#13;)/g, tag + '$1');
-		return $sce.trustAsHtml(msg);
-	};
-}]);
-
 // the colors service
 webApp.factory('colorsService', [function() {
 	// list of available colors
@@ -42,11 +33,11 @@ webApp.factory('modelsCategoriesService', ['$http', '$q', function($http, $q) {
 	var modelsCategoriesCache = false;
 	
 	return {
-		load: function(callbackFn) {
+		load: function(callbackFn, forceReload) {
 			var loadModelsCategories;
 			
 			// load models categories from the server or from the cache
-			if (!modelsCategoriesCache) {
+			if (!modelsCategoriesCache || forceReload) {
 				loadModelsCategories = $http({
 					method: 'get',
 					url: 'api/get_models_categories.php'

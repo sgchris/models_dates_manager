@@ -22,6 +22,7 @@ webApp.directive('modelsCategoriesTabs', ['$http', 'modelsCategoriesService', fu
 		},
 		link: function(scope, element, attributes) {
 			scope.modelsCategories = [];
+			scope.currentTabDescription = '';
 			
 			// implement promise resolve
 			modelsCategoriesService.load(function(modelsCategories) {
@@ -75,9 +76,13 @@ webApp.directive('modelsCategoriesTabs', ['$http', 'modelsCategoriesService', fu
 			'<div>' + 
 				'<ul class="nav nav-tabs">' + 
 					'<li ng-repeat="modelCategory in modelsCategories" ng-class="{\'active\': modelCategory.id == current.id}">' + 
-						'<a href="javascript:;" ng-click="tabClicked(modelCategory);">{{ modelCategory.name }}</a>' + 
+						'<a href="javascript:;" ng-click="tabClicked(modelCategory);" fix-direction>{{ modelCategory.name }}</a>' + 
 					'</li>' + 
 				'</ul>' + 
+				'<div class="alert alert-info" ng-repeat="modelCategory in modelsCategories" ' + 
+				'	ng-if="modelCategory.description && current.id == modelCategory.id" fix-direction>' + 
+				'	<i class="glyphicon glyphicon-info-sign"></i> <span ng-bind-html="current.description | nl2br"></span>' + 
+				'</div>' + 
 			'</div>'
 	};
 }]);
