@@ -43,6 +43,10 @@ function _log() {
 	
 	$logStr = date('d.M.Y H:i:s') . ' ' . $apiFileName . ': ' . implode(' ', $logElements) . "\r\n";
 	$res = @file_put_contents(LOG_FILE_PATH, $logStr, FILE_APPEND);
+	
+	// echo the log
+	echo $logStr;
+
 	return (is_numeric($res) && $res > 0);
 }
 
@@ -98,6 +102,16 @@ function dbExec(PDO $db, $sql, array $paramsArray = array()) {
  */
 function dbQuery(PDO $db, $sql, array $paramsArray = array()) {
 	return executeQuery($db, $sql, $paramsArray, $__returnResultSet = true);
+}
+
+/**
+ * Execute query and get the result as one row array
+ * @param string $sql 
+ * @param array $paramsArray 
+ * @return array
+ */
+function dbRow(PDO $db, $sql, array $paramsArray = array()) {
+	return executeQuery($db, $sql, $paramsArray, $__returnResultSet = true, $__fetchOnlyOne = true);
 }
 
 /**

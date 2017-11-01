@@ -343,11 +343,44 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 		}
 		
 	};
+
+	$scope.lists = {
+		error: '',
+		newListName: '',
+		data: [],
+
+		add: function() {
+			$http.post('api/add_list.php', {'name': $scope.lists.newListName}).then(function(res) {
+				if (res && res.data && res.data.result == 'ok') {
+					$scope.lists.data = (res.data && res.data.lists) ? res.data.lists : [];
+					$scope.lists.newListName = '';
+					return;
+				}
+
+				alert('error adding new list');
+			}, function() {
+				alert('network error');
+			});
+		},
+		load: function() {
+			$http.get('api/get_lists.php').then(function(res) {
+				if (res && res.data && res.data.result == 'ok') {
+					$scope.lists.data = res.data && res.data.lists ? res.data.lists : [];
+					return;
+				}
+
+				alert('error getting lists');
+			}, function() {
+				alert('network error');
+			});
+		}
+	}
 	
 	$rootScope.$watch('hasRestrictedAccess', function(hasRestrictedAccess) {
 		if (hasRestrictedAccess) {
 			$scope.models.load();
 			$scope.dates.load();
+			$scope.lists.load();
 		}
 	});
 	

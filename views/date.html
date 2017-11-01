@@ -12,14 +12,14 @@
 		<hr />
 		<label><i class="glyphicon glyphicon-pencil"></i> Description</label>
 		<div>
-			<textarea class="form-control" ng-model="data.date.description"></textarea>
+			<textarea class="form-control" ng-model="data.date.description" fix-direction></textarea>
 		</div>
 		<br />
 		<input type="submit" value="Update description" class="btn btn-primary" />
 		<span class="text-warning" ng-if="data.updateDescriptionForm.$dirty">&nbsp;&nbsp;<i class="glyphicon glyphicon-warning-sign"></i> Please update!</span>
 	</form>
 	
-	<p ng-if="!hasRestrictedAccess && data.date.description.length > 0" ng-bind-html="data.date.description | nl2br"></p>
+	<p ng-if="!hasRestrictedAccess && data.date.description.length > 0" ng-bind-html="data.date.description | nl2br" fix-direction></p>
 	
 	<hr />
 	

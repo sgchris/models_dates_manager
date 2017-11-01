@@ -83,6 +83,39 @@
 				{{ date.date_ts | secondsToMilliseconds | date: 'dd MMM yyyy' }}
 			</a>
 		</div>
+
+		<hr />
+
+		<h4>Add New List</h4>
+		
+		<form ng-submit="lists.add()">
+			<p class="input-group" ng-class="{'has-error': lists.error}">
+				<input type="text" ng-model="lists.newListName" class="form-control" placeholder="New list name (e.g. Models of Steven Meisel)" />
+				<span class="input-group-btn">
+					<button type="submit" class="btn btn-success" class="glyphicon glyphicon-plus"></i> Add</button>
+				</span>
+			</p>
+			<p ng-show="lists.error" class="alert alert-warning">{{lists.error}}</p>
+		</form>
+		
+		<hr />
+
+		<div ng-if="lists.data.length">
+
+			<h4>Existing Lists</h4>
+
+			<div class="list-group">
+				<a ng-href="#/list/{{list.hash}}" class="list-group-item" ng-repeat="list in lists.data">
+					<span 
+						class="badge alert-success" 
+						ng-attr-title="{{list.models.length}} models">{{list.models.length}}</span>
+					{{ list.name }}
+				</a>
+			</div>
+
+			<hr />
+		</div>
+
 	</div>
 	
 	<div class="col-xs-12 homepage-models-wrapper" ng-class="{'col-md-10':sidebar.expanded, 'col-md-12':!sidebar.expanded}">

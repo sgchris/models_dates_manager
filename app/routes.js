@@ -14,6 +14,11 @@ webApp.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', func
 			templateUrl: 'views/about.html',
 			controller: 'AboutController'
 		})
+		.state('list', {
+			url: '/list/:hash',
+			templateUrl: 'views/list.html',
+			controller: 'ListController'
+		})
 		.state('date', {
 			url: '/date/:hash',
 			templateUrl: 'views/date.html',

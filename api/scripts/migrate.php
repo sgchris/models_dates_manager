@@ -7,14 +7,14 @@ define('ROOT_FOLDER', realpath(dirname(__DIR__).'/..'));
 
 _log('migration start');
 
-$db_ff = new PDO('sqlite:freshfaces_models.db');
+$db_ff = new PDO('sqlite:ff_models.db');
 if (!$db_ff) {
 	die('Cannot connect to FF DB');
 }
 $db_ff->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
 
-$db_vip = new PDO('sqlite:vipmodels.db');
+$db_vip = new PDO('sqlite:vm_models.db');
 if (!$db_vip) {
 	die('Cannot connect to VIP DB');
 }
@@ -23,7 +23,6 @@ $db_vip->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 // get all the old models
 $ffModels = dbQuery($db_ff, 'select * from models');
 
-echo 'read', count($ffModels), 'models from FF', "\n";
 _log('read', count($ffModels), 'models from FF');
 
 /*
@@ -40,51 +39,25 @@ _log('read', count($ffModels), 'models from FF');
  *}"
  */
 foreach ($ffModels as $ffModel) {
-	echo 'importing', $ffModel['name'];
-	_log('importing', $ffModel['name']);
-	
-	if (!empty($ffModel['extra_data'])) {
-		$ffModel['extra_data'] = json_decode($ffModel['extra_data'], true);
-	}
-	
-	// download pictures
-	$newImagesList = downloadPictures($ffModel);
-	if (!is_array($newImagesList) || empty($newImagesList)) {
-		$newImagesList = [];
-	}
-	
-	/*
-	name text,
-	category text,
-	tags,
-	notes text,
-	private_notes,
-	images text,
-	hash text,
-	display_order number, 
-	instagram text, 
-	phone text
-	*/
-	$newModelRecord = array();
-	$newModelRecord['name'] = $ffModel['name'];
-	$newModelRecord['category'] = '2';
-	$newModelRecord['tags'] = ($ffModel['extra_data']['color'] ?? '');
-	$newModelRecord['notes'] = '';
-	$newModelRecord['private_notes'] = $ffModel['notes'];
-	$newModelRecord['images'] = json_encode($newImagesList);
-	$newModelRecord['hash'] = md5(microtime(true));
-	$newModelRecord['display_order'] = '0';
-	$newModelRecord['instagram'] = $ffModel['url'];
-	$newModelRecord['phone'] = $ffModel['phone'];
+	_log('checking', $ffModel['name']);
 
-	$result = dbExec($db_vip, 'insert into models (
-		name, category, tags, notes, private_notes, images, hash, display_order, instagram, phone
-	) values (
-		:name, :category, :tags, :notes, :private_notes, :images, :hash, :display_order, :instagram, :phone
-	)', $newModelRecord);
-	
-	echo 'done', "\n";
-	_log('finished importing', $ffModel['name']);
+	// find the model in the new database
+	$vmModel = dbRow($db_vip, '
+		SELECT id, name, phone 
+		FROM models 
+		WHERE name LIKE :name', 
+		['name' => $ffModel['name']]
+	);
+
+	if (!$vmModel) {
+		_log('model', $ffModel['name'], 'was not found in the new DB');
+		continue;
+	}
+
+	// check if the new model has no phone
+	if (empty($vmModel['phone']) && !empty($ffModel['phone'])) {
+		_log('model', $ffModel['name'], 'needs to be updated');
+	}
 }
 
 echo "Finished\n";

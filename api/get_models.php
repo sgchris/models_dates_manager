@@ -4,16 +4,18 @@ require_once __DIR__.'/init.php';
 
 requestShouldBe('GET');
 
-$params = receiveParams(['model_hash', 'date_hash']);
+$params = receiveParams(['models_hashes', 'date_hash']);
 
 // there's no option to show all the models for unauthorized users
-$model_hash = isset($params['model_hash']) ? $params['model_hash'] : false;
+$models_hashes = isset($params['models_hashes']) ? $params['models_hashes'] : false;
 $date_hash = isset($params['date_hash']) ? $params['date_hash'] : false;
 
-// validate model_hash parameter
-if ($model_hash) {
-	if (!preg_match('/^[\dA-Fa-f]+$/', $model_hash)) {
-		_exit('bad model hash parameter');
+// validate models_hashes parameter
+if ($models_hashes && count($models_hashes)) {
+	foreach ($models_hashes as $model_hash) {
+		if (!preg_match('/^[\dA-Fa-f]+$/', $model_hash)) {
+			_exit('bad one of the models hashes parameters');
+		}
 	}
 }
 
@@ -25,7 +27,7 @@ if ($date_hash) {
 }
 
 // *all* the models are available only to admin
-if (!$date_hash && !$model_hash) {
+if (!$date_hash && !$models_hashes) {
 	setRestrictedAccess();
 }
 
@@ -68,9 +70,8 @@ if ($date_hash) {
 	);
 	
 	$query.= ' WHERE id IN ('. implode(',', $modelsIds). ')';
-} elseif ($model_hash) {
-	$query.= ' WHERE hash = :hash';
-	$queryParams['hash'] = $model_hash;
+} elseif ($models_hashes) {
+	$query.= ' WHERE hash in ("'.implode('","', $models_hashes).'")';
 }
 
 $query.= '
@@ -87,3 +88,4 @@ foreach ($allModels as $i => $modelRow) {
 }
 
 _success(['models' => $allModels]);
+
