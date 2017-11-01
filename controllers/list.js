@@ -44,6 +44,22 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 			});
 		},
 
+		removeModel: function(model) {
+			$http.post('api/remove_model_from_list.php', {
+				list_id: $scope.list.data.id,
+				model_id: model.id
+			}).then(function(res) {
+				if (res && res.data && res.data.result == 'ok') {
+					$scope.list.load();
+					return;
+				}
+
+				alert('Cannot add model to the list');
+			}, function() {
+				alert('Network error');
+			});
+		},
+
 		loadAllModels: function() {
 			$http.get('api/get_models.php').then(function(res) {
 				if (res && res.data && res.data.result == 'ok') {

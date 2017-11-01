@@ -40,9 +40,7 @@
 				<model-box 
 					ng-if=" hasRestrictedAccess"
 					ng-model="model" 
-					on-exclude="data.excludeModel(data.date, model);"
-					on-choose="data.chooseModel(data.date, model);"
-					on-make-unavailable="data.makeUnavailable(data.date, model);"
+					on-make-unavailable="list.removeModel(model);"
 					></model-box>
 			</article>
 		</div>
