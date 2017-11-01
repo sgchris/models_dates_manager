@@ -138,7 +138,7 @@ webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$
 				method: 'get',
 				url: 'api/get_models.php',
 				params: {
-					models_hashes: [$scope.model.hash]
+					'models_hashes[]': [$scope.model.hash]
 				}
 			}).then(function(res) {
 				var foundModel = false;
