@@ -55,7 +55,7 @@
 			</h2>
 			
 			<div class="col-xs-12">
-				<article ng-repeat="model in list.allModels | filterModelsByCategory:tabs.current">
+				<article ng-repeat="model in list.allModels | filterModelsByCategory:tabs.current | filterAlreadyChosenModels:list.data.models">
 					<model-box-small 
 						ng-model="model" 
 						on-make-available="list.addModel(model);"></model-box-small>

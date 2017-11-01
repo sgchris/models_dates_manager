@@ -34,6 +34,27 @@ webApp.filter('filterModelsByCategory', [function() {
 }]);
 
 // filter model (which has "category" field) by the given category  (number)
+webApp.filter('filterAlreadyChosenModels', [function() {
+	return function(models, modelsList) {
+		if (!modelsList || !modelsList.length) {
+			return models;
+		}
+		
+		// check the models list
+		var filtered = [];
+		if (models && models.length > 0) {
+			models.forEach(function(model) {
+				if (modelsList.indexOf(model.id) < 0) {
+					filtered.push(model);
+				}
+			});
+		}
+		
+		return filtered;
+	};
+}]);
+
+// filter model (which has "category" field) by the given category  (number)
 webApp.filter('filterModelsByName', [function() {
 	return function(models, filterString) {
 		if (!filterString || filterString.trim() == '') {
