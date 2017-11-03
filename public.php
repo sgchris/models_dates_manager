@@ -51,12 +51,12 @@ if (!empty($date)) {
 
 $model = dbRow('select * from models where hash = :hash', ['hash' => $hash]);
 if (!empty($model)) {
+	// this is "model" page
 	$title = $model['name'];
-	$description = 'Model '.$model['name'].' images';
+	$images = json_decode($model['images'], true);
+	$description = $model['name'].' model page - '.count($images).' photos';
 	$originalUrl = '/#/model/'.$hash;
 
-	// this is "model" page
-	$images = json_decode($model['images'], true);
 	if ($images) {
 		$mediumImageName = str_ireplace('.jpg', '_medium.jpg', $images[0]);
 		$image = 'images/upload/medium/'.$mediumImageName;
