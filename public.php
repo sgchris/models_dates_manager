@@ -68,7 +68,7 @@ $list = dbRow('select * from lists where hash = :hash', ['hash' => $hash]);
 if (!empty($list)) {
 	// this is "list" page
 	$title = $list['name'];
-	$models = json_decode($date['available_models'], true);
+	$models = json_decode($list['models'], true);
 	$description = count($models).' available model(s)';
 	$originalUrl = '/#/list/'.$hash;
 
