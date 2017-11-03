@@ -1,6 +1,12 @@
 webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$http', '$timeout', 'Upload', 'modelsCategoriesService', 'colorsService',
-	function($rootScope, $stateParams, $scope, $http, $timeout, Upload, modelsCategoriesService, colorsService) {
+function($rootScope, $stateParams, $scope, $http, $timeout, Upload, modelsCategoriesService, colorsService) {
+
+	// get the hash from the URL
+	$scope.hash = $stateParams.hash;
 	
+	// public URL for social networks
+	$scope.publicUrl = document.location.protocol + '//' + document.location.hostname + '/public.php?hash=' + $scope.hash;
+
 	$scope.gallery = {
 		isOpen: false,
 		
@@ -29,7 +35,7 @@ webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$
 		
 		id: null,
 		
-		hash: $stateParams.modelHash,
+		hash: $scope.hash,
 		
 		details: {},
 		

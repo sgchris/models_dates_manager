@@ -64,7 +64,7 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 					var promise = $scope.models.load();
 					
 					if (emptyName) {
-						$state.go('model', {modelHash: newModelHash});
+						$state.go('model', {hash: newModelHash});
 					}
 					return;
 				}

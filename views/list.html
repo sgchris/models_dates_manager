@@ -5,6 +5,11 @@
 		<i class="glyphicon glyphicon-remove"></i> Delete this list
 	</button>
 
+	<!-- copy URL button -->
+	<button ng-if="hasRestrictedAccess" class="btn btn-large btn-primary pull-right" ngclipboard data-clipboard-text="{{publicUrl}}">
+		<i class="glyphicon glyphicon-link"></i> Copy URL
+	</button>
+
 	<!-- display list name + form -->
 	<h1 ng-dblclick="hasRestrictedAccess && list.displayNameForm = true;">
 		<span ng-if="!list.displayNameForm" ng-init="list.displayNameForm = false;">{{ list.data.name }}</span>

@@ -1,4 +1,4 @@
-webApp = angular.module('WebApp', ['ui.router', 'ui.bootstrap', 'ngFileUpload']);
+webApp = angular.module('WebApp', ['ui.router', 'ui.bootstrap', 'ngFileUpload', 'ngclipboard']);
 
 webApp.config(['$httpProvider', function($httpProvider) {
 

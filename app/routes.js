@@ -1,4 +1,4 @@
-
+$scope.
 webApp.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
 	
 	$urlRouterProvider.otherwise("/");
@@ -30,7 +30,7 @@ webApp.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', func
 			controller: 'DateController'
 		})
 		.state('model', {
-			url: '/model/:modelHash',
+			url: '/model/:hash',
 			templateUrl: 'views/model.html',
 			controller: 'ModelController'
 		})

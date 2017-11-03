@@ -1,8 +1,11 @@
 webApp.controller('ListController', ['$rootScope', '$scope', '$state', '$stateParams', '$http', '$location', '$q', 
 function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 	
-	// identify the date by its haash
-	var hash = $stateParams['hash'];
+	// identify the list by its hash
+	$scope.hash = $stateParams.hash;
+
+	// public URL for social networks
+	$scope.publicUrl = document.location.protocol + '//' + document.location.hostname + '/public.php?hash=' + $scope.hash;
 
 	$scope.list = {
 		// list info
@@ -98,12 +101,12 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 		},
 
 		load: function() {
-			var getListUrl = 'api/get_list.php?hash=' + hash;
+			var getListUrl = 'api/get_list.php?hash=' + $scope.hash;
 			$http({
 				method: 'get',
 				url: 'api/get_list.php',
 				params: {
-					hash: hash
+					hash: $scope.hash
 				}
 			}).then(function(res) {
 				if (res && res.data && res.data.result == 'ok') {

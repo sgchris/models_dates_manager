@@ -5,6 +5,11 @@
 		<i class="glyphicon glyphicon-remove"></i> Delete this date
 	</button>
 
+	<!-- copy URL button -->
+	<button ng-if="hasRestrictedAccess" class="btn btn-large btn-primary pull-right" ngclipboard data-clipboard-text="{{publicUrl}}">
+		<i class="glyphicon glyphicon-link"></i> Copy URL
+	</button>
+
 	<h1>{{data.date.date_ts * 1000 | date:'EEEE, dd LLLL yyyy' }}</h1>
 	
 	

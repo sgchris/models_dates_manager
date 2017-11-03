@@ -3,6 +3,9 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 	
 	// identify the date by its haash
 	$scope.hash = $stateParams['hash'];
+
+	// public URL for social networks
+	$scope.publicUrl = document.location.protocol + '//' + document.location.hostname + '/public.php?hash=' + $scope.hash;
 	
 	// hash MUST be provided
 	if (!$scope.hash) {
