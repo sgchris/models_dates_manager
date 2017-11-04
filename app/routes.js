@@ -33,6 +33,11 @@ webApp.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', func
 			templateUrl: 'views/model.html',
 			controller: 'ModelController'
 		})
+		.state('models_archive', {
+			url: '/models_archive',
+			templateUrl: 'views/models_archive.html',
+			controller: 'ModelsArchiveController'
+		})
 		.state('models_categories', {
 			url: '/models_categories',
 			templateUrl: 'views/models_categories.html',

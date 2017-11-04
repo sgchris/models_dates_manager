@@ -7,7 +7,12 @@ requestShouldBe('GET');
 setRestrictedAccess();
 
 // get all the models from the archive
-$models = dbQuery('select * from models_archive');
+$models = dbQuery('
+	SELECT * 
+	FROM models 
+	WHERE is_archive = "1" 
+	ORDER by CAST(display_order AS INTEGER) DESC, id DESC
+');
 
 // make images as array
 foreach ($models as $i => $model) {

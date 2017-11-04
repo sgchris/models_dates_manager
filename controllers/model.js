@@ -14,7 +14,6 @@ function($rootScope, $stateParams, $scope, $http, $timeout, Upload, modelsCatego
 		setInitialIndex: function(newIndex) {
 			$scope.gallery.initialIndex = newIndex;
 		},
-		
 		close: function() {
 			$scope.gallery.isOpen = false;
 		},
@@ -44,6 +43,44 @@ function($rootScope, $stateParams, $scope, $http, $timeout, Upload, modelsCatego
 		setColor: function(newColor) {
 			$scope.model.details.color = newColor;
 			$scope.model.detailsForm.$setDirty();
+		},
+
+		moveToArchive: function() {
+			$http({
+				method: 'post',
+				url: 'api/move_model_to_archive.php',
+				data: {
+					model_id: $scope.model.id
+				}
+			}).then(function(res) {
+				if (res && res.data && res.data.result == 'ok') {
+					$scope.model.load();
+					return;
+				}
+
+				alert('operation failed');
+			}, function() {
+				alert('connection error');
+			});
+		},
+
+		removeFromArchive: function() {
+			$http({
+				method: 'post',
+				url: 'api/remove_model_from_archive.php',
+				data: {
+					model_id: $scope.model.id
+				}
+			}).then(function(res) {
+				if (res && res.data && res.data.result == 'ok') {
+					$scope.model.load();
+					return;
+				}
+
+				alert('operation failed');
+			}, function() {
+				alert('connection error');
+			});
 		},
 		
 		update: function() {

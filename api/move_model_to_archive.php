@@ -28,8 +28,8 @@ removeModelFromLists($modelId);
 // remove the model from all the dates
 removeModelFromDates($modelId);
 
-// move the model to "models_archive" table
-moveModelToArchive($modelRow);
+// update the model row
+dbExec('UPDATE models set is_archive = 1 where id = :id', ['id' => $modelId]);
 
 $db->commit();
 
@@ -42,7 +42,7 @@ function removeModelFromLists($modelId) {
 	$lists = dbQuery('select * from lists');
 	foreach ($lists as $list) {
 		$listModels = json_decode($list['models'], true);
-		if (($modelIdx = array_search($modelId, $listModels)) !== false) {
+		if (is_array($listModels) && !empty($listModels) && ($modelIdx = array_search($modelId, $listModels)) !== false) {
 			// remove the model from the list
 			array_splice($listModels, $modelIdx, 1);
 			dbExec(
@@ -60,7 +60,7 @@ function removeModelFromDates($modelId) {
 	foreach ($dates as $date) {
 		// available models
 		$availableModels = json_decode($date['available_models'], true);
-		if (($modelIdx = array_search($modelId, $availableModels )) !== false) {
+		if (is_array($availableModels) && !empty($availableModels) && ($modelIdx = array_search($modelId, $availableModels )) !== false) {
 			// remove the model from the list
 			array_splice($availableModels, $modelIdx, 1);
 			dbExec(
@@ -71,7 +71,7 @@ function removeModelFromDates($modelId) {
 
 		// chosen models
 		$chosenModels = json_decode($date['chosen_models'], true);
-		if (($modelIdx = array_search($modelId, $chosenModels )) !== false) {
+		if (is_array($chosenModels) && !empty($chosenModels) && ($modelIdx = array_search($modelId, $chosenModels )) !== false) {
 			// remove the model from the list
 			array_splice($chosenModels, $modelIdx, 1);
 			dbExec(
@@ -82,7 +82,7 @@ function removeModelFromDates($modelId) {
 
 		// excluded models
 		$excludedModels = json_decode($date['excluded_models'], true);
-		if (($modelIdx = array_search($modelId, $excludedModels )) !== false) {
+		if (is_array($excludedModels) && !empty($excludedModels) && ($modelIdx = array_search($modelId, $excludedModels )) !== false) {
 			// remove the model from the list
 			array_splice($excludedModels, $modelIdx, 1);
 			dbExec(
@@ -92,24 +92,3 @@ function removeModelFromDates($modelId) {
 		}
 	}
 }
-
-// move the model to the "models_archive" table, and delete it from the 
-// main models table
-function moveModelToArchive($modelRow) {
-	$modelId = $modelRow['id'];
-
-	// remove the ID from the list
-	unset($modelRow['id']);
-
-	// insert the row to "models_archive"
-	$sql = 'insert into models_archive 
-		('.implode(',', array_keys($modelRow)).')
-		values
-		(:'.implode(',:', array_keys($modelRow)).')';
-	
-	dbExec($sql, $modelRow);
-
-	// delete the row from models table
-	dbExec('delete from models where id = :id', ['id' => $modelId]);
-}
-

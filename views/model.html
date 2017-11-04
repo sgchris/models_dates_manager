@@ -8,6 +8,20 @@
 		<i class="glyphicon glyphicon-link"></i> Copy URL
 	</button>
 
+	<!-- move to archive -->
+	<button 
+		style="margin-right: 10px;"
+		ng-click="model.moveToArchive()"
+		ng-if="hasRestrictedAccess && model.details.is_archive == '0'" class="btn btn-large btn-default pull-right">
+		<i class="glyphicon glyphicon-folder-open"></i> Move to Archive
+	</button>
+	<button  
+		style="margin-right: 10px;"
+		ng-click="model.removeFromArchive()"
+		ng-if="hasRestrictedAccess && model.details.is_archive == '1'" class="btn btn-large btn-default pull-right">
+		<i class="glyphicon glyphicon-folder-open"></i> Remove from Archive
+	</button>
+
 	<!-- the gallery -->
 	<an-gri-gal ng-if="gallery.isOpen" images="model.details.images" initial-index="gallery.initialIndex" on-close="gallery.close();"></an-gri-gal>
 

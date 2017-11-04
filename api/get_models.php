@@ -72,6 +72,8 @@ if ($date_hash) {
 	$query.= ' WHERE id IN ('. implode(',', $modelsIds). ')';
 } elseif ($models_hashes) {
 	$query.= ' WHERE hash in ("'.implode('","', $models_hashes).'")';
+} else {
+	$query.= ' WHERE is_archive = 0';
 }
 
 $query.= '

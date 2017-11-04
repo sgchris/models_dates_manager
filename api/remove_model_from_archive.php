@@ -14,26 +14,14 @@ if (!is_numeric($modelId) || !($modelId > 0)) {
 	_exit('bad model_id parameter');
 }
 
-$modelRow = dbRow('select * from models_archive where id = :id', ['id' => $modelId]);
+// get the model from the DB
+$modelRow = getModelDetails($modelId);
 if (!$modelRow) {
-	_exit('model not found');
+	_exit('cannot find the model');
 }
 
-$db->beginTransaction();
-
-unset($modelRow['id']);
-
-// insert the row back to "models"
-$sql = 'INSERT INTO models
-	('.implode(',', array_keys($modelRow)).')
-	VALUES
-	(:'.implode(',:', array_keys($modelRow)).')';
-dbExec($sql, $modelRow);
-
 // remove the model from the archive
-dbExec('delete from models_archive where id = :id', ['id' => $modelId]);
-
-$db->commit();
+dbExec('update models set is_archive = 0 where id = :id', ['id' => $modelId]);
 
 _success();
 
