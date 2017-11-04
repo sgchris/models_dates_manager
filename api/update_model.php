@@ -17,6 +17,9 @@ if (!is_numeric($modelId) || !($modelId > 0)) {
 
 // get the model from the DB
 $modelRow = getModelDetails($params['model_id']);
+if (!$modelRow) {
+	_exit('cannot find the model');
+}
 
 // prepare the patameters tp update
 $updateParams = [];
