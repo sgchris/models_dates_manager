@@ -14,25 +14,25 @@ if (!$dateData) {
 }
 
 // convert "available_models" to array
-$dateData['available_models'] = !empty($dateData['available_models']) ? 
-	array_filter(
-		json_decode($dateData['available_models'], $__assoc = true), 
-		'strlen'
-	) : [];
+$dateData['available_models'] = 
+	!empty($dateData['available_models']) && 
+	($decodedData = json_decode($dateData['available_models'], $__assoc = true)) !== false && 
+	is_array($decodedData) ? 
+	array_filter($decodedData, 'strlen') : [];
 
 // convert "excluded_models" to array
-$dateData['excluded_models'] = !empty($dateData['excluded_models']) ? 
-	array_filter(
-		json_decode($dateData['excluded_models'], $__assoc = true), 
-		'strlen'
-	) : [];
+$dateData['excluded_models'] = 
+	!empty($dateData['excluded_models']) && 
+	($decodedData = json_decode($dateData['excluded_models'], $__assoc = true)) !== false && 
+	is_array($decodedData) ? 
+	array_filter($decodedData, 'strlen') : [];
 
 // convert "chosen_models" to array
-$dateData['chosen_models'] = !empty($dateData['chosen_models']) ? 
-	array_filter(
-		json_decode($dateData['chosen_models'], $__assoc = true), 
-		'strlen'
-	) : [];
+$dateData['chosen_models'] = 
+	!empty($dateData['chosen_models']) && 
+	($decodedData = json_decode($dateData['chosen_models'], $__assoc = true)) !== false && 
+	is_array($decodedData) ? 
+	array_filter($decodedData, 'strlen') : [];
 
 _success([
 	'date' => $dateData,

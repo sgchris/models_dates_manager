@@ -12,11 +12,11 @@ if (!$list) {
 }
 
 // convert "available_models" to array
-$list['models'] = !empty($list['models']) ? 
-	array_filter(
-		json_decode($list['models'], $__assoc = true), 
-		'strlen'
-	) : [];
+$list['models'] = 
+	!empty($list['models']) && 
+	($decodedData = json_decode($list['models'], $__assoc = true)) !== false && 
+	is_array($decodedData) ? 
+	array_filter($decodedData, 'strlen') : [];
 
 // get models hashes
 $models = dbQuery('select * from models where id in ('.implode(',', $list['models']).')');

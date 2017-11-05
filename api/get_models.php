@@ -54,14 +54,23 @@ if ($date_hash) {
 	}
 	
 	// get all the relevant models IDs for the date
-	$dateRow['available_models'] = !empty($dateRow['available_models']) ? json_decode($dateRow['available_models'], true) : [];
-	$dateRow['available_models'] = array_filter($dateRow['available_models'], 'is_numeric');
+	$dateRow['available_models'] = 
+		!empty($dateRow['available_models']) && 
+		($decodedData = json_decode($dateRow['available_models'], $__assoc = true)) !== false && 
+		is_array($decodedData) ? 
+		array_filter($decodedData, 'is_numeric') : [];
 	
-	$dateRow['chosen_models'] = !empty($dateRow['chosen_models']) ? json_decode($dateRow['chosen_models'], true) : [];
-	$dateRow['chosen_models'] = array_filter($dateRow['chosen_models'], 'is_numeric');
+	$dateRow['chosen_models'] = 
+		!empty($dateRow['chosen_models']) && 
+		($decodedData = json_decode($dateRow['chosen_models'], $__assoc = true)) !== false && 
+		is_array($decodedData) ? 
+		array_filter($decodedData, 'is_numeric') : [];
 	
-	$dateRow['excluded_models'] = !empty($dateRow['excluded_models']) ? json_decode($dateRow['excluded_models'], true) : [];
-	$dateRow['excluded_models'] = array_filter($dateRow['excluded_models'], 'is_numeric');
+	$dateRow['excluded_models'] = 
+		!empty($dateRow['excluded_models']) && 
+		($decodedData = json_decode($dateRow['excluded_models'], $__assoc = true)) !== false && 
+		is_array($decodedData) ? 
+		array_filter($decodedData, 'is_numeric') : [];
 	
 	$modelsIds = array_merge(
 		$dateRow['available_models'], 

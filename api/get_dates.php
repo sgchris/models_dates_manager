@@ -12,20 +12,23 @@ $results = dbQuery('select * from dates_list order by date_ts asc');
 
 foreach ($results as $i => $row) {
 	// available models
-	$results[$i]['available_models'] = !empty($row['available_models']) ? 
-		array_filter(explode(',', $row['available_models']), 'strlen') :
-		[];
+	$results[$i]['available_models'] = 
+		!empty($results[$i]['available_models']) && 
+		($decodedData = json_decode($results[$i]['available_models'], $__assoc = true)) !== false && 
+		is_array($decodedData) ? 
+		array_filter($decodedData, 'strlen') : [];
 
-	// excluded models
-	$results[$i]['excluded_models'] = !empty($row['excluded_models']) ? 
-		array_filter(explode(',', $row['excluded_models']), 'strlen') :
-		[];
+	$results[$i]['chosen_models'] = 
+		!empty($results[$i]['chosen_models']) && 
+		($decodedData = json_decode($results[$i]['chosen_models'], $__assoc = true)) !== false && 
+		is_array($decodedData) ? 
+		array_filter($decodedData, 'strlen') : [];
 
-	// chosen models for the date
-	$results[$i]['chosen_models'] = !empty($row['chosen_models']) ? 
-		array_filter(explode(',', $row['chosen_models']), 'strlen') :
-		[];
-
+	$results[$i]['excluded_models'] = 
+		!empty($results[$i]['excluded_models']) && 
+		($decodedData = json_decode($results[$i]['excluded_models'], $__assoc = true)) !== false && 
+		is_array($decodedData) ? 
+		array_filter($decodedData, 'strlen') : [];
 }
 
 _success([
