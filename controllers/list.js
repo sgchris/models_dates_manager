@@ -8,6 +8,7 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 	$scope.publicUrl = document.location.protocol + '//' + document.location.hostname + '/public.php?hash=' + $scope.hash;
 
 	$scope.list = {
+
 		// list info
 		data: {},
 
@@ -16,12 +17,23 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 
 		allModels: [],
 
+		// display the form instead of the list title (to change the name of the form)
+		nameFormIsDisplayed: false,
+
+		displayNameForm: function() {
+			console.log('$rootScope.hasRestrictedAccess', $rootScope.hasRestrictedAccess);
+			if ($rootScope.hasRestrictedAccess) {
+				$scope.list.nameFormIsDisplayed = true;
+			}
+		},
+
 		updateName: function() {
 			$http.post('api/update_list.php', {
 				list_id: $scope.list.data.id,
 				name: $scope.list.data.name
 			}).then(function(res) {
 				if (res && res.data && res.data.result == 'ok') {
+					$scope.list.nameFormIsDisplayed = false;
 					return;
 				}
 
@@ -100,6 +112,36 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 
 		},
 
+		// delete the list 
+		delete: function() {
+			if (!confirm('Delete the list?')) {
+				return;
+			}
+
+			var listId = $scope.list.data.id;
+			if (!listId) {
+				return;
+			}
+
+			$http({
+				method: 'post',
+				url: 'api/delete_list.php',
+				params: {
+					'list_id': listId
+				}
+			}).then(function(res) {
+				if (res && res.data && res.data.result == 'ok') {
+					// nothing to do here, go home
+					$state.go('home');
+					return;
+				}
+
+				alert('Cannot delete the list');
+			}, function() {
+				alert('Network error');
+			});
+		},
+
 		load: function() {
 			var getListUrl = 'api/get_list.php?hash=' + $scope.hash;
 			$http({
@@ -119,6 +161,7 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 				}
 
 				alert('Cannot get the list details');
+				$state.go('home');
 			}, function() {
 				alert('Network error');
 			});

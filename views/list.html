@@ -1,4 +1,4 @@
-<div class="container-fluid date-page">
+<div class="container-fluid date-page" ng-if="list.data.id">
 
 	<!-- delete button -->
 	<button ng-if="hasRestrictedAccess" class="btn btn-large btn-danger pull-right" ng-click="list.delete();">
@@ -11,11 +11,11 @@
 	</button>
 
 	<!-- display list name + form -->
-	<h1 ng-dblclick="hasRestrictedAccess && list.displayNameForm = true;">
-		<span ng-if="!list.displayNameForm" ng-init="list.displayNameForm = false;">{{ list.data.name }}</span>
+	<h1 ng-dblclick="list.displayNameForm();">
+		<span ng-if="!list.nameFormIsDisplayed">{{ list.data.name }}</span>
 	</h1>
 	<div>
-		<form ng-if="list.displayNameForm" class="form-inline" ng-submit="list.updateName()">
+		<form ng-if="list.nameFormIsDisplayed" class="form-inline" ng-submit="list.updateName()">
 			<div class="form-group">
 				<label for="listName"><i class="glyphicon glyphicon-pencil"></i> List Name</label>
 				<input type="text" name="listName" class="form-control" ng-model="list.data.name" />
