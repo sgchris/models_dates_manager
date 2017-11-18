@@ -11,8 +11,14 @@
 	</button>
 
 	<!-- display list name + form -->
-	<h1 ng-dblclick="list.displayNameForm();">
+	<h1>
 		<span ng-if="!list.nameFormIsDisplayed">{{ list.data.name }}</span>
+		<a href="javascript:;" ng-click="list.displayNameForm()" 
+			style="font-size: 14px;"
+			title="Double click on the name to change it" 
+			ng-if="hasRestrictedAccess && !list.nameFormIsDisplayed">
+			<i class="glyphicon glyphicon-pencil"></i>
+		</a>
 	</h1>
 	<div>
 		<form ng-if="list.nameFormIsDisplayed" class="form-inline" ng-submit="list.updateName()">
@@ -21,7 +27,7 @@
 				<input type="text" name="listName" class="form-control" ng-model="list.data.name" />
 			</div>
 			<input type="submit" value="Update" class="btn btn-primary" />
-			<input type="button" value="Cancel" class="btn btn-default" ng-click="list.displayNameForm = false;" />
+			<input type="button" value="Cancel" class="btn btn-default" ng-click="list.nameFormIsDisplayed = false;" />
 		</form>
 	</div>
 	

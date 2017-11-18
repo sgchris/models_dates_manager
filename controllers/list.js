@@ -21,7 +21,6 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 		nameFormIsDisplayed: false,
 
 		displayNameForm: function() {
-			console.log('$rootScope.hasRestrictedAccess', $rootScope.hasRestrictedAccess);
 			if ($rootScope.hasRestrictedAccess) {
 				$scope.list.nameFormIsDisplayed = true;
 			}
