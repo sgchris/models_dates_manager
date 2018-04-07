@@ -6,7 +6,8 @@
 	</button>
 
 	<!-- copy URL button -->
-	<button ng-if="hasRestrictedAccess" class="btn btn-large btn-primary pull-right" ngclipboard data-clipboard-text="{{publicUrl}}">
+	<input ng-if="hasRestrictedAccess" type="text" value="{{publicUrl}}" style="min-width:600px; text-align: center;" />
+	<button ng-if="hasRestrictedAccess && publicUrl" class="btn btn-large btn-primary pull-right" ngclipboard data-clipboard-text="{{publicUrl}}">
 		<i class="glyphicon glyphicon-link"></i> Copy URL
 	</button>
 
