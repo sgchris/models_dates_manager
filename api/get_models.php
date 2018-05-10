@@ -77,6 +77,10 @@ if ($date_hash) {
 		$dateRow['chosen_models'], 
 		$dateRow['excluded_models']
 	);
+
+	// check who's archived model from the current list, and remove her
+	$modelsIds = filterArchivedModels($modelsIds);
+
 	
 	$query.= ' WHERE id IN ('. implode(',', $modelsIds). ')';
 } elseif ($models_hashes) {
@@ -99,4 +103,42 @@ foreach ($allModels as $i => $modelRow) {
 }
 
 _success(['models' => $allModels]);
+
+
+// ---------------------------------
+
+// check archived models in this list and remove them
+function filterArchivedModels($modelsIds) {
+	if (empty($modelsIds)) {
+		return [];
+	}
+	
+	// get archived models in the given list
+	$archModelsQuery = '
+		select id 
+		from models 
+		where id in ('.implode(',', $modelsIds).') and 
+			is_archive = 1';
+	$archivedModels = dbQuery($archModelsQuery);
+
+	// convert to IDs array
+	$archivedModels = array_map(function($archModelRow) {
+		return $archModelRow['id'];
+	}, $archivedModels);
+
+	// remove archived models from the original list
+	if (!empty($archivedModels)) {
+		$newModelsIds = [];
+		foreach ($modelsIds as $modelId) {
+			if (!in_array($modelId, $archivedModels)) {
+				$newModelsIds[] = $modelId;
+			}
+		}
+
+		$modelsIds = $newModelsIds;
+	}
+
+	return $modelsIds;
+}
+
 
