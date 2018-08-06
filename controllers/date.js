@@ -326,6 +326,13 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 						});
 					}
 				});
+
+				// sort the available models by "display_order" (ascending, then reverse)
+				$scope.data.availableModels = $scope.data.availableModels.sort(function(modelA, modelB) {
+					var modelAOrder = parseInt(modelA.display_order);
+					var modelBOrder = parseInt(modelB.display_order);
+					return modelAOrder > modelBOrder ? 1 : (modelAOrder == modelBOrder ? 0 : -1);
+				}).reverse();
 				
 				// update the models lists (excluded, chosen, available);
 				$scope.data.chosenModels = [];
