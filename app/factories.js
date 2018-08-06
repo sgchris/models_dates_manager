@@ -66,6 +66,12 @@ webApp.factory('modelsCategoriesService', ['$http', '$q', function($http, $q) {
 					if (typeof(callbackFn) == 'function') {
 						callbackFn(res.data.models_categories);
 					}
+				} else {
+					if (res.data && res.data.error) {
+						console.error('load models categories', res.data.error);
+					} else {
+						console.error('load models categories', res);
+					}
 				}
 			}, function(res) {
 				alert('error loading models categories');

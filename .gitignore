@@ -20,3 +20,4 @@ api/db/*.db
 # upload folder
 images/upload
 
+package-lock.json
