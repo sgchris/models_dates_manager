@@ -54,7 +54,7 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesS
 			scope.galleryIsOpen = false;
 			
 			// set the initial main image
-			scope.mainImage = scope.model.images[0] ? 
+			scope.mainImage = scope.model && scope.model.images[0] ? 
 				(scope.$root.IMAGES_BASE_URL + '/' + scope.model.images[0]) : 
 				scope.defaultImage;
 			
