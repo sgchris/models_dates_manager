@@ -8,6 +8,13 @@
 #  </ifModule>
 #</filesMatch>
 
+RewriteEngine On
+RewriteCond %{HTTPS} !on
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+
+
+
 <IfModule mod_deflate.c>
     #The following line is enough for .js and .css
     AddOutputFilter DEFLATE js css json
@@ -46,4 +53,7 @@
   Header set Cache-Control "max-age=7200, public, must-revalidate"
   </filesmatch>
 </IfModule>
+
+
+
 
