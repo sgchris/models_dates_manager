@@ -1,5 +1,7 @@
-webApp.controller('ModelController', ['$rootScope', '$stateParams', '$scope', '$http', '$timeout', 'Upload', 'modelsCategoriesService', 'colorsService',
-function($rootScope, $stateParams, $scope, $http, $timeout, Upload, modelsCategoriesService, colorsService) {
+webApp.controller('ModelController', ['$rootScope', '$stateParams', '$state', '$scope', '$http', '$timeout', 
+	'Upload', 'modelsCategoriesService', 'colorsService', 'recentModelsService', 'smallImagesService',
+function($rootScope, $stateParams, $state, $scope, $http, $timeout, 
+	Upload, modelsCategoriesService, colorsService, recentModelsService, smallImagesService) {
 
 	// get the hash from the URL
 	$scope.hash = $stateParams.hash;
@@ -120,6 +122,31 @@ function($rootScope, $stateParams, $scope, $http, $timeout, Upload, modelsCatego
 				$scope.model.inProgress = false;
 			});
 		},
+
+		delete: function() {
+			if (!confirm('Delete the model?')) {
+				return;
+			}
+			
+			// call the API
+			$http({
+				method: 'post',
+				url: 'api/delete_model.php',
+				data: {
+					model_id: $scope.model.id
+				}
+			}).then(function(res) {
+				if (res.data && res.data.result == 'ok') {
+					$state.go("home");
+					return;
+				}
+				
+				var errorString = res.data.error || 'Delete failed';
+				alert(errorString);
+			}, function() {
+				alert('Delete failed - server error');
+			});
+		},
 		
 		deleteImage: function(imageUrl) {
 			if (!confirm('Delete the image?')) {
@@ -188,9 +215,19 @@ function($rootScope, $stateParams, $scope, $http, $timeout, Upload, modelsCatego
 				if (res.data && res.data.result == 'ok' && res.data.models && res.data.models.length === 1) {
 					$scope.model.id = res.data.models[0].id;
 					$scope.model.details = res.data.models[0];
+					
+					recentModelsService.add(
+						$scope.model.id,
+						$scope.model.details.name,
+						$scope.model.details.hash,
+						$scope.model.details.images && $scope.model.details.images.length ?
+							smallImagesService.getSmall($scope.model.details.images[0]) : null
+					);
 				} else {
-					alert('cannot load model details');
+					alert('cannot load model details, probably deleted');
 					console.error('res', res);
+
+					$state.go('home');
 				}
 				
 			}, function() {

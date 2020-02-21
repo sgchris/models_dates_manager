@@ -26,6 +26,57 @@ webApp.factory('colorsService', [function() {
 	};
 }]);
 
+
+// the colors service
+webApp.factory('recentModelsService', [function() {
+	// list of available colors
+	var recentModels = [];
+	var recentModelsLocalStorageKey = 'recentModels';
+
+	// read from localStorage
+	var loadRecentModels = function() {
+		var recentModelsLS = localStorage.getItem(recentModelsLocalStorageKey);
+		if (recentModelsLS) {
+			try {
+				recentModels = JSON.parse(recentModelsLS); 
+			} catch(e) {};
+		}
+	};
+	
+	// save to localStorage
+	var saveRecentModels = function() {
+		try {
+			localStorage.setItem(recentModelsLocalStorageKey, JSON.stringify(angular.copy(recentModels)));
+		} catch(e) {};
+	};
+
+	loadRecentModels();
+
+	return {
+		// add model to 'recent models' list
+		add: function(id, name, hash, image) {
+			// remove this model if was there before
+			var idx = recentModels.findIndex(modelObj => modelObj.id == id);
+			if (idx >= 0) {
+				recentModels.splice(idx, 1);
+			}
+
+			// add to the start of the list
+			recentModels.unshift({id, name, hash, image});
+
+			if (recentModels.length > 10) {
+				recentModels.pop();
+			}
+
+			saveRecentModels();
+		},
+
+		get: function() {
+			return recentModels;
+		}
+	};
+}]);
+
 // models' categories service
 webApp.factory('modelsCategoriesService', ['$http', '$q', function($http, $q) {
 	
