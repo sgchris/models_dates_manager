@@ -17,7 +17,7 @@
 			<p class="input-group" ng-class="{'has-error': models.newModelError}">
 				<input type="text" ng-model="models.newModelName" class="form-control" placeholder="Model full name here (e.g. Kate Upton)" />
 				<span class="input-group-btn">
-					<button type="submit" class="btn btn-success" ng-click="addNewModel()"><i class="glyphicon glyphicon-plus"></i> Add</button>
+					<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Add</button>
 				</span>
 			</p>
 			<p ng-show="models.newModelError" class="alert alert-warning">{{models.newModelError}}</p>
@@ -120,6 +120,18 @@
 		
 		<hr />
 		
+		<div ng-if="models.recent.length" class="recent-models">
+			<h4>Recently visited</h4>
+			<ul>
+				<li ng-repeat="recentModel in models.recent" class="text-overflow-fix">
+					<div class="recent-model-image-wrapper">
+						<img ng-if=" recentModel.image" ng-src="{{recentModel.image}}" />
+						<img ng-if="!recentModel.image"    src="/images/model_silhouette.png" />
+					</div>
+					<a href="#/model/{{ recentModel.hash }}">{{ recentModel.name }}</a>
+				</li>
+			</ul>
+		</div>
 	</div>
 	
 	<div class="col-xs-12 homepage-models-wrapper" ng-class="{'col-md-10':sidebar.expanded, 'col-md-12':!sidebar.expanded}">

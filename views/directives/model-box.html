@@ -45,7 +45,8 @@
 		</div>
 	</div>
 	<h2 class="model-name" ng-style="{background: ((model.color && (showChooseButton || showDeleteButton)) ? getColorNumber(model.color) : '#FFF')}">
-		<a ng-href="#/model/{{model.hash}}" ng-attr-title="{{model.name}}">{{model.name}}&nbsp;</a>
+		<a ng-href="#/model/{{model.hash}}" ng-if=" model.name && model.name.length > 0" ng-attr-title="{{model.name}}">{{model.name}}</a>
+		<a ng-href="#/model/{{model.hash}}" ng-if="!model.name || model.name.length == 0"><i style="color: #AAA;">Noname</i></a>
 	</h2>
 	<div ng-init="notesEditor.public_notes = false"
 		ng-dblclick="notesEditor.public_notes = true"

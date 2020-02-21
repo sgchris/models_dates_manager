@@ -22,6 +22,15 @@
 		<i class="glyphicon glyphicon-folder-open"></i> Remove from Archive
 	</button>
 
+	<!-- delete model -->
+	<button  
+		style="margin-right: 10px;"
+		ng-click="model.delete()"
+		ng-if="hasRestrictedAccess" class="btn btn-large btn-danger pull-right">
+		<i class="glyphicon glyphicon-trash"></i> Delete
+	</button>
+
+
 	<!-- the gallery -->
 	<an-gri-gal ng-if="gallery.isOpen" images="model.details.images" initial-index="gallery.initialIndex" on-close="gallery.close();"></an-gri-gal>
 

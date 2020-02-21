@@ -1,12 +1,14 @@
-webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$state', '$uibModal', 'modelsCategoriesService',
-	function($rootScope, $scope, $http, $state, $modal, modelsCategoriesService) {
+webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$state', '$uibModal', 'modelsCategoriesService', 'recentModelsService',
+	function($rootScope, $scope, $http, $state, $modal, modelsCategoriesService, recentModelsService) {
 	
-	var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-	
+	//var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+	var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 	
 	
 	$scope.models = {
 		inProgress: false,
+
+		recent: recentModelsService.get(),
 		
 		filterString: (localStorage.getItem('vipmodels_homepage_filterString') || ''),
 		
@@ -26,7 +28,7 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 			var emptyName = false;
 			if ($scope.models.newModelName.trim().length == 0) {
 				var now = new Date();
-				$scope.models.newModelName = 'Model ' + now.getDate() + ' ' + days[now.getDay()] + ' ' + now.getHours() + '.' + now.getMinutes();
+				$scope.models.newModelName = 'Model from ' + monthNames[now.getMonth()] + ' ' + now.getDate() + ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds() + '.' + now.getMilliseconds();
 				
 				emptyName = true;
 			}
