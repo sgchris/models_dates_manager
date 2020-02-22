@@ -29,7 +29,7 @@ webApp.directive('modelsCategoriesTabs', ['$http', 'modelsCategoriesService', fu
 			
 			// implement promise resolve
 			modelsCategoriesService.load(function(modelsCategories) {
-				
+
 				// set the data in the scope
 				scope.modelsCategories = modelsCategories;
 				if (typeof(scope.includeOnly) != 'undefined' && scope.includeOnly != false && scope.includeOnly.length) {
@@ -81,7 +81,7 @@ webApp.directive('modelsCategoriesTabs', ['$http', 'modelsCategoriesService', fu
 			
 		},
 		template: 
-			'<div>' + 
+			'<div ng-show="modelsCategories && modelsCategories.length > 1">' + 
 				'<ul class="nav nav-tabs">' + 
 					'<li ng-repeat="modelCategory in modelsCategories" ng-class="{\'active\': modelCategory.id == current.id}">' + 
 						'<a href="javascript:;" ng-click="tabClicked(modelCategory);" fix-direction>{{ modelCategory.name }}</a>' + 
