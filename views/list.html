@@ -35,7 +35,16 @@
 	
 	<div class="row">
 		<div class="col-xs-12 homepage-models-wrapper">
+			<!-- unfilter tabs -->
 			<models-categories-tabs 
+				ng-if=" hasRestrictedAccess"
+				on-select="tabs.tabClicked(newSelectedTab)"
+				on-load="tabs.dataLoaded(modelsCategories)"></models-categories-tabs>
+
+			<!-- filtered tabs -->
+			<models-categories-tabs 
+				ng-if="!hasRestrictedAccess"
+				include-only="list.loadedModelsCategories"
 				on-select="tabs.tabClicked(newSelectedTab)"
 				on-load="tabs.dataLoaded(modelsCategories)"></models-categories-tabs>
 

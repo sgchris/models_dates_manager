@@ -11,6 +11,9 @@ webApp.directive('modelsCategoriesTabs', ['$http', 'modelsCategoriesService', fu
 		scope: {
 			addUncategorized: '=?',
 			
+			// list of tabs (ids) to include only them
+			includeOnly: '=?',
+			
 			// initial value
 			initialValue: '@?',
 			
@@ -29,6 +32,11 @@ webApp.directive('modelsCategoriesTabs', ['$http', 'modelsCategoriesService', fu
 				
 				// set the data in the scope
 				scope.modelsCategories = modelsCategories;
+				if (typeof(scope.includeOnly) != 'undefined' && scope.includeOnly != false && scope.includeOnly.length) {
+					scope.modelsCategories = scope.modelsCategories.filter(function(categoryData) {
+						return scope.includeOnly.indexOf(categoryData.id) >= 0;
+					});
+				}
 				
 				// check if adding "uncategorized" tab needed
 				if (scope.addUncategorized) {

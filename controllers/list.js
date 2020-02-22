@@ -15,7 +15,11 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 		// list of models (their hashes)
 		models_hashes: [],
 
+		// all models (for restricted access)
 		allModels: [],
+
+		// only specific models list (for non-restricted)
+		models: [],
 
 		// display the form instead of the list title (to change the name of the form)
 		nameFormIsDisplayed: false,
@@ -87,6 +91,19 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 			});
 		},
 
+		loadedModelsCategories: [],
+		// get list of categories (ids) from the loaded models
+		updateLoadedModelsCategories: function() {
+			var categories = {};
+			$scope.list.models.forEach(function(model) {	
+				if (!categories[model.category]) {
+					categories[model.category] = true;
+				}
+			});
+			$scope.list.loadedModelsCategories = Object.keys(categories);
+		},
+
+		// load models by hashes
 		loadModels: function() {
 			if ($scope.list.models_hashes.length === 0) {
 				return;
@@ -101,6 +118,7 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 			}).then(function(res) {
 				if (res && res.data && res.data.result == 'ok') {
 					$scope.list.models = res.data.models;
+					$scope.list.updateLoadedModelsCategories();
 					return;
 				}
 
@@ -171,7 +189,7 @@ function($rootScope, $scope, $state, $stateParams, $http, $location, $q) {
 	$scope.tabs = {
 		// current tab to filter the models
 		current: '',
-		
+
 		// callback from the tabs directive
 		tabClicked: function(newTab) {
 			$scope.tabs.current = newTab.id;
