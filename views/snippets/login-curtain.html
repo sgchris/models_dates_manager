@@ -1,9 +1,30 @@
 <!-- the login curtain for non logged in users -->
 <div class="curtain" ng-show="!loginInProcess && !loggedInUser"></div>
 <div class="curtain-login-area" ng-show="!loginInProcess && !loggedInUser">
-	<h1>Models-Dates management</h1>
-	<p>Please login using the facebook button below</p><br />
-	<div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="false"></div>
+	<h1>Login</h1>
+	<div class="row">
+		<div class="col-sm-6 col-sm-offset-3">
+			<form class="form-horizontal" ng-submit="loginFormSubmit()">
+				<div class="form-group">
+					<label for="login-username" class="col-sm-3 control-label">Username</label>
+					<div class="input-group col-sm-9">
+						<span class="input-group-addon">@</span>
+						<input type="text" ng-model="$root.loginFormUsername" name="login-username" class="form-control" /><br />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="login-password" class="col-sm-3 control-label">Password</label>
+					<div class="input-group col-sm-9">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+						<input type="password" ng-model="$root.loginFormPassword" name="login-password" class="form-control" /><br />
+					</div>
+				</div>
+				<div class="form-group">
+					<input type="submit" class="btn btn-lg btn-primary" value="Go" />
+				</div>
+			</form>
+		</div>
+	</div>
 	<br><hr><br>
 	<p>For more information <a href="mailto:moshkovich.marina@gmail.com">moshkovich.marina@gmail.com</a></p>
 </div>

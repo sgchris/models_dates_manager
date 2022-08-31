@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 require_once __DIR__.DIRECTORY_SEPARATOR.'config.php';
 
@@ -8,7 +9,16 @@ require_once __DIR__.DS.'..'.DS.'vendor'.DS.'autoload.php';
 // include helper functions
 require_once __DIR__.DS.'tools'.DS.'functions.php';
 
+// include helper functions
+require_once __DIR__.DS.'tools'.DS.'auth.php';
+
+// include helper functions
+require_once __DIR__.DS.'tools'.DS.'logs.php';
+
 session_start();
+
+// check if the user is logged in + load auth functions
+checkAuth();
 
 // all the responses should be JSONs
 header('Content-Type: application/json');

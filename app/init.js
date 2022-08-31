@@ -1,4 +1,4 @@
-webApp = angular.module('WebApp', ['ui.router', 'ui.bootstrap', 'ngFileUpload', 'ngclipboard']);
+webApp = angular.module('WebApp', ['ui.router', 'ui.bootstrap', 'ngFileUpload', 'ngclipboard', 'ngCookies']);
 
 webApp.config(['$httpProvider', function($httpProvider) {
 
@@ -49,7 +49,7 @@ webApp.config(['$httpProvider', function($httpProvider) {
 }]);
 
 
-webApp.run(['$rootScope', '$window', '$http', function($rootScope, $window, $http) {
+webApp.run(['$rootScope', '$window', '$http', '$cookies', function($rootScope, $window, $http, $cookies) {
 
 	// check if is mobile (from http://detectmobilebrowsers.com/)
 	$rootScope.isMobileFn = function() {
@@ -67,13 +67,67 @@ webApp.run(['$rootScope', '$window', '$http', function($rootScope, $window, $htt
 		}
 		return phoneNumber;
 	};
-			
+
+	$rootScope.loginFormUsername = "";
+	$rootScope.loginFormPassword = "";
+	$rootScope.loginInProcess = false;
+	$rootScope.loggedInUser = false;	
+	$rootScope.hasRestrictedAccess = false;
+	
+	$rootScope.loginFormSubmit = () => {
+		const username = $rootScope.loginFormUsername; 
+		const password = $rootScope.loginFormPassword; 
+		$rootScope.loginInProcess = true;
+
+		// update the access token on the server side
+		$http({
+			method: 'post', 
+			url: 'api/set_access_token2.php',
+			withCredentials: true,
+			data: { username, password }
+		}).then(function(res) {
+			if (res && res.data && res.data.result == "ok") {
+				$rootScope.hasRestrictedAccess = true;
+				$rootScope.loggedInUser = res.data.name;
+				
+				// set cookie
+				var now = new Date();
+				var expires = new Date(now.getFullYear(), now.getMonth() + 3, now.getDate());
+				$cookies.put('access_token', res.data.access_token, {expires})
+			} else if (res && res.data && res.data.result == "error") {
+				if (res.data.error) {
+					alert(res.data.error);
+				}
+			}
+		}, function() {
+			alert('Authentication failed');
+		}).finally(() => {
+			$rootScope.loginInProcess = false;
+		});
+	}
+
+	$rootScope.checkIsLoggedIn = () => {
+		$rootScope.loginInProcess = true;
+
+		// update the access token on the server side
+		$http({
+			method: 'get', 
+			url: 'api/is_logged_in.php'
+		}).then(function(res) {
+			if (res && res.data && res.data.result == "ok") {
+				if (res.data.isLoggedIn) {
+					$rootScope.hasRestrictedAccess = true;
+					$rootScope.loggedInUser = res.data.name;
+				}
+			}
+		}).finally(() => {
+			$rootScope.loginInProcess = false;
+		})
+	}
+	$rootScope.checkIsLoggedIn();
+	
 	// models' images base URL
 	$rootScope.IMAGES_BASE_URL = window.IMAGES_BASE_URL;
-	
-	$rootScope.loginInProcess = true;
-	
-	$rootScope.hasRestrictedAccess = false;
 	
 	// store the controller name in the rootScope
 	$rootScope.$on('$routeChangeSuccess', function(ev, data) {
@@ -92,77 +146,12 @@ webApp.run(['$rootScope', '$window', '$http', function($rootScope, $window, $htt
 			$rootScope.isMobile = true;
 		}
 	};
+	
 	checkResolution();
 	angular.element($window).on('resize', function() {
 		$rootScope.$apply(function() {
 			checkResolution();
 		});
 	});
-	
-	// callback for FB authentication
-	$window.statusChangeCallback = function(response) {
-		var accessToken = response && response.authResponse && response.authResponse.accessToken ? 
-			response.authResponse.accessToken : false;
-		
-		$rootScope.$apply(function() {
-			if (response.status === 'connected') {
-				
-				// temporarily set the logged in user
-				$rootScope.loggedInUser = true;
-				
-				// update the access token on the server side
-				$http({
-					method: 'post', 
-					url: 'api/set_access_token.php',
-					data: {
-						access_token: accessToken
-					}
-				}).then(function(res) {
-					$rootScope.hasRestrictedAccess = res.data.has_restricted_access;
-				}, function() {
-					alert('could not authenticate the server');
-				});
-				
-				// get logged in user details
-				FB.api('/me', function(response) {
-					$rootScope.$apply(function() {
-						$rootScope.loggedInUser = response;
-					});
-				});
-				
-			} else {
-				$rootScope.loggedInUser = false;
-			}
-			
-			$rootScope.loginInProcess = false;
-		});
-	};
-	
-	$window.fbAsyncInit = function() {
-		FB.init({
-			appId: '1464574370233315',
-			cookie: true,
-			xfbml: true,
-			version: 'v2.8'
-		});
-		
-		FB.AppEvents.logPageView();
-		
-		FB.getLoginStatus(function(response) {
-			statusChangeCallback(response);
-		});
-	};
-
-	(function(d, s, id) {
-		var js, fjs = d.getElementsByTagName(s)[0];
-		if (d.getElementById(id)) {
-			return;
-		}
-		js = d.createElement(s);
-		js.id = id;
-		js.src = "//connect.facebook.net/en_US/sdk.js";
-		fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));
-	
 }]);
 
