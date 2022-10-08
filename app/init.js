@@ -94,6 +94,8 @@ webApp.run(['$rootScope', '$window', '$http', '$cookies', function($rootScope, $
 				var now = new Date();
 				var expires = new Date(now.getFullYear(), now.getMonth() + 3, now.getDate());
 				$cookies.put('access_token', res.data.access_token, {expires})
+
+				document.location.reload();
 			} else if (res && res.data && res.data.result == "error") {
 				if (res.data.error) {
 					alert(res.data.error);
