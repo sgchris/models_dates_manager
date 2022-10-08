@@ -46,7 +46,21 @@ function signIn($username, $password, $passIsMD5Hashed = false) {
             strcmp($user['password'], $password) === 0)
         {
             // found the user, set the session
-            $users[$i][ACCESS_TOKEN_KEY] = $accessToken;
+            if (array_key_exists(ACCESS_TOKEN_KEY, $users[$i])) {
+                // convert to array
+                if (is_string($users[$i][ACCESS_TOKEN_KEY])) {
+                    $existingAccessToken = $users[$i][ACCESS_TOKEN_KEY];
+                    $users[$i][ACCESS_TOKEN_KEY] = [$existingAccessToken, $accessToken];
+                } else if (is_array($users[$i][ACCESS_TOKEN_KEY])) {
+                    $users[$i][ACCESS_TOKEN_KEY][] = $accessToken;
+                } else {
+                    logError("user {$i} has invalid access token. resetting");
+                    $users[$i][ACCESS_TOKEN_KEY] = $accessToken;
+                }
+            } else {
+                $users[$i][ACCESS_TOKEN_KEY] = $accessToken;
+            }
+
             $_SESSION['user'] = $users[$i];
             $foundUser = true;
         }
@@ -73,11 +87,20 @@ function _getUserByAccessToken($accessToken) {
     $storedUsers = _getStoredUsers();
     if ($storedUsers !== false && is_array($storedUsers)) {
         foreach ($storedUsers as $userData) {
-            if (is_array($userData) && 
-                array_key_exists(ACCESS_TOKEN_KEY, $userData) && 
-                strcmp($userData[ACCESS_TOKEN_KEY], $accessToken) === 0) 
+            if (is_array($userData) && array_key_exists(ACCESS_TOKEN_KEY, $userData))
             {
-                return $userData;
+                if (is_string($userData[ACCESS_TOKEN_KEY]) && strcmp($userData[ACCESS_TOKEN_KEY], $accessToken) === 0) {
+                    return $userData;
+                }
+
+                // check if one of the stored access tokens has match
+                if (is_array($userData[ACCESS_TOKEN_KEY])) {
+                    foreach ($userData[ACCESS_TOKEN_KEY] as $existingAccessToken) {
+                        if (strcmp($existingAccessToken, $accessToken) === 0) {
+                            return $userData;
+                        }
+                    }
+                }
             }
         }
     }
