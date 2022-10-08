@@ -28,7 +28,7 @@ webApp.controller('HomepageController', ['$rootScope', '$scope', '$http', '$stat
 			var emptyName = false;
 			if ($scope.models.newModelName.trim().length == 0) {
 				var now = new Date();
-				$scope.models.newModelName = 'Model from ' + monthNames[now.getMonth()] + ' ' + now.getDate() + ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds() + '.' + now.getMilliseconds();
+				$scope.models.newModelName = monthNames[now.getMonth()] + now.getDate() + '_' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
 				
 				emptyName = true;
 			}
