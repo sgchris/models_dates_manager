@@ -18,9 +18,9 @@ if (strlen($_POST['username']) > 255 || strlen($_POST['username']) < 3 ||
     _exit("Invalid input");
 }
 
-$signInSucceeded = signIn($_POST['username'], $_POST['password']);
-if ($signInSucceeded) {
-    _success(["name" => $_SERSSION['user']['name'], ACCESS_TOKEN_KEY => $_SESSION['user'][ACCESS_TOKEN_KEY]]);
+$newAccessToken = signIn($_POST['username'], $_POST['password']);
+if ($newAccessToken !== false) {
+    _success(["name" => $_SERSSION['user']['name'], ACCESS_TOKEN_KEY => $newAccessToken]);
 } else {
     _exit('authentication failed');
 }

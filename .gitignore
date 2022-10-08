@@ -17,6 +17,7 @@ api/scripts/*.log
 # database
 api/db/*.db
 api/db/logs.txt
+api/db/users.json
 
 # upload folder
 images/upload
