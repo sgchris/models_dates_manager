@@ -29,6 +29,7 @@ if (empty($modelName)) {
 
 $errors = [];
 $successfulFiles = 0;
+$videoExtensions = ['mp4', 'wmv', 'mpg', 'mpeg'];
 if (!empty($_FILES)) {
 	foreach ($_FILES as $file) {
 		
@@ -44,49 +45,59 @@ if (!empty($_FILES)) {
 			continue;
 		}
 		
-		// check that this is an image
-		list ($width, $height) = getimagesize($file['tmp_name']);
-		if (!$width || !$height) {
-			$errors[] = 'The file '.$file['name'].' is not an image';
+		$fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
+		if (empty($fileExtension)) {
+			$errors[] = 'Cannot get file extension of '.$file['name'];
 			continue;
 		}
-		
-		// resize the oiginal file, if needed
-		if ($width > 1920 || $height > 1280) {
-			$r_hash = getRandHash();
-			$tempImgPath = sys_get_temp_dir().'/resized_img_'.$r_hash;
-			
-			// resize
-			$result = resizeImage(
-				$file['tmp_name'],
-				$file['tmp_name'],
-				1920,
-				1280
-			);
-			
-			// renew the w/h values
-			list($width, $height) = getimagesize($file['tmp_name']);
-		}
-		
-		// relocate the file
+
+		$isVideo = in_array($fileExtension, $videoExtensions);
 		$hash = getRandHash();
-		$newImageFileName = uniqid('model_').$file['name'];
-		$newImageFileName = "model_{$modelName}_{$hash}_{$width}x{$height}.jpg";
-		if (!move_uploaded_file($file['tmp_name'], $destinationFolder.'/'.$newImageFileName)) {
-			$errors[] = 'Could not relocate uploaded file '.$file['name'];
-			continue;
+		if ($isVideo) {
+			$newImageFileName = uniqid('model_vid_').$file['name'];
+		} else {
+			// check that this is an image
+			list ($width, $height) = getimagesize($file['tmp_name']);
+			if (!$width || !$height) {
+				$errors[] = 'The file '.$file['name'].' is not an image';
+				continue;
+			}
+			
+			// resize the oiginal file, if needed
+			if ($width > 1920 || $height > 1280) {
+				$r_hash = getRandHash();
+				$tempImgPath = sys_get_temp_dir().'/resized_img_'.$r_hash;
+				
+				// resize
+				$result = resizeImage(
+					$file['tmp_name'],
+					$file['tmp_name'],
+					1920,
+					1280
+				);
+				
+				// renew the w/h values
+				list($width, $height) = getimagesize($file['tmp_name']);
+			}
+
+			$newImageFileName = "model_{$modelName}_{$hash}_{$width}x{$height}.jpg";
+			
+			// relocate the file
+			if (!move_uploaded_file($file['tmp_name'], $destinationFolder.'/'.$newImageFileName)) {
+				$errors[] = 'Could not relocate uploaded file '.$file['name'];
+				continue;
+			}
+			
+			// create small image
+			$smallImagePath = $destinationFolder.'/small/'.$newImageFileName;
+			$smallImagePath = str_ireplace('.jpg', '_small.jpg', $smallImagePath);
+			resizeImage($destinationFolder.'/'.$newImageFileName, $smallImagePath, 60, 60);
+			
+			// create medium image
+			$mediumImagePath = $destinationFolder.'/medium/'.$newImageFileName;
+			$mediumImagePath = str_ireplace('.jpg', '_medium.jpg', $mediumImagePath);
+			resizeImage($destinationFolder.'/'.$newImageFileName, $mediumImagePath, 180, 180);
 		}
-		
-		
-		// create small image
-		$smallImagePath = $destinationFolder.'/small/'.$newImageFileName;
-		$smallImagePath = str_ireplace('.jpg', '_small.jpg', $smallImagePath);
-		resizeImage($destinationFolder.'/'.$newImageFileName, $smallImagePath, 60, 60);
-		
-		// create medium image
-		$mediumImagePath = $destinationFolder.'/medium/'.$newImageFileName;
-		$mediumImagePath = str_ireplace('.jpg', '_medium.jpg', $mediumImagePath);
-		resizeImage($destinationFolder.'/'.$newImageFileName, $mediumImagePath, 180, 180);
 		
 		// update the DB
 		$modelImages = json_decode($modelRow['images']) ?? [];
