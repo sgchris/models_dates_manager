@@ -5,65 +5,28 @@
 
 	<div style="overflow: hidden;">
 		<!-- copy URL button -->
-		<button ng-if="hasRestrictedAccess" class="btn btn-large btn-primary pull-right" ngclipboard data-clipboard-text="{{publicUrl}}">
+		<button ng-if="hasRestrictedAccess" class="btn btn-large btn-default pull-right" ngclipboard data-clipboard-text="{{publicUrl}}">
 			<i class="glyphicon glyphicon-link"></i> Copy URL
 		</button>
 
-		<!-- move to archive -->
-		<button 
-			style="margin-right: 10px;"
-			ng-click="model.moveToArchive()"
-			ng-if="hasRestrictedAccess && model.details.is_archive == '0'" class="btn btn-large btn-default pull-right">
-			<i class="glyphicon glyphicon-folder-open"></i> Archive
-		</button>
-		<button  
-			style="margin-right: 10px;"
-			ng-click="model.removeFromArchive()"
-			ng-if="hasRestrictedAccess && model.details.is_archive == '1'" class="btn btn-large btn-default pull-right">
-			<i class="glyphicon glyphicon-folder-open"></i> Un-Archive
-		</button>
-
-		<!-- delete model -->
-		<button  
-			style="margin-right: 10px;"
-			ng-click="model.delete()"
-			ng-if="hasRestrictedAccess" class="btn btn-large btn-danger pull-right">
-			<i class="glyphicon glyphicon-trash"></i> Delete
-		</button>
 	</div>
-
-
-	<!-- the gallery -->
-	<an-gri-gal ng-if="gallery.isOpen" images="model.details.images" initial-index="gallery.initialIndex" on-close="gallery.close();"></an-gri-gal>
 
 	<h1><i class="glyphicon glyphicon-user"></i> {{model.details.name}}</h1>
 	<p title="{{model.details.name}}" class="lead secondary-title">{{model.details.notes}}</p>
 	
+	<!-- the gallery -->
+	<an-gri-gal ng-if="gallery.isOpen" images="model.details.images" initial-index="gallery.initialIndex" on-close="gallery.close();"></an-gri-gal>
+
 	<!-- upload new images -->
 	<div class="upload-model-images-wrapper" ng-if="hasRestrictedAccess">
-		
-		<h3>Upload new images</h3>
-		<div style="overflow: auto;">
-			<div class="upload-model-images-drop-area" 
-				ngf-drop 
-				ng-model="uploader.files"
-				ngf-multiple="true" 
-				accept="image/*"
-				ngf-drag-over-class="'model-images-dragover'" 
-				title="Drop images to that area">
-				<span class="upload-model-images-drop-area-text">Drop images here</span>
-				<br />
-				
-			</div>
-		</div>
-		<div style="overflow: auto;">
+		<div style="overflow: auto; text-align: center;">
 			<button
-				class="btn btn-primary btn-large"
+				class="btn btn-primary btn-lg"
 				ngf-select="uploader.uploadFiles($files, $invalidFiles)" 
 				ngf-multiple="true" 
 				accept="image/*"
 				title="Click the button to select files from your computer">
-				<i class="glyphicon glyphicon-picture"></i> Select files from my PC
+				<i class="glyphicon glyphicon-picture"></i> Upload images
 			</button>
 		</div>
 		<div style="overflow: hidden;" ng-if="uploader.errorMessage"></div>
@@ -88,32 +51,29 @@
 			<!-- color line -->
 			<form class="form-horizontal" ng-submit="model.update()" name="model.detailsForm">
 				<div class="form-group">
-					<label class="col-sm-2"><i class="glyphicon glyphicon-user"></i> Color</label>
-					<input type="hidden" ng-model="model.details.color">
-
-					<div class="color-boxes">
-						<div ng-repeat="(colorName, colorNumber) in availableColors" 
-							class="color-box-wrapper"
-							ng-click="model.setColor(colorName)"
-							ng-class="{'color-box-selected': model.details.color == colorName}">
-							<div class="color-box" ng-style="{'background': colorNumber}" ng-attr-title="{{colorName}}"></div>
-						</div>
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-primary">
+							<i class="glyphicon glyphicon-pencil"></i> Update
+						</button>
+						<span ng-show="model.detailsForm.$dirty" class="text-warning" title="Model details are not updated until you press the update button">
+							&nbsp;&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-warning-sign"></i> Please update!
+						</span>
 					</div>
 				</div>
-				
+
 				<div class="form-group">
 					<label class="col-sm-2"><i class="glyphicon glyphicon-user"></i> Name</label>
 					<div class="col-sm-10"><input type="text" class="form-control" ng-model="model.details.name" /></div>
 				</div>
 				
+				
 				<div class="form-group">
-					<label class="col-sm-2"><i class="glyphicon glyphicon-list"></i> Category</label>
+					<label class="col-sm-2"><i class="glyphicon glyphicon-globe"></i> Instagram</label>
 					<div class="col-sm-10">
-						<select class="form-control" ng-model="model.details.category">
-							<option ng-repeat="model_category in models_categories.data" value="{{model_category.id}}">{{model_category.name}}</option>
-						</select>
-						
-						<small><a href="#/models_categories">Manage models categories</a></small>
+						<input type="text" class="form-control" ng-model="model.details.instagram" placeholder="https://www.instagram.com/barrefaeli/" />
+						<small ng-if="model.details.instagram">
+							<a ng-href="{{model.details.instagram}}" target="_blank">{{model.details.instagram}}</a>
+						</small>
 					</div>
 				</div>
 				
@@ -144,18 +104,7 @@
 					</div>
 				</div>
 				
-				
-				<div class="form-group">
-					<label class="col-sm-2"><i class="glyphicon glyphicon-globe"></i> Instagram</label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" ng-model="model.details.instagram" placeholder="https://www.instagram.com/barrefaeli/" />
-						<small ng-if="model.details.instagram">
-							<a ng-href="{{model.details.instagram}}" target="_blank">{{model.details.instagram}}</a>
-						</small>
-					</div>
-				</div>
-				
-				
+
 				<div class="form-group">
 					<label class="col-sm-2"><i class="glyphicon glyphicon-eye-open"></i> Public notes</label>
 					<div class="col-sm-10">
@@ -164,11 +113,38 @@
 					</div>
 				</div>
 				
+
 				<div class="form-group">
 					<label class="col-sm-2"><i class="glyphicon glyphicon-lock"></i> Private notes</label>
 					<div class="col-sm-10">
 						<small>This text will be seen only by the administrators</small><br/>
 						<textarea class="form-control" ng-model="model.details.private_notes">{{model.details.notes}}</textarea>
+					</div>
+				</div>
+				
+				
+				<div class="form-group">
+					<label class="col-sm-2"><i class="glyphicon glyphicon-list"></i> Category</label>
+					<div class="col-sm-10">
+						<select class="form-control" ng-model="model.details.category">
+							<option ng-repeat="model_category in models_categories.data" value="{{model_category.id}}">{{model_category.name}}</option>
+						</select>
+						
+						<small><a href="#/models_categories">Manage models categories</a></small>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-2"><i class="glyphicon glyphicon-user"></i> Color</label>
+					<input type="hidden" ng-model="model.details.color">
+
+					<div class="color-boxes">
+						<div ng-repeat="(colorName, colorNumber) in availableColors" 
+							class="color-box-wrapper"
+							ng-click="model.setColor(colorName)"
+							ng-class="{'color-box-selected': model.details.color == colorName}">
+							<div class="color-box" ng-style="{'background': colorNumber}" ng-attr-title="{{colorName}}"></div>
+						</div>
 					</div>
 				</div>
 				
@@ -180,16 +156,6 @@
 					</div>
 				</div>
 					
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-primary">
-							<i class="glyphicon glyphicon-pencil"></i> Update
-						</button>
-						<span ng-show="model.detailsForm.$dirty" class="text-warning" title="Model details are not updated until you press the update button">
-							&nbsp;&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-warning-sign"></i> Please update!
-						</span>
-					</div>
-				</div>
 			</form>
 		</div>
 	</div>
@@ -223,5 +189,31 @@
 	<div ng-if="model.details.images.length == 0" class="model-no-images-wrapper">
 		No images :(
 	</div>
+
+	<hr />
 	
+	<!-- move to archive -->
+	<button 
+		style="margin-right: 10px;"
+		ng-click="model.moveToArchive()"
+		ng-if="hasRestrictedAccess && model.details.is_archive == '0'" class="btn btn-large btn-default">
+		<i class="glyphicon glyphicon-folder-open"></i> Archive
+	</button>
+	<button  
+		style="margin-right: 10px;"
+		ng-click="model.removeFromArchive()"
+		ng-if="hasRestrictedAccess && model.details.is_archive == '1'" class="btn btn-large btn-default">
+		<i class="glyphicon glyphicon-folder-open"></i> Un-Archive
+	</button>
+
+	<!-- delete model -->
+	<button  
+		style="margin-right: 10px;"
+		ng-click="model.delete()"
+		ng-if="hasRestrictedAccess" class="btn btn-large btn-danger">
+		<i class="glyphicon glyphicon-trash"></i> Delete
+	</button>
+
+	<br />
+	<br />
 </div>

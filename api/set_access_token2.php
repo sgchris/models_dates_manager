@@ -20,7 +20,7 @@ if (strlen($_POST['username']) > 255 || strlen($_POST['username']) < 3 ||
 
 $newAccessToken = signIn($_POST['username'], $_POST['password']);
 if ($newAccessToken !== false) {
-    _success(["name" => $_SERSSION['user']['name'], ACCESS_TOKEN_KEY => $newAccessToken]);
+    _success(["name" => $_SESSION['user']['name'], ACCESS_TOKEN_KEY => $newAccessToken]);
 } else {
     _exit('authentication failed');
 }
