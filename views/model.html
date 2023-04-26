@@ -190,29 +190,31 @@
 		No images :(
 	</div>
 
-	<hr />
-	
-	<!-- move to archive -->
-	<button 
-		style="margin-right: 10px;"
-		ng-click="model.moveToArchive()"
-		ng-if="hasRestrictedAccess && model.details.is_archive == '0'" class="btn btn-large btn-default">
-		<i class="glyphicon glyphicon-folder-open"></i> Archive
-	</button>
-	<button  
-		style="margin-right: 10px;"
-		ng-click="model.removeFromArchive()"
-		ng-if="hasRestrictedAccess && model.details.is_archive == '1'" class="btn btn-large btn-default">
-		<i class="glyphicon glyphicon-folder-open"></i> Un-Archive
-	</button>
+	<div style="overflow: hidden; display: block; float: none; clear: both;">
+		<hr />
+		
+		<!-- move to archive -->
+		<button 
+			style="margin-right: 10px;"
+			ng-click="model.moveToArchive()"
+			ng-if="hasRestrictedAccess && model.details.is_archive == '0'" class="btn btn-large btn-default">
+			<i class="glyphicon glyphicon-folder-open"></i> Archive
+		</button>
+		<button  
+			style="margin-right: 10px;"
+			ng-click="model.removeFromArchive()"
+			ng-if="hasRestrictedAccess && model.details.is_archive == '1'" class="btn btn-large btn-default">
+			<i class="glyphicon glyphicon-folder-open"></i> Un-Archive
+		</button>
 
-	<!-- delete model -->
-	<button  
-		style="margin-right: 10px;"
-		ng-click="model.delete()"
-		ng-if="hasRestrictedAccess" class="btn btn-large btn-danger">
-		<i class="glyphicon glyphicon-trash"></i> Delete
-	</button>
+		<!-- delete model -->
+		<button  
+			style="margin-right: 10px;"
+			ng-click="model.delete()"
+			ng-if="hasRestrictedAccess" class="btn btn-large btn-danger">
+			<i class="glyphicon glyphicon-trash"></i> Delete
+		</button>
+	</div>
 
 	<br />
 	<br />
