@@ -81,13 +81,15 @@ if (!empty($_FILES)) {
 			}
 
 			$newImageFileName = "model_{$modelName}_{$hash}_{$width}x{$height}.jpg";
+		}
 			
-			// relocate the file
-			if (!move_uploaded_file($file['tmp_name'], $destinationFolder.'/'.$newImageFileName)) {
-				$errors[] = 'Could not relocate uploaded file '.$file['name'];
-				continue;
-			}
-			
+		// relocate the file
+		if (!move_uploaded_file($file['tmp_name'], $destinationFolder.'/'.$newImageFileName)) {
+			$errors[] = 'Could not relocate uploaded file '.$file['name'];
+			continue;
+		}
+		
+		if (!$isVideo) {
 			// create small image
 			$smallImagePath = $destinationFolder.'/small/'.$newImageFileName;
 			$smallImagePath = str_ireplace('.jpg', '_small.jpg', $smallImagePath);

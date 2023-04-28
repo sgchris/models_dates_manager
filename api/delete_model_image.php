@@ -42,13 +42,8 @@ if (!$foundImage) {
 
 // delete the image from the disk
 $imageFullPath = $destinationFolder.'/'.$imageUrl;
-if (!file_exists($imageFullPath) || !is_writable($imageFullPath)) {
-	_exit('Cannot delete the image "'.$imageUrl.'" from the disk - either not exists, or no permissions');
-}
-
-$deleteResult = @unlink($imageFullPath);
-if (!$deleteResult) {
-	_exit('Cannot delete the image "'.$imageUrl.'" from the disk - delete operation failed');
+if (file_exists($imageFullPath) && is_writable($imageFullPath)) {
+	$deleteResult = @unlink($imageFullPath);
 }
 
 // update model's row in the DB

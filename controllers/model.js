@@ -1,6 +1,6 @@
-webApp.controller('ModelController', ['$rootScope', '$stateParams', '$state', '$scope', '$http', '$timeout', 
+webApp.controller('ModelController', ['$rootScope', '$sce', '$stateParams', '$state', '$scope', '$http', '$timeout', 
 	'Upload', 'modelsCategoriesService', 'colorsService', 'recentModelsService', 'smallImagesService',
-function($rootScope, $stateParams, $state, $scope, $http, $timeout, 
+function($rootScope, $sce, $stateParams, $state, $scope, $http, $timeout, 
 	Upload, modelsCategoriesService, colorsService, recentModelsService, smallImagesService) {
 
 	// get the hash from the URL
@@ -290,6 +290,22 @@ function($rootScope, $stateParams, $state, $scope, $http, $timeout,
 
 		},
 	};
+
+	$scope.isVideoFile = function(fileName) {
+		let parts = fileName.split('.');
+		if (parts && parts.length > 0) {
+			const ext = parts[parts.length - 1];
+			if (['mp4', 'wmv', 'mpeg', 'mpg'].includes(ext)) {
+				return true;
+			}
+		}
+		
+		return false;
+	};
+
+	$scope.buildPath = function(urlPart1, urlPart2) {
+		return $sce.trustAsResourceUrl(urlPart1 + '/' + urlPart2);
+	}
 	
 	$scope.models_categories = {
 		inProgress: false,
