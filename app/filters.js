@@ -9,6 +9,13 @@ webApp.filter('nl2br', ['$sce', function($sce) {
 }]);
 
 
+webApp.filter('trustUrl', ['$sce', function($sce) {
+	return function(recordingUrl) {
+		return $sce.trustAsResourceUrl(recordingUrl);
+	};
+}]);
+
+
 // convert seconds to milliseconds
 webApp.filter('secondsToMilliseconds', function() {
 	return function(seconds) {
