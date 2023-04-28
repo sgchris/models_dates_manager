@@ -166,11 +166,15 @@
 	<!-- images list -->
 	<div ng-if="model.details.images.length > 0" class="model-image-wrapper" ng-repeat="imageUrl in model.details.images">
 		<a ng-click="gallery.setInitialIndex($index); gallery.open();" class="main-image-lightbox-link" title="Click to see model images in original size">
-			<i class="fa fa-search"></i>
+			<i ng-if="!isVideoFile(imageUrl)" class="fa fa-search"></i>
+			<i ng-if=" isVideoFile(imageUrl)" class="fa fa-play"></i>
 		</a>
 		
-		<div class="model-image-wrapper-inner">
+		<div ng-if="!isVideoFile(imageUrl)" class="model-image-wrapper-inner">
 			<img ng-src="{{IMAGES_BASE_URL}}/{{imageUrl}}" />
+		</div>
+		<div ng-if="isVideoFile(imageUrl)" class="model-image-wrapper-inner model-image-video-wrapper">
+			<video ng-src="{{ buildPath(IMAGES_BASE_URL, imageUrl) }}"></video>
 		</div>
 		<div class="model-toolbar" ng-if="hasRestrictedAccess">
 			<a href="javascript:;" class="btn btn-link pull-right icon-red"
