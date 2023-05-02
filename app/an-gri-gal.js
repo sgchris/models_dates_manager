@@ -4,28 +4,36 @@ webApp.directive('imageFitScreenSize', function() {
 	return {
 		restrict: 'A',
 		link: function(scope, element, attrs) {
-			element.bind('load', function() {
-				var $el = angular.element(element);
-				
-				// get image source
-				var imgSrc = attrs.imageFitScreenSize && attrs.imageFitScreenSize.length > 0 ? attrs.imageFitScreenSize : $el.attr('src');
-				if (!imgSrc) {
-					return;
-				}
-				
+			var $el = angular.element(element);
+			
+			// get image source
+			var imgSrc = attrs.imageFitScreenSize && attrs.imageFitScreenSize.length > 0 ? attrs.imageFitScreenSize : $el.attr('src');
+			if (!imgSrc) {
+				console.error('Cannot get resource URL from element', element);
+				return;
+			}
+
+			// check if video
+			const isVideoFile = $el[0].tagName == 'VIDEO';
+			const eventName = isVideoFile ? 'loadedmetadata' : 'load';
+
+			element.on(eventName, function(evt) {
 				// get image dimensions (by name)
-				var dims = /(\d+)x(\d+)/.exec(imgSrc);
+				var dims = isVideoFile ?
+					[null, this.videoWidth, this.videoHeight] :
+					/(\d+)x(\d+)/.exec(imgSrc);
 				if (!dims || dims.length < 3) {
 					return;
 				}
-				
+
 				// git image ratio
 				var imgX = dims[1];
 				var imgY = dims[2];
-				var imgRatio = parseInt(imgX) / parseInt(imgY);
+				var imgRatio = 1.0 * parseInt(imgX) / parseInt(imgY);
 				
 				// get window ratio
-				var winRatio = window.innerWidth / window.innerHeight;
+				var winRatio = 1.0 * window.innerWidth / window.innerHeight;
+
 				// set width/height
 				if (imgRatio > winRatio) {
 					$el.attr('width', '100%');
@@ -46,7 +54,8 @@ webApp.directive('imageOnLoad', function() {
 			imageOnLoad: '&?'
 		},
 		link: function(scope, element, attrs) {
-			element.bind('load', function() {
+			const eventName = element && element[0].tagName == "IMG" ? "load" : "loadedmetadata"
+			element.on(eventName, function() {
 				if (scope.imageOnLoad) {
 					scope.imageOnLoad();
 				}
@@ -101,6 +110,18 @@ webApp.directive('anGriGal', ['$window', 'smallImagesService', function($window,
 				var smallImagesSrc = smallImagesService.getSmall(imgSrc);
 				return smallImagesSrc;
 			};
+
+			scope.isVideoFile = function(imgSrc) {
+				let parts = imgSrc.split('.');
+				if (parts && parts.length > 0) {
+					const ext = parts[parts.length - 1];
+					if (['mp4', 'wmv', 'mpeg', 'mpg'].includes(ext)) {
+						return true;
+					}
+				}
+				
+				return false;
+			};
 			
 			scope.getMediumImage = function(imgSrc) {
 				var mediumImageSrc = smallImagesService.getMedium(imgSrc);
@@ -115,7 +136,6 @@ webApp.directive('anGriGal', ['$window', 'smallImagesService', function($window,
 			scope.isMediumImageLoaded = function(imgSrc) {
 				return !!scope.mediumImageLoaded[imgSrc];
 			}
-			
 			
 			scope.bigImageLoaded = {};
 			scope.markBigImageLoaded = function(imgSrc) {
@@ -139,22 +159,28 @@ webApp.directive('anGriGal', ['$window', 'smallImagesService', function($window,
 				'</div>' +
 				'<div class="ang-gri-gal-main-image">' + 
 					// small image
-				'<img ng-show="!isMediumImageLoaded(mainImage) && !isBigImageLoaded(mainImage)" ' + 
-				'		image-fit-screen-size="{{mainImage}}" ' + 
+				'<img ng-if="!isVideoFile(mainImage)" ng-show="!isMediumImageLoaded(mainImage) && !isBigImageLoaded(mainImage)" ' + 
+				'		image-fit-screen-size="{{getSmallImage(mainImage)}}" ' + 
 				'		ng-src="{{getSmallImage(mainImage)}}" ' + 
 				'		ng-click="next();" />' +
 					// medium image
-				'<img ng-show=" isMediumImageLoaded(mainImage) && !isBigImageLoaded(mainImage)" ' + 
-				'		image-fit-screen-size ' + 
-				'		src="{{getMediumImage($root.IMAGES_BASE_URL + \'/\' + mainImage)}}" ' + 
+				'<img ng-if="!isVideoFile(mainImage)" ng-show=" isMediumImageLoaded(mainImage) && !isBigImageLoaded(mainImage)" ' + 
+				'		image-fit-screen-size="{{getMediumImage($root.IMAGES_BASE_URL + \'/\' + mainImage)}}" ' + 
+				'		ng-src="{{getMediumImage($root.IMAGES_BASE_URL + \'/\' + mainImage)}}" ' + 
 				'		image-on-load="markMediumImageLoaded(mainImage)" ' + 
 				'		ng-click="next();" />' +
 					// big image
-				'<img ng-show=" isBigImageLoaded(mainImage)" ' + 
-				'		image-fit-screen-size ' + 
-				'		src="{{$root.IMAGES_BASE_URL + \'/\' + mainImage}}" ' + 
+				'<img ng-if="!isVideoFile(mainImage)" ng-show=" isBigImageLoaded(mainImage)" ' + 
+				'		image-fit-screen-size="{{mainImage}}" ' + 
+				'		ng-src="{{$root.IMAGES_BASE_URL + \'/\' + mainImage}}" ' + 
 				'		image-on-load="markBigImageLoaded(mainImage)" ' + 
 				'		ng-click="next();" />' +
+				'<video controls autoplay muted ' +
+				'		ng-if=" isVideoFile(mainImage)" ng-show="isBigImageLoaded(mainImage)" ' + 
+				'		image-fit-screen-size="{{mainImage}}" ' + 
+				'		ng-src="{{$root.IMAGES_BASE_URL + \'/\' + mainImage}}" ' + 
+				'		image-on-load="markBigImageLoaded(mainImage)" ' + 
+				'		ng-click="next();" ></video>' +
 				'</div>' +
 			'</div>'
 	};
