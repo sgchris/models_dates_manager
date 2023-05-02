@@ -1,7 +1,8 @@
 <div class="model-box-small-wrapper">
 	<div class="model-box-small-category" ng-attr-title="{{modelCategoryName}}">{{modelCategoryName}}</div>
 	<div class="model-box-small-image-wrapper">
-		<img ng-show=" model.images[0]" ng-src="{{getMediumImage(mainImage)}}">
+		<img ng-show=" model.images[0] && !isVideoFile(mainImage)" ng-src="{{getMediumImage(mainImage)}}">
+		<video ng-show=" model.images[0] && isVideoFile(mainImage)" ng-src="{{mainImage}}"></video>
 		<img ng-show="!model.images[0]" ng-src="{{defaultImage}}">
 	</div>
 	<div class="model-box-small-name" ng-style="{background: ((model.color && (showChooseButton || showDeleteButton || showMakeAvailableButton)) ? getColorNumber(model.color) : '#FFF')}">
