@@ -31,7 +31,8 @@
 		<a ng-click="openGallery();" class="main-image-lightbox-link" title="Click to see model images in original size">
 			<i class="fa fa-search"></i>
 		</a>
-		<img ng-if=" model.images[0]" ng-src="{{getMediumImage(mainImage)}}">
+		<img ng-if=" model.images[0] && !isVideoFile(mainImage)" ng-src="{{getMediumImage(mainImage)}}">
+		<video ng-if=" model.images[0] && isVideoFile(mainImage)" ng-src="{{mainImage}}"></video>
 		<img ng-if="!model.images[0]" ng-src="{{defaultImage}}">
 	</div>
 	<div class="small-images-wrapper">
@@ -40,7 +41,8 @@
 				'defined-small-image': model.images[i], 
 				'selected-small-image': mainImage == $root.IMAGES_BASE_URL + '/' + model.images[i]
 			}">
-			<img ng-if=" model.images[i]" ng-src="{{getSmallImage(model.images[i])}}" ng-click="setMainImage(i);">
+			<img ng-if=" model.images[i] && !isVideoFile(model.images[i])" ng-src="{{getSmallImage(model.images[i])}}" ng-click="setMainImage(i);">
+			<video ng-if=" model.images[i] &&  isVideoFile(model.images[i])" ng-src="{{getSmallImage(model.images[i])}}" ng-click="setMainImage(i);"></video>
 			<img ng-if="!model.images[i]" ng-src="{{defaultImage}}">
 		</div>
 	</div>

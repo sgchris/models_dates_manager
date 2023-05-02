@@ -50,6 +50,18 @@ var modelBoxCoreFunction = function($http, modelsCategoriesService, smallImagesS
 			scope.getMediumImage = function(imageFile) {
 				return smallImagesService.getMedium(imageFile);
 			};
+
+			scope.isVideoFile = function(fileName) {
+				let parts = fileName.split('.');
+				if (parts && parts.length > 0) {
+					const ext = parts[parts.length - 1];
+					if (['mp4', 'wmv', 'mpeg', 'mpg'].includes(ext)) {
+						return true;
+					}
+				}
+				
+				return false;
+			};
 			
 			scope.galleryIsOpen = false;
 			
