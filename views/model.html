@@ -174,7 +174,10 @@
 			<img ng-src="{{IMAGES_BASE_URL}}/{{imageUrl}}" />
 		</div>
 		<div ng-if="isVideoFile(imageUrl)" class="model-image-wrapper-inner model-image-video-wrapper">
-			<video ng-src="{{ buildPath(IMAGES_BASE_URL, imageUrl) }}"></video>
+			<div class="video-wrapper" title="Video">
+				<i class="fa fa-play"></i>
+				<video ng-src="{{ buildPath(IMAGES_BASE_URL, imageUrl) }}"></video>
+			</div>
 		</div>
 		<div class="model-toolbar" ng-if="hasRestrictedAccess">
 			<a href="javascript:;" class="btn btn-link pull-right icon-red"

@@ -36,8 +36,7 @@ body {
 	bottom: 0;
 	left: 0;
 	
-	background: #FFF;
-	opacity: 0.8;
+	background: #369;
 	
 	z-index: 1031;
 }
@@ -46,7 +45,7 @@ body {
 	position: fixed;
 	
 	height: 50%;
-	min-height: 300px;
+	min-height: 500px;
 	width: 50%;
 	min-width: 300px;
 	
@@ -65,10 +64,37 @@ body {
 	text-align: center;
 }
 
+@media screen and (max-width: 960px) {
+	.curtain-login-area {
+		width: 90%;
+		right: 5%;
+		left: 5%;
+	}
+}
+
 .invisible {
 	visibility: hidden;
 }
 
+
+
+.video-wrapper {
+	max-width: 100%;
+	max-height: 100%;
+	position: relative;
+	overflow: hidden;
+
+	i.fa-play {
+		font-size: 40px;
+		color: white;
+		background-color: rgba(255, 255, 255, 0.4);
+		padding: 6px;
+		border-radius: 6px;
+		position: absolute;
+		top: 5px;
+		left: 5px;
+	}
+}
 
 
 // import page styles
