@@ -34,7 +34,8 @@ RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 	ExpiresActive On
 	ExpiresDefault "access plus 300 seconds"
 	ExpiresByType application/json "access plus 300 seconds"
-	ExpiresByType text/html "access plus 300 seconds"
+	ExpiresByType text/html "access plus 1 seconds"
+	ExpiresByType text/htm "access plus 1 seconds"
 	ExpiresByType image/gif "access plus 2678400 seconds"
 	ExpiresByType image/jpeg "access plus 2678400 seconds"
 	ExpiresByType image/png "access plus 2678400 seconds"
@@ -54,7 +55,7 @@ RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # Cache HTML files for a couple hours
   <filesmatch "\.(html|htm|json|js|css|less)$">
-  Header set Cache-Control "max-age=300, public, must-revalidate"
+  Header set Cache-Control "max-age=1, public, must-revalidate"
   </filesmatch>
 </IfModule>
 
