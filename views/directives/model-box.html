@@ -32,7 +32,10 @@
 			<i class="fa fa-search"></i>
 		</a>
 		<img ng-if=" model.images[0] && !isVideoFile(mainImage)" ng-src="{{getMediumImage(mainImage)}}">
-		<video ng-if=" model.images[0] && isVideoFile(mainImage)" ng-src="{{mainImage}}"></video>
+		<div class="video-wrapper">
+			<i class="fa fa-play"></i>
+			<video ng-if=" model.images[0] && isVideoFile(mainImage)" ng-src="{{mainImage}}"></video>
+		</div>
 		<img ng-if="!model.images[0]" ng-src="{{defaultImage}}">
 	</div>
 	<div class="small-images-wrapper">
