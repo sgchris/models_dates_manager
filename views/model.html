@@ -12,7 +12,7 @@
 	</div>
 
 	<h1><i class="glyphicon glyphicon-user"></i> {{model.details.name}}</h1>
-	<p title="{{model.details.name}}" class="lead secondary-title">{{model.details.notes}}</p>
+	<p title="{{model.details.name}}" class="lead secondary-title" ng-bind-html="model.details.notes | linkify"></p>
 	
 	<!-- the gallery -->
 	<an-gri-gal ng-if="gallery.isOpen" images="model.details.images" initial-index="gallery.initialIndex" on-close="gallery.close();"></an-gri-gal>

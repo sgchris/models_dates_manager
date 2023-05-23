@@ -84,3 +84,13 @@ webApp.filter('filterModelsByName', [function() {
 		return filtered;
 	};
 }]);
+
+webApp.filter('linkify', function($sce) {
+    return function(text) {
+        var urlRegex = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+        var phoneRegex = /(\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9})/g;
+        var result = text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
+        result = result.replace(phoneRegex, '<a href="tel:$1">$1</a>');
+        return $sce.trustAsHtml(result);
+    };
+});
