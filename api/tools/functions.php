@@ -264,6 +264,29 @@ function getModelDetails($modelId) {
 }
 
 
+if (!function_exists("createImageFromFileByType")) {
+	/**
+	 * Create image object according to the type of the file
+	 */
+	function createImageFromFileByType($filename) {
+		$info = getimagesize($filename);
+		$mime = $info['mime'];
+	
+		switch ($mime) {
+			case 'image/jpeg':
+				return imagecreatefromjpeg($filename);
+			case 'image/png':
+				return imagecreatefrompng($filename);
+			case 'image/gif':
+				return imagecreatefromgif($filename);
+			case 'image/webp':
+				return imagecreatefromwebp($filename);
+			default:
+				throw new Exception("Unsupported image format: $mime");
+		}
+	}
+}
+
 
 if (!function_exists('resizeImage')) {
 	/**
@@ -304,7 +327,7 @@ if (!function_exists('resizeImage')) {
 
 		$image_p = imagecreatetruecolor($width, $height);
 
-		$image = imagecreatefromjpeg($filename);
+		$image = createImageFromFileByType($filename);
 
 		imagecopyresampled($image_p, $image, 0, 0, 0, 0, 
 			$width, $height, $orig_width, $orig_height);
